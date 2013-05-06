@@ -5,7 +5,7 @@ import logging
 
 import RPIO
 
-from RPLCD import CharLCD, Cursor
+from RPLCD import CharLCD
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -14,3 +14,4 @@ logging.basicConfig(level=logging.DEBUG)
 lcd = CharLCD(cols=20, rows=4,
               pin_rs=15, pin_e=16, pins_data=[21, 22, 23, 24],
               numbering_mode=RPIO.BOARD)
+lcd.close()

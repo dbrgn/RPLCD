@@ -23,14 +23,23 @@ class CharLCD(object):
         self.numbering_mode = numbering_mode
 
         # Setup GPIO
-        log.debug('Numbering scheme: {}'.format(self.numbering_mode))
+        if self.numbering_mode == RPIO.BOARD:
+            log.debug('Numbering mode: BOARD')
+        elif self.numbering_mode == RPIO.BCM:
+            log.debug('Numbering mode: BCM')
+        else:
+            log.warning('Numbering mode: Unknown')
         RPIO.setmode(self.numbering_mode)
         log.debug('RS pin: {}'.format(self.pin_rs))
         RPIO.setup(self.pin_rs, RPIO.OUT)
         log.debug('E pin: {}'.format(self.pin_e))
         RPIO.setup(self.pin_e, RPIO.OUT)
-        log.debug('Data pins: {}'.format(self.pin_e))
+        log.debug('Data pins: {}'.format(self.pins_data))
         for pin in self.pins_data:
             RPIO.setup(pin, RPIO.OUT)
 
-        logging.info('Setup complete.')
+        log.info('Setup complete.')
+
+    def close(self):
+        log.info('Cleaning up GPIO...')
+        RPIO.cleanup()
