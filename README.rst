@@ -6,7 +6,7 @@ controller.
 
 Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`.
+<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
 
 This library is inspired by Adafruit Industries' `CharLCD library
 <https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD>`_.
@@ -14,10 +14,12 @@ This library is inspired by Adafruit Industries' `CharLCD library
 The GPIO access is provided by `RPIO <https://github.com/metachris/RPIO>`_.
 
 
-Ideas
------
+Ideas / Goals
+-------------
 
 - Very simple to use API
+- Python 2/3 compatible
+- Idiomatic Python, e.g. using context managers
 - Contrast support via PWM 
 
 
