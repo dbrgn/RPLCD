@@ -11,7 +11,8 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 This library is inspired by Adafruit Industries' `CharLCD library
 <https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD>`_.
 
-The GPIO access is provided by `RPIO <https://github.com/metachris/RPIO>`_.
+The GPIO access is provided by the `RPIO <https://github.com/metachris/RPIO>`_
+library.
 
 
 Ideas / Goals
@@ -29,7 +30,7 @@ API Drafts
 .. sourcecode:: python
 
     import RPIO
-    from RPLCD import CharLCD, Cursor
+    from RPLCD import CharLCD, cursor
 
     # Initialize LCD
     lcd = CharLCD(cols=20, rows=4,
@@ -50,7 +51,7 @@ API Drafts
     lcd.write_raw('awesome')
 
     # Use context manager to set cursor
-    with Cursor(1, 9):
+    with cursor(1, 9):
         lcd.write_raw('fan-tas-tic')
 
     # Turn LCD off and on
@@ -64,9 +65,16 @@ API Drafts
     lcd.close(clear=True)
 
 
+Resources
+---------
+
+- TC2004A-01 Data Sheet: http://www.adafruit.com/datasheets/TC2004A-01.pdf
+- HD44780U Data Sheet: http://www.adafruit.com/datasheets/HD44780.pdf
+
+
 License
 -------
 
-This code is licensed under the MIT license, see the ``LICENSE`` file or
-`tldrlegal <http://www.tldrlegal.com/license/mit-license>`_ for more
-information. 
+This code is licensed under the MIT license, see the `LICENSE file
+<https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
+<http://www.tldrlegal.com/license/mit-license>`_ for more information. 
