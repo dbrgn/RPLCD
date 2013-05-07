@@ -9,7 +9,9 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
 
 This library is inspired by Adafruit Industries' `CharLCD library
-<https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD>`_.
+<https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD>`_
+as well as by Arduino's `LiquidCrystal library
+<http://arduino.cc/en/Reference/LiquidCrystal>`_.
 
 The GPIO access is provided by the `RPIO <https://github.com/metachris/RPIO>`_
 library.
@@ -22,6 +24,7 @@ Ideas / Goals
 - Python 2/3 compatible
 - Idiomatic Python, e.g. using context managers
 - Contrast support via PWM 
+- Busy flag checking instead of sleeping
 
 
 API Drafts
