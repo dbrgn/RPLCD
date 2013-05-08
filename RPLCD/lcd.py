@@ -236,15 +236,17 @@ class CharLCD(object):
         return self._display_shift_mode
 
     def _set_display_shift_mode(self, value):
-        # TODO use LEFT / RIGHT constants instead of bitmasks
-        if not value in [LCD_ENTRYSHIFTDECREMENT, LCD_ENTRYSHIFTINCREMENT]:
-            raise ValueError('Invalid display shift mode.')
-        self._display_shift_mode = value
-        self.command(LCD_ENTRYMODESET | self._cursor_move_mode, self._display_shift_mode)
+        if not value in [1, 2]:
+            raise ValueError('Display shift mode must be 1 or 2.')
+        if value == 1:
+            self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
+        else:
+            self._display_shift_mode = LCD_ENTRYSHIFTINCREMENT
+        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
 
     display_shift_mode = property(_get_display_shift_mode, _set_display_shift_mode,
-            doc='Specifies the display shift mode.')
+            doc='Specifies the shift mode when writing (1: shift cursor, 2: shift display).')
 
     def _get_display_enabled(self):
         return self._display_mode == LCD_DISPLAYON
