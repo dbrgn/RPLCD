@@ -63,6 +63,8 @@ High Level Functions
 - ``home()``
 - ``turn_on()``
 - ``turn_off()``
+- ``scroll_left(amount=1)``
+- ``scroll_right(amount=1)``
 
 Mid Level Functions
 -------------------

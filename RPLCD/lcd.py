@@ -178,6 +178,7 @@ class CharLCD(object):
 
         # Write configuration to display
         self.command(LCD_FUNCTIONSET | displayfunction)
+        usleep(50)
 
         # Configure display mode
         self._display_mode = LCD_DISPLAYON
@@ -194,6 +195,7 @@ class CharLCD(object):
         self._cursor_move_mode = LCD_ENTRYLEFT
         self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
+        usleep(50)
 
     def close(self, clear=False):
         RPIO.cleanup()
@@ -283,6 +285,18 @@ class CharLCD(object):
         """Set cursor to initial position and reset any shifting."""
         self.command(LCD_RETURNHOME)
         msleep(2)
+
+    def scroll_left(self, amount=1):
+        """Scroll the display left."""
+        for i in xrange(amount):
+            self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT)
+            usleep(50)
+
+    def scroll_right(self, amount=1):
+        """Scroll the display right."""
+        for i in xrange(amount):
+            self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT)
+            usleep(50)
 
     # Mid level commands
 
