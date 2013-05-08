@@ -186,8 +186,10 @@ class CharLCD(object):
         # Configure entry mode
         self.command(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
 
-    def close(self):
+    def close(self, clear=False):
         RPIO.cleanup()
+        if clear:
+            self.clear()
 
     # High level commands
 

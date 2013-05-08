@@ -22,9 +22,9 @@ Ideas / Goals
 
 - Very simple to use API
 - Python 2/3 compatible
+- Contrast support via PWM (additional circuit needed)
+- Busy flag checking
 - Idiomatic Python, e.g. using context managers
-- Contrast support via PWM 
-- Busy flag checking instead of sleeping
 
 
 API Drafts
