@@ -286,16 +286,16 @@ class CharLCD(object):
         self.command(LCD_RETURNHOME)
         msleep(2)
 
-    def scroll_left(self, amount=1):
-        """Scroll the display left."""
+    def shift_left(self, amount=1):
+        """Shift the display left."""
         for i in xrange(amount):
             self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT)
             usleep(50)
 
-    def scroll_right(self, amount=1):
-        """Scroll the display right."""
+    def shift_right(self, amount=1):
+        """Shift the display right."""
         for i in xrange(amount):
-            self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT)
+            self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT)
             usleep(50)
 
     # Mid level commands
