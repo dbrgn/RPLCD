@@ -194,6 +194,7 @@ class CharLCD(object):
         # Configure entry mode
         self._cursor_move_mode = LCD_ENTRYLEFT
         self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
+        self._cursor_pos = (0, 0)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
 
@@ -203,6 +204,19 @@ class CharLCD(object):
             self.clear()
 
     # Properties
+
+    def _get_cursor_pos(self):
+        return self._cursor_pos
+
+    def _set_cursor_pos(self, value):
+        if not hasattr(value, '__getitem__') or len(value) != 2:
+            raise ValueError('Cursor position should be determined by a 2-tuple.')
+        row_offsets = [0x00, 0x40, 0x14, 0x54]  # TODO handle smaller displays
+        self.command(LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
+        usleep(50)
+
+    cursor_pos = property(_get_cursor_pos, _set_cursor_pos,
+            doc='The cursor position as a 2-tuple (row, col).')
 
     def _get_cursor_move_mode(self):
         return self._cursor_move_mode

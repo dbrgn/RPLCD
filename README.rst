@@ -50,6 +50,7 @@ Init, Setup, Teardown
 Properties
 ----------
 
+- ``cursor_pos``
 - ``cursor_move_mode``
 - ``display_shift_mode``
 - ``display_enabled``
