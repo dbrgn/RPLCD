@@ -2,14 +2,9 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import time
-import logging
 from collections import namedtuple
 
 import RPIO
-
-
-# Setup logging
-log = logging.getLogger(__name__)
 
 
 # Commands
@@ -108,6 +103,7 @@ class CharLCD(object):
 
         """
         # Set attributes
+        self.numbering_mode = numbering_mode
         if len(pins_data) == 4:  # 4 bit mode
             self.display_mode = LCD_4BITMODE
             block1 = [None] * 4
@@ -123,18 +119,9 @@ class CharLCD(object):
                               mode=numbering_mode)
 
         # Setup GPIO
-        log.info('Pin configuration: {!r}'.format(self.pins))
-        if self.numbering_mode == RPIO.BOARD:
-            log.debug('Numbering mode: BOARD')
-        elif self.numbering_mode == RPIO.BCM:
-            log.debug('Numbering mode: BCM')
-        else:
-            log.warning('Numbering mode: Unknown')
         RPIO.setmode(self.numbering_mode)
         for pin in filter(None, self.pins)[:-1]:
             RPIO.setup(pin, RPIO.OUT)
-
-        log.info('Setup complete.')
 
     def setup(self, rows=4, cols=20, dotsize=8):
         """Initialize display with the specified configuration.
@@ -172,20 +159,20 @@ class CharLCD(object):
         # Choose 4 or 8 bit mode
         if self.display_mode == LCD_4BITMODE:
             # Hitachi manual page 46
-            self.write4bits(0x03)
+            self._write4bits(0x03)
             msleep(4.5)
-            self.write4bits(0x03)
+            self._write4bits(0x03)
             msleep(4.5)
-            self.write4bits(0x03)
+            self._write4bits(0x03)
             usleep(100)
-            self.write4bits(0x02)
+            self._write4bits(0x02)
         elif self.display_mode == LCD_8BITMODE:
             # Hitachi manual page 45
-            self.write8bits(0x30)
+            self._write8bits(0x30)
             msleep(4.5)
-            self.write8bits(0x30)
+            self._write8bits(0x30)
             usleep(100)
-            self.write8bits(0x30)
+            self._write8bits(0x30)
         else:
             raise ValueError('Invalid display mode: {}'.format(self.display_mode))
 
@@ -200,7 +187,6 @@ class CharLCD(object):
         self.command(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
 
     def close(self):
-        log.info('Cleaning up GPIO...')
         RPIO.cleanup()
 
     # High level commands
