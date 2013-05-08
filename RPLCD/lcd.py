@@ -270,6 +270,10 @@ class CharLCD(object):
 
     # High level commands
 
+    def write_string(self, value):
+        for char in value:
+            self.write(ord(char))
+
     def clear(self):
         """Overwrite display with blank characters."""
         self.command(LCD_CLEARDISPLAY)
@@ -279,14 +283,6 @@ class CharLCD(object):
         """Set cursor to initial position and reset any shifting."""
         self.command(LCD_RETURNHOME)
         msleep(2)
-
-    def turn_on(self):
-        """Show characters."""
-        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
-
-    def turn_off(self):
-        """Hide characters."""
-        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYOFF)
 
     # Mid level commands
 

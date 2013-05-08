@@ -1,5 +1,5 @@
 RPLCD
-=====
+#####
 
 A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
 controller.
@@ -18,7 +18,7 @@ library.
 
 
 Ideas / Goals
--------------
+=============
 
 - Very simple to use API
 - Python 2/3 compatible
@@ -27,56 +27,59 @@ Ideas / Goals
 - Idiomatic Python, e.g. using context managers
 
 
-API Drafts
-----------
+API
+===
+
+Init, Setup, Teardown
+---------------------
 
 .. sourcecode:: python
 
     import RPIO
-    from RPLCD import CharLCD, cursor
+    from RPLCD import CharLCD
 
     # Initialize LCD
-    lcd = CharLCD(cols=20, rows=4,
-                  pin_rs=15, pin_e=16, pins_data=[21, 22, 23, 24],
+    lcd = CharLCD(pin_rs=15, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=RPIO.BOARD)
+    lcd.setup(cols=20, rows=4, dotsize=8)
 
-    # Write to display
-    lcd.write('Hello world!')
+    # (...)
 
-    # Overwrite display
-    lcd.write('This is simple!')
-
-    # Set cursor using function
-    lcd.set_cursor(1, 9)
-
-    # Write or overwrite only the selected bytes
-    # Display now shows ``This is awesome``
-    lcd.write_raw('awesome')
-
-    # Use context manager to set cursor
-    with cursor(1, 9):
-        lcd.write_raw('fan-tas-tic')
-
-    # Turn LCD off and on
-    lcd.turn_off()
-    lcd.turn_on()
-
-    # Clear LCD
-    lcd.clear()
-
-    # Clear LCD, cleanup GPIO
     lcd.close(clear=True)
+
+Properties
+----------
+
+- ``cursor_move_mode``
+- ``display_shift_mode``
+- ``display_enabled``
+- ``cursor_mode``
+
+High Level Functions
+--------------------
+
+- ``write_string(value)``
+- ``clear()``
+- ``home()``
+- ``turn_on()``
+- ``turn_off()``
+
+Mid Level Functions
+-------------------
+
+- ``write(value)``
+- ``command(value)``
 
 
 Resources
----------
+=========
 
 - TC2004A-01 Data Sheet: http://www.adafruit.com/datasheets/TC2004A-01.pdf
 - HD44780U Data Sheet: http://www.adafruit.com/datasheets/HD44780.pdf
 
 
 License
--------
+=======
 
 This code is licensed under the MIT license, see the `LICENSE file
 <https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
