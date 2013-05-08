@@ -52,7 +52,7 @@ Properties
 
 - ``cursor_pos``
 - ``cursor_move_mode``
-- ``display_shift_mode``
+- ``write_shift_mode``
 - ``display_enabled``
 - ``cursor_mode``
 
