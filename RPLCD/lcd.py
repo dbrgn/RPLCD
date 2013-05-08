@@ -203,7 +203,7 @@ class CharLCD(object):
 
     def clear(self):
         """Overwrite display with blank characters."""
-        self.command(LCD_DISPLAYCONTROL | LCD_CLEARDISPLAY)
+        self.command(LCD_CLEARDISPLAY)
         msleep(2)
 
     # Mid level commands
