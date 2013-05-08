@@ -64,8 +64,7 @@ High Level Functions
 - ``home()``
 - ``turn_on()``
 - ``turn_off()``
-- ``shift_left(amount=1)``
-- ``shift_right(amount=1)``
+- ``shift_display(amount)``
 
 Mid Level Functions
 -------------------
