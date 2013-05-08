@@ -59,18 +59,17 @@ Properties
 High Level Functions
 --------------------
 
-- ``write_string(value)``
-- ``clear()``
-- ``home()``
-- ``turn_on()``
-- ``turn_off()``
-- ``shift_display(amount)``
+- ``write_string(value)``: Write the specified string to the display.
+- ``clear()``: Overwrite display with blank characters and reset cursor position.
+- ``home()``: Set cursor to initial position and reset any shifting.
+- ``shift_display(amount)``: Shift the display. Use negative amounts to shift
+  left and positive amounts to shift right.
 
 Mid Level Functions
 -------------------
 
-- ``write(value)``
-- ``command(value)``
+- ``write(value)``: Send a raw command to the LCD.
+- ``command(value)``: Write a raw byte to the LCD.
 
 
 Resources

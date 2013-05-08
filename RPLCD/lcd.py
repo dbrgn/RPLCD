@@ -299,11 +299,12 @@ class CharLCD(object):
     # High level commands
 
     def write_string(self, value):
+        """Write the specified string to the display."""
         for char in value:
             self.write(ord(char))
 
     def clear(self):
-        """Overwrite display with blank characters."""
+        """Overwrite display with blank characters and reset cursor position."""
         self.command(LCD_CLEARDISPLAY)
         msleep(2)
 
@@ -325,9 +326,11 @@ class CharLCD(object):
     # Mid level commands
 
     def command(self, value):
+        """Send a raw command to the LCD."""
         self._send(value, RS_INSTRUCTION)
 
     def write(self, value):
+        """Write a raw byte to the LCD."""
         self._send(value, RS_DATA)
 
     # Low level commands
