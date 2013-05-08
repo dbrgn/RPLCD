@@ -181,7 +181,7 @@ class CharLCD(object):
 
         # Configure display mode
         self._display_mode = LCD_DISPLAYON
-        self._cursor_mode = LCD_CURSORON
+        self._cursor_mode = LCD_CURSOROFF
         self._blink_mode = LCD_BLINKOFF
         self.command(LCD_DISPLAYCONTROL |
                      self._display_mode | self._cursor_mode | self._blink_mode)
@@ -242,29 +242,31 @@ class CharLCD(object):
     display_enabled = property(_get_display_enabled, _set_display_enabled,
             doc='Whether or not to display any characters.')
 
-    def _get_show_cursor(self):
-        return self._cursor_mode == LCD_CURSORON
+    def _get_cursor_mode(self):
+        if self._blink_mode:
+            return 2
+        if self._cursor_mode:
+            return 1
+        return 0
 
-    def _set_show_cursor(self, value):
-        self._cursor_mode = LCD_CURSORON if value else LCD_CURSOROFF
+    def _set_cursor_mode(self, value):
+        if not value in xrange(3):
+            raise ValueError('Cursor mode must be 0, 1 or 2.')
+        if value == 0:
+            self._cursor_mode = LCD_CURSOROFF
+            self._blink_mode = LCD_BLINKOFF
+        if value == 1:
+            self._cursor_mode = LCD_CURSORON
+            self._blink_mode = LCD_BLINKOFF
+        elif value == 2:
+            self._cursor_mode = LCD_CURSOROFF
+            self._blink_mode = LCD_BLINKON
         self.command(LCD_DISPLAYCONTROL |
                      self._display_mode | self._cursor_mode | self._blink_mode)
         usleep(50)
 
-    show_cursor = property(_get_show_cursor, _set_show_cursor,
-            doc='Whether or not to show the cursor.')
-
-    def _get_blink_cursor(self):
-        return self._blink_mode == LCD_BLINKON
-
-    def _set_blink_cursor(self, value):
-        self._blink_mode = LCD_BLINKON if value else LCD_BLINKOFF
-        self.command(LCD_DISPLAYCONTROL |
-                     self._display_mode | self._blink_mode | self._blink_mode)
-        usleep(50)
-
-    blink_cursor = property(_get_blink_cursor, _set_blink_cursor,
-            doc='Whether or not the cursor character should blink.')
+    cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
+            doc='How the cursor should behave (0: hide, 1: show, 2: blink).')
 
     # High level commands
 
