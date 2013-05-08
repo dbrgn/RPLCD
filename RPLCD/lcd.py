@@ -219,18 +219,24 @@ class CharLCD(object):
             doc='The cursor position as a 2-tuple (row, col).')
 
     def _get_cursor_move_mode(self):
-        return self._cursor_move_mode
+        if self._cursor_move_mode == LCD_ENTRYRIGHT:
+            return 1
+        if self._cursor_move_mode == LCD_ENTRYLEFT:
+            return 2
+        raise ValueError('Internal _cursor_move_mode has invalid value.')
 
     def _set_cursor_move_mode(self, value):
-        # TODO use LEFT / RIGHT constants instead of bitmasks
-        if not value in [LCD_ENTRYLEFT, LCD_ENTRYRIGHT]:
-            raise ValueError('Invalid cursor move mode.')
-        self._cursor_move_mode = value
+        if not value in [1, 2]:
+            raise ValueError('Cursor move mode must be 1 or 2.')
+        if value == 1:
+            self._cursor_move_mode = LCD_ENTRYRIGHT
+        else:
+            self._cursor_move_mode = LCD_ENTRYLEFT
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
 
     cursor_move_mode = property(_get_cursor_move_mode, _set_cursor_move_mode,
-            doc='Specifies the cursor move direction.')
+            doc='Specifies the cursor move direction (1: right, 2: left).')
 
     def _get_write_shift_mode(self):
         if self._display_shift_mode == LCD_ENTRYSHIFTDECREMENT:
