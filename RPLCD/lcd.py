@@ -105,10 +105,10 @@ class CharLCD(object):
         # Set attributes
         self.numbering_mode = numbering_mode
         if len(pins_data) == 4:  # 4 bit mode
-            self.display_mode = LCD_4BITMODE
+            self.data_bus_mode = LCD_4BITMODE
             block1 = [None] * 4
         elif len(pins_data) == 8:  # 8 bit mode
-            self.display_mode = LCD_8BITMODE
+            self.data_bus_mode = LCD_8BITMODE
             block1 = pins_data[:4]
         else:
             raise ValueError('There should be exactly 4 or 8 data pins.')
@@ -138,7 +138,7 @@ class CharLCD(object):
         """
         # Set attributes
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
-        displayfunction = self.display_mode | LCD_1LINE | LCD_5x8DOTS
+        displayfunction = self.data_bus_mode | LCD_1LINE | LCD_5x8DOTS
 
         # LCD only uses two lines on 4 row displays
         if rows == 4:
@@ -157,7 +157,7 @@ class CharLCD(object):
             RPIO.output(self.pins.rw, 0)
 
         # Choose 4 or 8 bit mode
-        if self.display_mode == LCD_4BITMODE:
+        if self.data_bus_mode == LCD_4BITMODE:
             # Hitachi manual page 46
             self._write4bits(0x03)
             msleep(4.5)
@@ -166,7 +166,7 @@ class CharLCD(object):
             self._write4bits(0x03)
             usleep(100)
             self._write4bits(0x02)
-        elif self.display_mode == LCD_8BITMODE:
+        elif self.data_bus_mode == LCD_8BITMODE:
             # Hitachi manual page 45
             self._write8bits(0x30)
             msleep(4.5)
@@ -174,37 +174,117 @@ class CharLCD(object):
             usleep(100)
             self._write8bits(0x30)
         else:
-            raise ValueError('Invalid display mode: {}'.format(self.display_mode))
+            raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
 
         # Write configuration to display
         self.command(LCD_FUNCTIONSET | displayfunction)
 
-        # Turn on and clear display
-        self.turn_on()
+        # Configure display mode
+        self._display_mode = LCD_DISPLAYON
+        self._cursor_mode = LCD_CURSORON
+        self._blink_mode = LCD_BLINKOFF
+        self.command(LCD_DISPLAYCONTROL |
+                     self._display_mode | self._cursor_mode | self._blink_mode)
+        usleep(50)
+
+        # Clear display
         self.clear()
 
         # Configure entry mode
-        self.command(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
+        self._cursor_move_mode = LCD_ENTRYLEFT
+        self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
+        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
 
     def close(self, clear=False):
         RPIO.cleanup()
         if clear:
             self.clear()
 
+    # Properties
+
+    def _get_cursor_move_mode(self):
+        return self._cursor_move_mode
+
+    def _set_cursor_move_mode(self, value):
+        # TODO use LEFT / RIGHT constants instead of bitmasks
+        if not value in [LCD_ENTRYLEFT, LCD_ENTRYRIGHT]:
+            raise ValueError('Invalid cursor move mode.')
+        self._cursor_move_mode = value
+        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
+        usleep(50)
+
+    cursor_move_mode = property(_get_cursor_move_mode, _set_cursor_move_mode,
+            doc='Specifies the cursor move direction.')
+
+    def _get_display_shift_mode(self):
+        return self._display_shift_mode
+
+    def _set_display_shift_mode(self, value):
+        # TODO use LEFT / RIGHT constants instead of bitmasks
+        if not value in [LCD_ENTRYSHIFTDECREMENT, LCD_ENTRYSHIFTINCREMENT]:
+            raise ValueError('Invalid display shift mode.')
+        self._display_shift_mode = value
+        self.command(LCD_ENTRYMODESET | self._cursor_move_mode, self._display_shift_mode)
+        usleep(50)
+
+    display_shift_mode = property(_get_display_shift_mode, _set_display_shift_mode,
+            doc='Specifies the display shift mode.')
+
+    def _get_display_enabled(self):
+        return self._display_mode == LCD_DISPLAYON
+
+    def _set_display_enabled(self, value):
+        self._display_mode = LCD_DISPLAYON if value else LCD_DISPLAYOFF
+        self.command(LCD_DISPLAYCONTROL |
+                     self._display_mode | self._cursor_mode | self._blink_mode)
+        usleep(50)
+
+    display_enabled = property(_get_display_enabled, _set_display_enabled,
+            doc='Whether or not to display any characters.')
+
+    def _get_show_cursor(self):
+        return self._cursor_mode == LCD_CURSORON
+
+    def _set_show_cursor(self, value):
+        self._cursor_mode = LCD_CURSORON if value else LCD_CURSOROFF
+        self.command(LCD_DISPLAYCONTROL |
+                     self._display_mode | self._cursor_mode | self._blink_mode)
+        usleep(50)
+
+    show_cursor = property(_get_show_cursor, _set_show_cursor,
+            doc='Whether or not to show the cursor.')
+
+    def _get_blink_cursor(self):
+        return self._blink_mode == LCD_BLINKON
+
+    def _set_blink_cursor(self, value):
+        self._blink_mode = LCD_BLINKON if value else LCD_BLINKOFF
+        self.command(LCD_DISPLAYCONTROL |
+                     self._display_mode | self._blink_mode | self._blink_mode)
+        usleep(50)
+
+    blink_cursor = property(_get_blink_cursor, _set_blink_cursor,
+            doc='Whether or not the cursor character should blink.')
+
     # High level commands
-
-    def turn_on(self):
-        """Turn display on."""
-        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
-
-    def turn_off(self):
-        """Turn display off."""
-        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYOFF)
 
     def clear(self):
         """Overwrite display with blank characters."""
         self.command(LCD_CLEARDISPLAY)
         msleep(2)
+
+    def home(self):
+        """Set cursor to initial position and reset any shifting."""
+        self.command(LCD_RETURNHOME)
+        msleep(2)
+
+    def turn_on(self):
+        """Show characters."""
+        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
+
+    def turn_off(self):
+        """Hide characters."""
+        self.command(LCD_DISPLAYCONTROL | LCD_DISPLAYOFF)
 
     # Mid level commands
 
@@ -228,7 +308,7 @@ class CharLCD(object):
             RPIO.output(self.pins.rw, 0)
 
         # Write data out in chunks of 4 or 8 bit
-        if self.display_mode == LCD_8BITMODE:
+        if self.data_bus_mode == LCD_8BITMODE:
             self._write8bits(value)
         else:
             self._write4bits(value >> 4)
