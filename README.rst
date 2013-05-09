@@ -8,6 +8,9 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
 
+.. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
+    :alt: Photo of 20x4 LCD in action
+
 This library is inspired by Adafruit Industries' `CharLCD library
 <https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD>`_
 as well as by Arduino's `LiquidCrystal library
