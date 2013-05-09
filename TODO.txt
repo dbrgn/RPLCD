@@ -1,0 +1,18 @@
+Release blocker
+
+- Correct line breaks
+- Python 3 compatibility
+
+Awesome
+
+- Context managers for cursor
+- Custom characters
+- Busy flag checking
+- Manual test script
+- Tests with 2x16 display
+
+Nice to have
+
+- Turning backlight on/off via GPIO
+- Contrast support via PWM (additional circuit needed)
+- Sphinx docs

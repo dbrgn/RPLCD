@@ -17,14 +17,12 @@ The GPIO access is provided by the `RPIO <https://github.com/metachris/RPIO>`_
 library.
 
 
-Ideas / Goals
-=============
+Goals
+=====
 
-- Very simple to use API
+- Simple to use API
+- Support for both 4 bit and 8 bit modes
 - Python 2/3 compatible
-- Contrast support via PWM (additional circuit needed)
-- Busy flag checking
-- Idiomatic Python, e.g. using context managers
 
 
 API
