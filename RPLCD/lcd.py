@@ -5,7 +5,10 @@ import time
 from collections import namedtuple
 
 import RPIO
+from flufl.enum import IntEnum
 
+
+### BIT PATTERNS ###
 
 # Commands
 LCD_CLEARDISPLAY = 0x01
@@ -54,10 +57,31 @@ RS_INSTRUCTION = 0x00
 RS_DATA = 0x01
 
 
-# Namedtuples
+### NAMEDTUPLES ###
+
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 mode')
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
+
+### ENUMS ###
+
+class Direction(IntEnum):
+    left = LCD_ENTRYRIGHT
+    right = LCD_ENTRYLEFT
+
+
+class ShiftMode(IntEnum):
+    cursor = LCD_ENTRYSHIFTDECREMENT
+    display = LCD_ENTRYSHIFTINCREMENT
+
+
+class CursorMode(IntEnum):
+    hide = LCD_CURSOROFF | LCD_BLINKOFF
+    line = LCD_CURSORON | LCD_BLINKOFF
+    blink = LCD_CURSOROFF | LCD_BLINKON
+
+
+### HELPER FUNCTIONS ###
 
 def msleep(milliseconds):
     """Sleep the specified amount of milliseconds."""
@@ -68,6 +92,8 @@ def usleep(microseconds):
     """Sleep the specified amount of microseconds."""
     time.sleep(microseconds / 1000000.0)
 
+
+### MAIN ###
 
 class CharLCD(object):
 
@@ -182,18 +208,16 @@ class CharLCD(object):
 
         # Configure display mode
         self._display_mode = LCD_DISPLAYON
-        self._cursor_mode = LCD_CURSOROFF
-        self._blink_mode = LCD_BLINKOFF
-        self.command(LCD_DISPLAYCONTROL |
-                     self._display_mode | self._cursor_mode | self._blink_mode)
+        self._cursor_mode = int(CursorMode.hide)
+        self.command(LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         usleep(50)
 
         # Clear display
         self.clear()
 
         # Configure entry mode
-        self._cursor_move_mode = LCD_ENTRYLEFT
-        self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
+        self._cursor_move_mode = (Direction.right)
+        self._display_shift_mode = int(ShiftMode.cursor)
         self._cursor_pos = (0, 0)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
@@ -219,82 +243,64 @@ class CharLCD(object):
             doc='The cursor position as a 2-tuple (row, col).')
 
     def _get_cursor_move_mode(self):
-        if self._cursor_move_mode == LCD_ENTRYRIGHT:
-            return 1
-        if self._cursor_move_mode == LCD_ENTRYLEFT:
-            return 2
-        raise ValueError('Internal _cursor_move_mode has invalid value.')
+        try:
+            return Direction[self._cursor_move_mode]
+        except ValueError:
+            raise ValueError('Internal _cursor_move_mode has invalid value.')
 
     def _set_cursor_move_mode(self, value):
-        if not value in [1, 2]:
-            raise ValueError('Cursor move mode must be 1 or 2.')
-        if value == 1:
-            self._cursor_move_mode = LCD_ENTRYRIGHT
-        else:
-            self._cursor_move_mode = LCD_ENTRYLEFT
+        if not isinstance(value, Direction):
+            raise ValueError('Cursor move mode must be of ``Direction`` type.')
+        self._cursor_move_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
 
     cursor_move_mode = property(_get_cursor_move_mode, _set_cursor_move_mode,
-            doc='Specifies the cursor move direction (1: right, 2: left).')
+            doc='The cursor move direction (``Directions.left`` or ``Directions.right``).')
 
     def _get_write_shift_mode(self):
-        if self._display_shift_mode == LCD_ENTRYSHIFTDECREMENT:
-            return 1
-        if self._display_shift_mode == LCD_ENTRYSHIFTINCREMENT:
-            return 2
-        raise ValueError('Internal _display_shift_mode has invalid value.')
+        try:
+            return ShiftMode[self._display_shift_mode]
+        except ValueError:
+            raise ValueError('Internal _display_shift_mode has invalid value.')
 
     def _set_write_shift_mode(self, value):
-        if not value in [1, 2]:
-            raise ValueError('Write shift mode must be 1 or 2.')
-        if value == 1:
-            self._display_shift_mode = LCD_ENTRYSHIFTDECREMENT
-        else:
-            self._display_shift_mode = LCD_ENTRYSHIFTINCREMENT
+        if not isinstance(value, ShiftMode):
+            raise ValueError('Write shift mode must be of ``ShiftMode`` type.')
+        self._display_shift_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
         usleep(50)
 
     write_shift_mode = property(_get_write_shift_mode, _set_write_shift_mode,
-            doc='Specifies the shift mode when writing (1: shift cursor, 2: shift display).')
+            doc='The shift mode when writing (``ShiftMode.cursor`` or ``ShiftMode.display``).')
 
     def _get_display_enabled(self):
         return self._display_mode == LCD_DISPLAYON
 
     def _set_display_enabled(self, value):
         self._display_mode = LCD_DISPLAYON if value else LCD_DISPLAYOFF
-        self.command(LCD_DISPLAYCONTROL |
-                     self._display_mode | self._cursor_mode | self._blink_mode)
+        self.command(LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         usleep(50)
 
     display_enabled = property(_get_display_enabled, _set_display_enabled,
             doc='Whether or not to display any characters.')
 
     def _get_cursor_mode(self):
-        if self._blink_mode:
-            return 2
-        if self._cursor_mode:
-            return 1
-        return 0
+        try:
+            return CursorMode[self._cursor_mode]
+        except ValueError:
+            raise ValueError('Internal _cursor_mode has invalid value.')
 
     def _set_cursor_mode(self, value):
-        if not value in xrange(3):
-            raise ValueError('Cursor mode must be 0, 1 or 2.')
-        if value == 0:
-            self._cursor_mode = LCD_CURSOROFF
-            self._blink_mode = LCD_BLINKOFF
-        if value == 1:
-            self._cursor_mode = LCD_CURSORON
-            self._blink_mode = LCD_BLINKOFF
-        elif value == 2:
-            self._cursor_mode = LCD_CURSOROFF
-            self._blink_mode = LCD_BLINKON
-        self.command(LCD_DISPLAYCONTROL |
-                     self._display_mode | self._cursor_mode | self._blink_mode)
+        if not isinstance(value, CursorMode):
+            raise ValueError('Cursor mode must be of ``CursorMode`` type.')
+        self._cursor_mode = int(value)
+        self.command(LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         usleep(50)
 
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
-            doc='How the cursor should behave (0: hide, 1: show, 2: blink).')
+            doc='How the cursor should behave (``CursorMode.hide``, ' + \
+                                   '``CursorMode.line`` or ``CursorMode.blink``).')
 
     # High level commands
 

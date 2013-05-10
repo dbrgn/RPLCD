@@ -51,11 +51,11 @@ Init, Setup, Teardown
 Properties
 ----------
 
-- ``cursor_pos`` -> ``(row, col)``
-- ``cursor_move_mode`` -> ``1`` / ``2``
-- ``write_shift_mode`` -> ``1`` / ``2``
 - ``display_enabled`` -> ``True`` / ``False``
-- ``cursor_mode`` -> ``0`` / ``1`` / ``2``
+- ``cursor_pos`` -> ``(row, col)``
+- ``cursor_move_mode`` -> ``Direction.left`` / ``Direction.right``
+- ``write_shift_mode`` -> ``ShiftMode.cursor`` / ``ShiftMode.display``
+- ``cursor_mode`` -> ``CursorMode.hide`` / ``CursorMode.line`` / ``CursorMode.blink``
 
 High Level Functions
 --------------------
