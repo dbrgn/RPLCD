@@ -28,14 +28,15 @@ Goals
 Installing
 ==========
 
-(*TLDR: Use ``pip install RPLCD``.*)
+(**TLDR**: Use ``pip install RPLCD``)
 
 Prerequisites
 -------------
 
 As prerequisite to build the RPIO_ dependency, you need the ``python-dev``
-package as well as ``pip``. Both should already be installed on a regular
-Raspbian image. Otherwise, install them::
+package. And to install the package itself, you'll want to use ``pip``. Both
+should already be installed on a regular Raspbian image. Otherwise, install
+them::
 
     $ sudo apt-get install python-dev python-pip
 
@@ -77,6 +78,18 @@ You can also install the library manually without pip. Either just copy the
 scripts to your working directory and import them, or download the repository
 and run ``python setup.py install`` to install it into your Python package
 directory.
+
+
+Wiring
+======
+
+The standard wiring configuration uses the following pins (BOARD numbering
+scheme):
+
+- RS: 15
+- RW: 18
+- E: 16
+- Data 4-7: 21, 22, 23, 24
 
 
 API
@@ -128,7 +141,8 @@ Testing
 =======
 
 To test your display, please run the ``test.py`` script and confirm/verify each
-step with the enter key.
+step with the enter key. If you don't use the standard wiring, make sure to add
+your pin numbers to the ``CharLCD`` constructor in ``test.py``.
 
 
 Resources
