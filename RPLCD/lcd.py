@@ -223,9 +223,9 @@ class CharLCD(object):
         usleep(50)
 
     def close(self, clear=False):
-        RPIO.cleanup()
         if clear:
             self.clear()
+        RPIO.cleanup()
 
     # Properties
 
