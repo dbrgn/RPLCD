@@ -8,6 +8,14 @@ import RPIO
 from flufl.enum import Enum
 
 
+### PYTHON 3 COMPAT ###
+
+try:
+    range = xrange
+except NameError:
+    pass
+
+
 ### BIT PATTERNS ###
 
 # Commands
@@ -146,7 +154,7 @@ class CharLCD(object):
 
         # Setup GPIO
         RPIO.setmode(self.numbering_mode)
-        for pin in filter(None, self.pins)[:-1]:
+        for pin in list(filter(None, self.pins))[:-1]:
             RPIO.setup(pin, RPIO.OUT)
 
     def setup(self, rows=4, cols=20, dotsize=8):
@@ -325,7 +333,7 @@ class CharLCD(object):
         if amount == 0:
             return
         direction = LCD_MOVERIGHT if amount > 0 else LCD_MOVELEFT
-        for i in xrange(abs(amount)):
+        for i in range(abs(amount)):
             self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | direction)
             usleep(50)
 
@@ -361,14 +369,14 @@ class CharLCD(object):
 
     def _write4bits(self, value):
         """Write 4 bits of data into the data bus."""
-        for i in xrange(4):
+        for i in range(4):
             bit = (value >> i) & 0x01
             RPIO.output(self.pins[i + 7], bit)
         self._pulse_enable()
 
     def _write8bits(self, value):
         """Write 8 bits of data into the data bus."""
-        for i in xrange(8):
+        for i in range(8):
             bit = (value >> i) & 0x01
             RPIO.output(self.pins[i + 3], bit)
         self._pulse_enable()
