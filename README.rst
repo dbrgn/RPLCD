@@ -8,9 +8,6 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
 
-.. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
-    :alt: Photo of 20x4 LCD in action
-
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
 
@@ -23,6 +20,21 @@ Goals
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
 - Python 2/3 compatible
+
+
+Example
+=======
+
+.. sourcecode:: python
+
+    >>> from RPLCD import CharLCD
+    >>> lcd = CharLCD()
+    >>> lcd.write_string('Raspberry Pi HD44780')
+    >>> lcd.cursor_pos = (2, 0)
+    >>> lcd.write_string('http://github.com/\n\rdbrgn/RPLCD')
+
+.. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
+    :alt: Photo of 20x4 LCD in action
 
 
 Installing
