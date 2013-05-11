@@ -26,12 +26,15 @@ input('The cursor should now be a line. ')
 lcd.write_string('Hello world!')
 input('"Hello world!" should be on the LCD. ')
 
+assert lcd.cursor_pos == (0, 12), 'cursor_pos should now be (0, 12)'
+
 lcd.cursor_pos = (1, 0)
 lcd.write_string('2')
 lcd.cursor_pos = (2, 0)
 lcd.write_string('3')
 lcd.cursor_pos = (3, 0)
 lcd.write_string('4')
+assert lcd.cursor_pos == (3, 1), 'cursor_pos should now be (3, 1)'
 input('Lines 2, 3 and 4 should now be labelled with the right numbers. ')
 
 lcd.clear()
@@ -58,9 +61,7 @@ lcd.display_enabled = False
 input('Display should now be blank. ')
 
 lcd.clear()
-lcd.write_string('Eggs, Ham, Bacon')
-lcd.cursor_pos = (1, 0)
-lcd.write_string('and Spam')
+lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
 lcd.display_enabled = True
 input('Display should now show "Eggs, Ham, Bacon and Spam". ')
 
@@ -76,6 +77,17 @@ input('The word "Spam" should now be inverted. ')
 lcd.text_align_mode = Alignment.left
 lcd.write_string(' Wurscht')
 input('The word "mapS" should now be replaced with "Wurscht". ')
+
+lcd.clear()
+lcd.write_string('1\n')
+lcd.write_string('2\n')
+lcd.write_string('3\n')
+lcd.write_string('4')
+input('The numbers 1-4 should now be displayed, each line shifted to the right by 1 char more than the previous. ')
+
+lcd.clear()
+lcd.write_string('This is a long string that will wrap across multiple lines!')
+input('Text should nicely wrap around lins. ')
 
 print('Test done.')
 

@@ -344,6 +344,11 @@ class CharLCD(object):
 
         """
         for char in value:
+            # Write regular chars
+            if char not in '\n\r':
+                self.write(ord(char))
+                continue
+            # Handle newlines and carriage returns
             row, col = self.cursor_pos
             if char == '\n':
                 if row < self.lcd.rows - 1:
@@ -355,17 +360,17 @@ class CharLCD(object):
                     self.cursor_pos = (row, 0)
                 else:
                     self.cursor_pos = (row, self.lcd.cols - 1)
-            else:
-                self.write(ord(char))
 
     def clear(self):
         """Overwrite display with blank characters and reset cursor position."""
         self.command(LCD_CLEARDISPLAY)
+        self._cursor_pos = (0, 0)
         msleep(2)
 
     def home(self):
         """Set cursor to initial position and reset any shifting."""
         self.command(LCD_RETURNHOME)
+        self._cursor_pos = (0, 0)
         msleep(2)
 
     def shift_display(self, amount):
@@ -394,7 +399,7 @@ class CharLCD(object):
 
         # Update cursor position.
         if self.text_align_mode is Alignment.left:
-            if col < self.lcd.cols:
+            if col < self.lcd.cols - 1:
                 # No newline, update internal pointer
                 self._cursor_pos = (row, col + 1)
             else:
