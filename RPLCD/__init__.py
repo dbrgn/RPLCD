@@ -1,1 +1,1 @@
-from .lcd import CharLCD, Direction, CursorMode, ShiftMode
+from .lcd import CharLCD, Alignment, CursorMode, ShiftMode

@@ -65,7 +65,7 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 ### ENUMS ###
 
-class Direction(Enum):
+class Alignment(Enum):
     left = LCD_ENTRYLEFT
     right = LCD_ENTRYRIGHT
 
@@ -216,7 +216,7 @@ class CharLCD(object):
         self.clear()
 
         # Configure entry mode
-        self._text_align_mode = int(Direction.left)
+        self._text_align_mode = int(Alignment.left)
         self._display_shift_mode = int(ShiftMode.cursor)
         self._cursor_pos = (0, 0)
         self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
@@ -244,19 +244,19 @@ class CharLCD(object):
 
     def _get_text_align_mode(self):
         try:
-            return Direction[self._text_align_mode]
+            return Alignment[self._text_align_mode]
         except ValueError:
             raise ValueError('Internal _text_align_mode has invalid value.')
 
     def _set_text_align_mode(self, value):
-        if not value in Direction:
-            raise ValueError('Cursor move mode must be of ``Direction`` type.')
+        if not value in Alignment:
+            raise ValueError('Cursor move mode must be of ``Alignment`` type.')
         self._text_align_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         usleep(50)
 
     text_align_mode = property(_get_text_align_mode, _set_text_align_mode,
-            doc='The cursor move direction (``Directions.left`` or ``Directions.right``).')
+            doc='The text alignment (``Alignment.left`` or ``Alignment.right``).')
 
     def _get_write_shift_mode(self):
         try:
