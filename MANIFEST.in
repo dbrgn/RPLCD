@@ -1,4 +1,4 @@
 include README.rst
 include LICENSE
-include test.py
+include test_20x4.py
 recursive-exclude * *.pyc

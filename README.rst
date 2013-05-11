@@ -157,9 +157,13 @@ Mid Level Functions
 Testing
 =======
 
-To test your display, please run the ``test.py`` script and confirm/verify each
-step with the enter key. If you don't use the standard wiring, make sure to add
-your pin numbers to the ``CharLCD`` constructor in ``test.py``.
+To test your 20x4 display, please run the ``test_20x4.py`` script and
+confirm/verify each step with the enter key. If you don't use the standard
+wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
+``test_20x4.py``.
+
+Unfortunately I don't have a 16x2 display at hand yet, so I can't create a test
+script for that one. If someone else wants to adapt the script, feel free!
 
 
 Resources
