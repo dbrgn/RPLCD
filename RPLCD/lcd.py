@@ -265,7 +265,7 @@ class CharLCD(object):
             raise ValueError('Internal _display_shift_mode has invalid value.')
 
     def _set_write_shift_mode(self, value):
-        if value in ShiftMode:
+        if not value in ShiftMode:
             raise ValueError('Write shift mode must be of ``ShiftMode`` type.')
         self._display_shift_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
