@@ -14,7 +14,6 @@ RPIO.setwarnings(False)
 
 lcd = CharLCD()
 
-lcd.setup()
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink
@@ -90,6 +89,3 @@ lcd.write_string('This is a long string that will wrap across multiple lines!')
 input('Text should nicely wrap around lins. ')
 
 print('Test done.')
-
-
-#lcd.close()

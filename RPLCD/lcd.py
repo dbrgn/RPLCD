@@ -129,7 +129,8 @@ class CharLCD(object):
     # Init, setup, teardown
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                       numbering_mode=RPIO.BOARD):
+                       numbering_mode=RPIO.BOARD,
+                       cols=20, rows=4, dotsize=8):
         """
         Character LCD controller.
 
@@ -152,11 +153,20 @@ class CharLCD(object):
             numbering_mode:
                 Which scheme to use for numbering the GPIO pins.
                 Default: RPIO.BOARD (1-26).
+            rows:
+                Number of display rows (usually 1, 2 or 4). Default: 4.
+            cols:
+                Number of columns per row (usually 16 or 20). Default 20.
+            dotsize:
+                Some 1 line displays allow a font height of 10px.
+                Allowed: 8 or 10. Default: 8.
 
         Returns:
             A :class:`CharLCD` instance.
 
         """
+        assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
+
         # Set attributes
         self.numbering_mode = numbering_mode
         if len(pins_data) == 4:  # 4 bit mode
@@ -172,36 +182,20 @@ class CharLCD(object):
                               d0=block1[0], d1=block1[1], d2=block1[2], d3=block1[3],
                               d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
                               mode=numbering_mode)
+        self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
 
         # Setup GPIO
         RPIO.setmode(self.numbering_mode)
         for pin in list(filter(None, self.pins))[:-1]:
             RPIO.setup(pin, RPIO.OUT)
 
-    def setup(self, rows=4, cols=20, dotsize=8):
-        """Initialize display with the specified configuration.
-
-        Args:
-            rows:
-                Number of display rows (usually 1, 2 or 4). Default: 4.
-            cols:
-                Number of columns per row (usually 16 or 20). Default 20.
-            dotsize:
-                Some 1 line displays allow a font height of 10px.
-                Allowed: 8 or 10. Default: 8.
-
-        """
-        # Set attributes
-        self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
+        # Setup initial display configuration
         displayfunction = self.data_bus_mode | LCD_1LINE | LCD_5x8DOTS
-
-        # LCD only uses two lines on 4 row displays
         if rows == 4:
+            # LCD only uses two lines on 4 row displays
             displayfunction |= LCD_2LINE
-
-        # For some 1 line displays you can select a 10px font.
-        assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
         if dotsize == 10:
+            # For some 1 line displays you can select a 10px font.
             displayfunction |= LCD_5x10DOTS
 
         # Initialization

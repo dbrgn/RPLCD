@@ -103,13 +103,17 @@ Init, Setup, Teardown
     import RPIO
     from RPLCD import CharLCD
 
-    # Initialize LCD
+    # Initialize display. All values have default values and are therefore
+    # optional.
     lcd = CharLCD(pin_rs=15, pin_e=16, pins_data=[21, 22, 23, 24],
-                  numbering_mode=RPIO.BOARD)
-    lcd.setup(cols=20, rows=4, dotsize=8)
+                  numbering_mode=RPIO.BOARD,
+                  cols=20, rows=4, dotsize=8)
 
-    # (...)
+    ...
 
+    # If desired, reset the GPIO configuration and optionally clear the screen.
+    # Note that this can lead to undesired effects on the LCD, because the GPIO
+    # pins are not configured as input or output anymore.
     lcd.close(clear=True)
 
 Properties
@@ -125,7 +129,7 @@ High Level Functions
 --------------------
 
 - ``write_string(value)``: Write the specified string to the display. You can
-  use newline and carriage return characters.
+  use newline (``\n``) and carriage return (``\n``) characters.
 - ``clear()``: Overwrite display with blank characters and reset cursor position.
 - ``home()``: Set cursor to initial position and reset any shifting.
 - ``shift_display(amount)``: Shift the display. Use negative amounts to shift
