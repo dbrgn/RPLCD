@@ -5,7 +5,7 @@ import time
 from collections import namedtuple
 
 import RPIO
-from flufl.enum import IntEnum
+from flufl.enum import Enum
 
 
 ### BIT PATTERNS ###
@@ -65,17 +65,17 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 ### ENUMS ###
 
-class Direction(IntEnum):
+class Direction(Enum):
     left = LCD_ENTRYRIGHT
     right = LCD_ENTRYLEFT
 
 
-class ShiftMode(IntEnum):
+class ShiftMode(Enum):
     cursor = LCD_ENTRYSHIFTDECREMENT
     display = LCD_ENTRYSHIFTINCREMENT
 
 
-class CursorMode(IntEnum):
+class CursorMode(Enum):
     hide = LCD_CURSOROFF | LCD_BLINKOFF
     line = LCD_CURSORON | LCD_BLINKOFF
     blink = LCD_CURSOROFF | LCD_BLINKON
@@ -216,7 +216,7 @@ class CharLCD(object):
         self.clear()
 
         # Configure entry mode
-        self._cursor_move_mode = (Direction.right)
+        self._cursor_move_mode = int(Direction.right)
         self._display_shift_mode = int(ShiftMode.cursor)
         self._cursor_pos = (0, 0)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
@@ -249,7 +249,7 @@ class CharLCD(object):
             raise ValueError('Internal _cursor_move_mode has invalid value.')
 
     def _set_cursor_move_mode(self, value):
-        if not isinstance(value, Direction):
+        if not value in Direction:
             raise ValueError('Cursor move mode must be of ``Direction`` type.')
         self._cursor_move_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
@@ -265,7 +265,7 @@ class CharLCD(object):
             raise ValueError('Internal _display_shift_mode has invalid value.')
 
     def _set_write_shift_mode(self, value):
-        if not isinstance(value, ShiftMode):
+        if value in ShiftMode:
             raise ValueError('Write shift mode must be of ``ShiftMode`` type.')
         self._display_shift_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
@@ -292,7 +292,7 @@ class CharLCD(object):
             raise ValueError('Internal _cursor_mode has invalid value.')
 
     def _set_cursor_mode(self, value):
-        if not isinstance(value, CursorMode):
+        if not value in CursorMode:
             raise ValueError('Cursor mode must be of ``CursorMode`` type.')
         self._cursor_mode = int(value)
         self.command(LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
