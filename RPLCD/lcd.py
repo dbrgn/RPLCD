@@ -328,7 +328,7 @@ class CharLCD(object):
         usleep(50)
 
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
-            doc='How the cursor should behave (``CursorMode.hide``, ' + \
+            doc='How the cursor should behave (``CursorMode.hide``, ' +
                                    '``CursorMode.line`` or ``CursorMode.blink``).')
 
     # High level commands
