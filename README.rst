@@ -73,6 +73,13 @@ Mid Level Functions
 - ``command(value)``: Write a raw byte to the LCD.
 
 
+Testing
+=======
+
+To test your display, please run the ``test.py`` script and confirm/verify each
+step with the enter key.
+
+
 Resources
 =========
 

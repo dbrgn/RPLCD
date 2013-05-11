@@ -66,8 +66,8 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 ### ENUMS ###
 
 class Direction(Enum):
-    left = LCD_ENTRYRIGHT
-    right = LCD_ENTRYLEFT
+    left = LCD_ENTRYLEFT
+    right = LCD_ENTRYRIGHT
 
 
 class ShiftMode(Enum):
