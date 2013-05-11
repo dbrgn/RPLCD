@@ -324,7 +324,7 @@ class CharLCD(object):
         amounts to shift right."""
         if amount == 0:
             return
-        direction = LCD_MOVELEFT if amount > 0 else LCD_MOVERIGHT
+        direction = LCD_MOVERIGHT if amount > 0 else LCD_MOVELEFT
         for i in xrange(abs(amount)):
             self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | direction)
             usleep(50)
