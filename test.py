@@ -5,7 +5,7 @@ import RPIO
 from RPLCD import CharLCD, Alignment, CursorMode, ShiftMode
 
 try:
-    input = input
+    input = raw_input
 except NameError:
     pass
 
