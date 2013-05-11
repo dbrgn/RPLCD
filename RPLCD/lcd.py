@@ -216,10 +216,10 @@ class CharLCD(object):
         self.clear()
 
         # Configure entry mode
-        self._cursor_move_mode = int(Direction.right)
+        self._text_align_mode = int(Direction.left)
         self._display_shift_mode = int(ShiftMode.cursor)
         self._cursor_pos = (0, 0)
-        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
+        self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         usleep(50)
 
     def close(self, clear=False):
@@ -242,20 +242,20 @@ class CharLCD(object):
     cursor_pos = property(_get_cursor_pos, _set_cursor_pos,
             doc='The cursor position as a 2-tuple (row, col).')
 
-    def _get_cursor_move_mode(self):
+    def _get_text_align_mode(self):
         try:
-            return Direction[self._cursor_move_mode]
+            return Direction[self._text_align_mode]
         except ValueError:
-            raise ValueError('Internal _cursor_move_mode has invalid value.')
+            raise ValueError('Internal _text_align_mode has invalid value.')
 
-    def _set_cursor_move_mode(self, value):
+    def _set_text_align_mode(self, value):
         if not value in Direction:
             raise ValueError('Cursor move mode must be of ``Direction`` type.')
-        self._cursor_move_mode = int(value)
-        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
+        self._text_align_mode = int(value)
+        self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         usleep(50)
 
-    cursor_move_mode = property(_get_cursor_move_mode, _set_cursor_move_mode,
+    text_align_mode = property(_get_text_align_mode, _set_text_align_mode,
             doc='The cursor move direction (``Directions.left`` or ``Directions.right``).')
 
     def _get_write_shift_mode(self):
@@ -268,7 +268,7 @@ class CharLCD(object):
         if not value in ShiftMode:
             raise ValueError('Write shift mode must be of ``ShiftMode`` type.')
         self._display_shift_mode = int(value)
-        self.command(LCD_ENTRYMODESET | self._cursor_move_mode | self._display_shift_mode)
+        self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         usleep(50)
 
     write_shift_mode = property(_get_write_shift_mode, _set_write_shift_mode,

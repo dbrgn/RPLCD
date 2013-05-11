@@ -53,7 +53,7 @@ Properties
 
 - ``display_enabled`` -> ``True`` / ``False``
 - ``cursor_pos`` -> ``(row, col)``
-- ``cursor_move_mode`` -> ``Direction.left`` / ``Direction.right``
+- ``text_align_mode`` -> ``Direction.left`` / ``Direction.right``
 - ``write_shift_mode`` -> ``ShiftMode.cursor`` / ``ShiftMode.display``
 - ``cursor_mode`` -> ``CursorMode.hide`` / ``CursorMode.line`` / ``CursorMode.blink``
 
