@@ -265,6 +265,7 @@ class CharLCD(object):
         if not hasattr(value, '__getitem__') or len(value) != 2:
             raise ValueError('Cursor position should be determined by a 2-tuple.')
         row_offsets = [0x00, 0x40, 0x14, 0x54]  # TODO handle smaller displays
+        self._cursor_pos = value
         self.command(LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
         usleep(50)
 
@@ -334,9 +335,28 @@ class CharLCD(object):
     # High level commands
 
     def write_string(self, value):
-        """Write the specified string to the display."""
+        """Write the specified string to the display.
+
+        To control multiline behavior, use newline (\n) and carriage return
+        (\r) characters.
+
+        Lines that are too long automatically continue on next line.
+
+        """
         for char in value:
-            self.write(ord(char))
+            row, col = self.cursor_pos
+            if char == '\n':
+                if row < self.lcd.rows - 1:
+                    self.cursor_pos = (row + 1, col)
+                else:
+                    self.cursor_pos = (0, col)
+            elif char == '\r':
+                if self.text_align_mode is Alignment.left:
+                    self.cursor_pos = (row, 0)
+                else:
+                    self.cursor_pos = (row, self.lcd.cols - 1)
+            else:
+                self.write(ord(char))
 
     def clear(self):
         """Overwrite display with blank characters and reset cursor position."""
@@ -366,7 +386,34 @@ class CharLCD(object):
 
     def write(self, value):
         """Write a raw byte to the LCD."""
+        # Write byte
         self._send(value, RS_DATA)
+
+        # Get current position
+        row, col = self._cursor_pos
+
+        # Update cursor position.
+        if self.text_align_mode is Alignment.left:
+            if col < self.lcd.cols:
+                # No newline, update internal pointer
+                self._cursor_pos = (row, col + 1)
+            else:
+                # Newline, reset pointer
+                if row < self.lcd.rows - 1:
+                    self.cursor_pos = (row + 1, 0)
+                else:
+                    self.cursor_pos = (0, 0)
+        else:
+            if col > 0:
+                # No newline, update internal pointer
+                self._cursor_pos = (row, col - 1)
+            else:
+                # Newline, reset pointer
+                if row < self.lcd.rows - 1:
+                    self.cursor_pos = (row + 1, self.lcd.cols - 1)
+                else:
+                    self.cursor_pos = (0, self.lcd.cols - 1)
+
 
     # Low level commands
 

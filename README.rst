@@ -124,7 +124,8 @@ Properties
 High Level Functions
 --------------------
 
-- ``write_string(value)``: Write the specified string to the display.
+- ``write_string(value)``: Write the specified string to the display. You can
+  use newline and carriage return characters.
 - ``clear()``: Overwrite display with blank characters and reset cursor position.
 - ``home()``: Set cursor to initial position and reset any shifting.
 - ``shift_display(amount)``: Shift the display. Use negative amounts to shift
