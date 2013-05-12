@@ -25,6 +25,11 @@ Goals
 Example
 =======
 
+Writing To Display
+------------------
+
+Basic text output with multiline control.
+
 .. sourcecode:: python
 
     >>> from RPLCD import CharLCD
@@ -35,6 +40,24 @@ Example
 
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
     :alt: Photo of 20x4 LCD in action
+
+Context Managers
+----------------
+
+Unlike other uses of context managers, these implementations prepare the
+configuration before writing to the display, but don't reset it after the block
+ends.
+
+.. sourcecode:: python
+
+    >>> from RPLCD import CharLCD, cleared, cursor
+    >>> lcd = CharLCD()
+    >>>
+    >>> with cleared(lcd):
+    >>>     lcd.write_string('LCD is cleared.')
+    >>>
+    >>> with cursor(lcd, 2, 0):
+    >>>     lcd.write_string('This is he 3rd line.')
 
 
 Installing
