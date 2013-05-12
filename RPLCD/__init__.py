@@ -1,1 +1,3 @@
-from .lcd import CharLCD, Alignment, CursorMode, ShiftMode
+from .lcd import CharLCD
+from .lcd import Alignment, CursorMode, ShiftMode
+from .contextmanagers import cursor, cleared

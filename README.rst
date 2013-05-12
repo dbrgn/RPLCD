@@ -153,6 +153,12 @@ Mid Level Functions
 - ``write(value)``: Send a raw command to the LCD.
 - ``command(value)``: Write a raw byte to the LCD.
 
+Context Managers
+----------------
+
+- ``cursor(lcd, row, col)``: Control the cursor position before entering the block.
+- ``cleared(lcd)``: Clear the display before entering the block.
+
 
 Testing
 =======

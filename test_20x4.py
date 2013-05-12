@@ -2,7 +2,9 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import RPIO
-from RPLCD import CharLCD, Alignment, CursorMode, ShiftMode
+from RPLCD import CharLCD
+from RPLCD import Alignment, CursorMode, ShiftMode
+from RPLCD import cursor, cleared
 
 try:
     input = raw_input
@@ -56,11 +58,15 @@ input('The string "cursor" should now be on the third row, column 0. ')
 lcd.home()
 input('Cursor should now be at initial position. Everything should be shifted to the right by 5 characters. ')
 
+with cursor(lcd, 3, 19):
+    lcd.write_string('X')
+input('The last character on the LCD should now be an "X"')
+
 lcd.display_enabled = False
 input('Display should now be blank. ')
 
-lcd.clear()
-lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
+with cleared(lcd):
+    lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
 lcd.display_enabled = True
 input('Display should now show "Eggs, Ham, Bacon and Spam". ')
 
