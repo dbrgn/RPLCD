@@ -117,7 +117,7 @@ Init, Setup, Teardown
 
     # Initialize display. All values have default values and are therefore
     # optional.
-    lcd = CharLCD(pin_rs=15, pin_e=16, pins_data=[21, 22, 23, 24],
+    lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=RPIO.BOARD,
                   cols=20, rows=4, dotsize=8)
 
