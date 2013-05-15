@@ -198,6 +198,9 @@ class CharLCD(object):
             # For some 1 line displays you can select a 10px font.
             displayfunction |= LCD_5x10DOTS
 
+        # Create content cache
+        self._content = [[0x20] * cols] * rows
+
         # Initialization
         msleep(50)
         RPIO.output(self.pins.rs, 0)
@@ -385,11 +388,14 @@ class CharLCD(object):
 
     def write(self, value):
         """Write a raw byte to the LCD."""
-        # Write byte
-        self._send(value, RS_DATA)
 
         # Get current position
         row, col = self._cursor_pos
+
+        # Write byte if changed
+        if self._content[row][col] != value:
+            self._send(value, RS_DATA)
+            self._content[row][col] = value  # Update content cache
 
         # Update cursor position.
         if self.text_align_mode is Alignment.left:
@@ -412,7 +418,6 @@ class CharLCD(object):
                     self.cursor_pos = (row + 1, self.lcd.cols - 1)
                 else:
                     self.cursor_pos = (0, self.lcd.cols - 1)
-
 
     # Low level commands
 

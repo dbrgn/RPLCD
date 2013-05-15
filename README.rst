@@ -14,12 +14,13 @@ Arduino's LiquidCrystal_ library.
 The GPIO access is provided by the great RPIO_ library.
 
 
-Goals
-=====
+Features
+========
 
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
 - Python 2/3 compatible
+- Caching: Only write characters if they changed
 
 
 Example
