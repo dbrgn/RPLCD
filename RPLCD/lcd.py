@@ -199,7 +199,7 @@ class CharLCD(object):
             displayfunction |= LCD_5x10DOTS
 
         # Create content cache
-        self._content = [[0x20] * cols] * rows
+        self._content = [[0x20] * cols for _ in range(rows)]
 
         # Initialization
         msleep(50)
