@@ -396,12 +396,19 @@ class CharLCD(object):
         if self._content[row][col] != value:
             self._send(value, RS_DATA)
             self._content[row][col] = value  # Update content cache
+            unchanged = False
+        else:
+            unchanged = True
 
         # Update cursor position.
         if self.text_align_mode is Alignment.left:
             if col < self.lcd.cols - 1:
                 # No newline, update internal pointer
-                self._cursor_pos = (row, col + 1)
+                newpos = (row, col + 1)
+                if unchanged:
+                    self.cursor_pos = newpos
+                else:
+                    self._cursor_pos = newpos
             else:
                 # Newline, reset pointer
                 if row < self.lcd.rows - 1:
@@ -411,7 +418,11 @@ class CharLCD(object):
         else:
             if col > 0:
                 # No newline, update internal pointer
-                self._cursor_pos = (row, col - 1)
+                newpos = (row, col - 1)
+                if unchanged:
+                    self.cursor_pos = newpos
+                else:
+                    self._cursor_pos = newpos
             else:
                 # Newline, reset pointer
                 if row < self.lcd.rows - 1:
