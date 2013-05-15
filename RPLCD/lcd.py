@@ -362,6 +362,7 @@ class CharLCD(object):
         """Overwrite display with blank characters and reset cursor position."""
         self.command(LCD_CLEARDISPLAY)
         self._cursor_pos = (0, 0)
+        self._content = [[0x20] * self.lcd.cols for _ in range(self.lcd.rows)]
         msleep(2)
 
     def home(self):
