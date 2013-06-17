@@ -6,10 +6,10 @@ controller.
 
 Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
+<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`__.
 
 Also tested with a 16x2 LCD from `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`_.
+<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`__.
 
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
