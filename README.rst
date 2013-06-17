@@ -120,12 +120,15 @@ Wiring
 ======
 
 The standard wiring configuration uses the following pins (BOARD numbering
-scheme):
+scheme rev 2):
 
 - RS: 15
 - RW: 18
 - E: 16
 - Data 4-7: 21, 22, 23, 24
+
+.. image:: https://raw.github.com/dbrgn/RPLCD/master/docs/wiring.png
+    :alt: LCD wiring
 
 
 API

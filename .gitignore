@@ -34,3 +34,8 @@ nosetests.xml
 .project
 .pydevproject
 *.sw[op]
+
+# TeX
+*.log
+*.aux
+docs/*.pdf
