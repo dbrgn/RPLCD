@@ -8,7 +8,7 @@ requirements = [l.strip().strip('\n') for l in lines if l.strip() and not l.stri
 readme = open('README.rst').read()
 
 setup(name='RPLCD',
-      version='0.1.1',
+      version='0.1.2',
       description='A Raspberry Pi LCD library for the widely used Hitachi HD44780 controller.',
       long_description=readme,
       author='Danilo Bargen',
