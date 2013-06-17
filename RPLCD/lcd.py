@@ -190,8 +190,10 @@ class CharLCD(object):
             RPIO.setup(pin, RPIO.OUT)
 
         # Setup initial display configuration
-        displayfunction = self.data_bus_mode | LCD_1LINE | LCD_5x8DOTS
-        if rows == 4:
+        displayfunction = self.data_bus_mode | LCD_5x8DOTS
+        if rows == 1:
+            displayfunction |= LCD_1LINE
+        elif rows in [2,4]:
             # LCD only uses two lines on 4 row displays
             displayfunction |= LCD_2LINE
         if dotsize == 10:
