@@ -14,7 +14,7 @@ except NameError:
 RPIO.setwarnings(False)
 
 
-lcd = CharLCD()
+lcd = CharLCD(cols=16, rows=2)
 
 input('Display should be blank. ')
 
@@ -29,14 +29,12 @@ input('"Hello world!" should be on the LCD. ')
 
 assert lcd.cursor_pos == (0, 12), 'cursor_pos should now be (0, 12)'
 
-lcd.cursor_pos = (1, 0)
+lcd.cursor_pos = (0, 15)
+lcd.write_string('1')
+lcd.cursor_pos = (1, 15)
 lcd.write_string('2')
-lcd.cursor_pos = (2, 0)
-lcd.write_string('3')
-lcd.cursor_pos = (3, 0)
-lcd.write_string('4')
-assert lcd.cursor_pos == (3, 1), 'cursor_pos should now be (3, 1)'
-input('Lines 2, 3 and 4 should now be labelled with the right numbers. ')
+assert lcd.cursor_pos == (0, 0), 'cursor_pos should now be (0, 0)'
+input('Lines 1 and 2 should now be labelled with the right numbers on the right side. ')
 
 lcd.clear()
 input('Display should now be clear, cursor should be at initial position. ')
@@ -51,14 +49,14 @@ lcd.write_string('12345')
 input('Both strings should now be at column 0. ')
 
 lcd.write_shift_mode = ShiftMode.cursor
-lcd.cursor_pos = (2, 5)
+lcd.cursor_pos = (1, 5)
 lcd.write_string(lcd.write_shift_mode.name)
-input('The string "cursor" should now be on the third row, column 0. ')
+input('The string "cursor" should now be on the second row, column 0. ')
 
 lcd.home()
 input('Cursor should now be at initial position. Everything should be shifted to the right by 5 characters. ')
 
-with cursor(lcd, 3, 19):
+with cursor(lcd, 1, 15):
     lcd.write_string('X')
 input('The last character on the LCD should now be an "X"')
 
@@ -66,9 +64,9 @@ lcd.display_enabled = False
 input('Display should now be blank. ')
 
 with cleared(lcd):
-    lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
+    lcd.write_string('Eggs, Ham\n\rand Spam')
 lcd.display_enabled = True
-input('Display should now show "Eggs, Ham, Bacon and Spam". ')
+input('Display should now show "Eggs, Ham and Spam" with a line break after "Ham". ')
 
 lcd.shift_display(4)
 input('Text should now be shifted to the right by 4 characters. ')
@@ -86,12 +84,16 @@ input('The word "mapS" should now be replaced with "Wurscht". ')
 lcd.clear()
 lcd.write_string('1\n')
 lcd.write_string('2\n')
+lcd.cursor_pos = (0, 2)
 lcd.write_string('3\n')
 lcd.write_string('4')
-input('The numbers 1-4 should now be displayed, each line shifted to the right by 1 char more than the previous. ')
+lcd.cursor_pos = (0, 4)
+lcd.write_string('5\n')
+lcd.write_string('6')
+input('The numbers 1-6 should now be displayed in a zig zag line starting in the top left corner. ')
 
 lcd.clear()
-lcd.write_string('This is a long string that will wrap across multiple lines!')
+lcd.write_string('This will wrap around both lines')
 input('Text should nicely wrap around lines. ')
 
 print('Test done.')

@@ -8,6 +8,9 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`_.
 
+Also tested with a 16x2 LCD from `mikroshop.ch
+<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`_.
+
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
 
@@ -195,8 +198,8 @@ confirm/verify each step with the enter key. If you don't use the standard
 wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
 ``test_20x4.py``.
 
-Unfortunately I don't have a 16x2 display at hand yet, so I can't create a test
-script for that one. If someone else wants to adapt the script, feel free!
+To test a 16x2 display, procede as explained above, but use the ``test_16x2.py``
+script instead.
 
 
 Resources
