@@ -443,7 +443,7 @@ class CharLCD(object):
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
 
         # Choose instruction or data mode
-        RPIO.setup(self.pins.rs, mode)
+        RPIO.output(self.pins.rs, mode)
 
         # If the RW pin is used, set it to low in order to write.
         if self.pins.rw is not None:
