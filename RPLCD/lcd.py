@@ -76,6 +76,26 @@ class CharLCD(object):
         # Initialize display
         self._init_connection()
 
+        # Choose 4 or 8 bit mode
+        if self.data_bus_mode == c.LCD_4BITMODE:
+            # Hitachi manual page 46
+            self._write4bits(0x03)
+            c.msleep(4.5)
+            self._write4bits(0x03)
+            c.msleep(4.5)
+            self._write4bits(0x03)
+            c.usleep(100)
+            self._write4bits(0x02)
+        elif self.data_bus_mode == c.LCD_8BITMODE:
+            # Hitachi manual page 45
+            self._write8bits(0x30)
+            c.msleep(4.5)
+            self._write8bits(0x30)
+            c.usleep(100)
+            self._write8bits(0x30)
+        else:
+            raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
+
         # Write configuration to display
         self.command(c.LCD_FUNCTIONSET | displayfunction)
         c.usleep(50)

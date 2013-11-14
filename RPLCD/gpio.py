@@ -104,26 +104,6 @@ class CharLCD(BaseCharLCD):
         if self.pins.rw is not None:
             RPIO.output(self.pins.rw, 0)
 
-        # Choose 4 or 8 bit mode
-        if self.data_bus_mode == c.LCD_4BITMODE:
-            # Hitachi manual page 46
-            self._write4bits(0x03)
-            c.msleep(4.5)
-            self._write4bits(0x03)
-            c.msleep(4.5)
-            self._write4bits(0x03)
-            c.usleep(100)
-            self._write4bits(0x02)
-        elif self.data_bus_mode == c.LCD_8BITMODE:
-            # Hitachi manual page 45
-            self._write8bits(0x30)
-            c.msleep(4.5)
-            self._write8bits(0x30)
-            c.usleep(100)
-            self._write8bits(0x30)
-        else:
-            raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
-
     def _close_connection(self):
         RPIO.cleanup()
 
@@ -131,7 +111,7 @@ class CharLCD(BaseCharLCD):
 
     def _send(self, value, mode):
         """Send the specified value to the display with automatic 4bit / 8bit selection.
-        The mode is either ``constants.RS_DATA`` or ``constants.RS_INSTRUCTION``."""
+        The mode is either ``common.RS_DATA`` or ``common.RS_INSTRUCTION``."""
 
         # Choose instruction or data mode
         RPIO.output(self.pins.rs, mode)
