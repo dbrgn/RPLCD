@@ -26,6 +26,18 @@ Features
 - Caching: Only write characters if they changed
 
 
+Setup
+=====
+
+Install using pip::
+
+    pip install RPLCD
+
+If you want to use I2C, you also need smbus::
+
+    apt-get install python-smbus
+
+
 Example
 =======
 

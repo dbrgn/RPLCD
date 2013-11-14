@@ -39,3 +39,5 @@ nosetests.xml
 *.log
 *.aux
 docs/*.pdf
+
+VIRTUAL/
