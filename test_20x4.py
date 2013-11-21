@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-import RPIO
-from RPLCD import CharLCD
+from RPLCD.i2c import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
 
@@ -11,10 +10,8 @@ try:
 except NameError:
     pass
 
-RPIO.setwarnings(False)
 
-
-lcd = CharLCD()
+lcd = CharLCD(0x27)
 
 input('Display should be blank. ')
 

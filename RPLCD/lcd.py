@@ -79,20 +79,20 @@ class CharLCD(object):
         # Choose 4 or 8 bit mode
         if self.data_bus_mode == c.LCD_4BITMODE:
             # Hitachi manual page 46
-            self._write4bits(0x03)
+            self.command(0x03)
             c.msleep(4.5)
-            self._write4bits(0x03)
+            self.command(0x03)
             c.msleep(4.5)
-            self._write4bits(0x03)
+            self.command(0x03)
             c.usleep(100)
-            self._write4bits(0x02)
+            self.command(0x02)
         elif self.data_bus_mode == c.LCD_8BITMODE:
             # Hitachi manual page 45
-            self._write8bits(0x30)
+            self.command(0x30)
             c.msleep(4.5)
-            self._write8bits(0x30)
+            self.command(0x30)
             c.usleep(100)
-            self._write8bits(0x30)
+            self.command(0x30)
         else:
             raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
 
@@ -132,7 +132,8 @@ class CharLCD(object):
         if value[0] not in range(self.lcd.rows) or value[1] not in range(self.lcd.cols):
             msg = 'Cursor position {pos!r} invalid on a {lcd.rows}x{lcd.cols} LCD.'
             raise ValueError(msg.format(pos=value, lcd=self.lcd))
-        row_offsets = [0x00, 0x40, 0x14, 0x54]  # TODO handle smaller displays
+        row_offsets = [0x00, 0x40, 0x14, 0x54]  # TODO fix offsets for smaller displays
+        #row_offsets = [0x00, 0x20, 0x10, 0x30]
         self._cursor_pos = value
         self.command(c.LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
         c.usleep(50)

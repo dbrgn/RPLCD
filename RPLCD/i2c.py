@@ -39,23 +39,35 @@ class CharLCD(BaseCharLCD):
 
     """
     def __init__(self, address, port=1, cols=20, rows=4, dotsize=8):
-	self.address = address
-	self.port = port
+        self.address = address
+        self.port = port
+        self._backlight = c.LCD_BACKLIGHT
 
         # Currently the I2C mode only supports 4 bit communication 
-    	self.data_bus_mode = c.LCD_4BITMODE
+        self.data_bus_mode = c.LCD_4BITMODE
         
-	# Call superclass
-	super(CharLCD, self).__init__(cols, rows, dotsize)
+        # Call superclass
+        super(CharLCD, self).__init__(cols, rows, dotsize)
 
     def _init_connection(self):
         print('init connection')
         self.bus = SMBus(self.port)
         c.msleep(50)
-        self.bus.write_byte(self.address, c.LCD_BACKLIGHT)
 
     def _close_connection(self):
         print('close connection')
+
+    # High level commands
+
+    def _get_backlight_enabled(self):
+        return self._backlight == c.LCD_BACKLIGHT
+
+    def _set_backlight_enabled(self, value):
+        self._backlight = c.LCD_BACKLIGHT if value else c.LCD_NOBACKLIGHT
+        self.bus.write_byte(self.address, self._backlight)
+
+    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
+            doc='Whether or not to enable the backlight.')
 
     # Low level commands
 
@@ -67,18 +79,18 @@ class CharLCD(BaseCharLCD):
 
     def _write4bits(self, value):
         """Write 4 bits of data into the data bus."""
-        self.bus.write_byte(self.address, value | c.LCD_BACKLIGHT)
-        self._pulse_enable(value)
+        self.bus.write_byte(self.address, value | self._backlight)
+        self._pulse_data(value)
 
     def _write8bits(self, value):
         """Write 8 bits of data into the data bus."""
         raise NotImplementedError('I2C currently supports only 4bit.')
 
-    def _pulse_enable(self, value):
+    def _pulse_data(self, value):
         """Pulse the `enable` flag to process value."""
-        self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | c.LCD_BACKLIGHT))
+        self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | self._backlight))
         c.usleep(1)
-        self.bus.write_byte(self.address, value | c.PIN_ENABLE | c.LCD_BACKLIGHT)
+        self.bus.write_byte(self.address, value | c.PIN_ENABLE | self._backlight)
         c.usleep(1)
-        self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | c.LCD_BACKLIGHT))
+        self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | self._backlight))
         c.usleep(100)
