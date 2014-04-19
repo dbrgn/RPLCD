@@ -14,7 +14,8 @@ Also tested with a 16x2 LCD from `mikroshop.ch
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
 
-The GPIO access is provided by the great RPIO_ library.
+No external dependencies (except the RPi.GPIO library, which comes preinstalled
+on Raspbian) are needed to use this library.
 
 
 Features
@@ -24,6 +25,7 @@ Features
 - Support for both 4 bit and 8 bit modes
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
+- No external dependencies
 
 
 Example
@@ -67,46 +69,11 @@ ends.
 Installing
 ==========
 
-(**TLDR**: Use ``pip install RPLCD``)
+From PyPI
+---------
 
-Prerequisites
--------------
-
-As prerequisite to build the RPIO_ dependency, you need the ``python-dev``
-package. And to install the package itself, you'll want to use ``pip``. Both
-should already be installed on a regular Raspbian image. Otherwise, install
-them::
-
-    $ sudo apt-get install python-dev python-pip
-
-Virtualenv Installation
------------------------
-
-I would recommend you to always use virtualenv_ and virtualenvwrapper when
-developing Python applications. This way, you have an isolated environment for
-each project, which prevents package version conflicts.
-
-To install virtualenv and virtualenvwrapper::
-
-    $ sudo apt-get install virtualenvwrapper
-
-Log out and back in to activate the virtualenvwrapper scripts. Then create a
-new virtualenv::
-
-    $ mkvirtualenv myproject
-
-To enable the virtualenv, use ``workon myproject`` and to disable it use
-``deactivate``.
-
-Then install the RPLCD library with its dependencies::
-
-    $ pip install RPLCD
-
-Systemwide Installation
------------------------
-
-If you want you can also skip the virtualenv part and install the library
-system-wide. In that case just run pip as root::
+You can install RPLCD directly from `PyPI
+<https://pypi.python.org/pypi/RPLCD/>`_ using pip::
 
     $ sudo pip install RPLCD
 
@@ -142,13 +109,13 @@ Init, Setup, Teardown
 
 .. sourcecode:: python
 
-    import RPIO
+    import RPi.GPIO as GPIO
     from RPLCD import CharLCD
 
     # Initialize display. All values have default values and are therefore
     # optional.
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                  numbering_mode=RPIO.BOARD,
+                  numbering_mode=GPIO.BOARD,
                   cols=20, rows=4, dotsize=8)
 
     ...
@@ -216,8 +183,9 @@ This code is licensed under the MIT license, see the `LICENSE file
 <https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
 <http://www.tldrlegal.com/license/mit-license>`_ for more information. 
 
+The module `RPLCD/enum.py` is (c) 2004-2013 by Barry Warsaw. It was distributed
+as part of the `flufl.enum` package under the LGPL License version 3 or later.
 
-.. _rpio: https://github.com/metachris/RPIO
+
 .. _charlcd: https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD
 .. _liquidcrystal: http://arduino.cc/en/Reference/LiquidCrystal
-.. _virtualenv: http://blog.dbrgn.ch/2012/9/18/virtualenv-quickstart/

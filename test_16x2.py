@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-import RPIO
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
@@ -11,7 +10,6 @@ try:
 except NameError:
     pass
 
-RPIO.setwarnings(False)
 
 
 lcd = CharLCD(cols=16, rows=2)

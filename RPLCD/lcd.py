@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2013 Danilo Bargen
+Copyright (C) 2013-2014 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -25,8 +25,9 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import time
 from collections import namedtuple
 
-import RPIO
-from flufl.enum import Enum
+import RPi.GPIO as GPIO
+
+from . import enum
 
 
 ### PYTHON 3 COMPAT ###
@@ -94,17 +95,17 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 ### ENUMS ###
 
-class Alignment(Enum):
+class Alignment(enum.Enum):
     left = LCD_ENTRYLEFT
     right = LCD_ENTRYRIGHT
 
 
-class ShiftMode(Enum):
+class ShiftMode(enum.Enum):
     cursor = LCD_ENTRYSHIFTDECREMENT
     display = LCD_ENTRYSHIFTINCREMENT
 
 
-class CursorMode(Enum):
+class CursorMode(enum.Enum):
     hide = LCD_CURSOROFF | LCD_BLINKOFF
     line = LCD_CURSORON | LCD_BLINKOFF
     blink = LCD_CURSOROFF | LCD_BLINKON
@@ -129,7 +130,7 @@ class CharLCD(object):
     # Init, setup, teardown
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                       numbering_mode=RPIO.BOARD,
+                       numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8):
         """
         Character LCD controller.
@@ -151,8 +152,8 @@ class CharLCD(object):
                 List of data bus pins in 8 bit mode (DB0-DB7) or in 8 bit mode
                 (DB4-DB7) in ascending order. Default: [21, 22, 23, 24].
             numbering_mode:
-                Which scheme to use for numbering the GPIO pins.
-                Default: RPIO.BOARD (1-26).
+                Which scheme to use for numbering of the GPIO pins, either
+                ``GPIO.BOARD`` or ``GPIO.BCM``.  Default: ``GPIO.BOARD`` (1-26).
             rows:
                 Number of display rows (usually 1, 2 or 4). Default: 4.
             cols:
@@ -185,9 +186,9 @@ class CharLCD(object):
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
 
         # Setup GPIO
-        RPIO.setmode(self.numbering_mode)
+        GPIO.setmode(self.numbering_mode)
         for pin in list(filter(None, self.pins))[:-1]:
-            RPIO.setup(pin, RPIO.OUT)
+            GPIO.setup(pin, GPIO.OUT)
 
         # Setup initial display configuration
         displayfunction = self.data_bus_mode | LCD_5x8DOTS
@@ -205,10 +206,10 @@ class CharLCD(object):
 
         # Initialization
         msleep(50)
-        RPIO.output(self.pins.rs, 0)
-        RPIO.output(self.pins.e, 0)
+        GPIO.output(self.pins.rs, 0)
+        GPIO.output(self.pins.e, 0)
         if self.pins.rw is not None:
-            RPIO.output(self.pins.rw, 0)
+            GPIO.output(self.pins.rw, 0)
 
         # Choose 4 or 8 bit mode
         if self.data_bus_mode == LCD_4BITMODE:
@@ -253,7 +254,7 @@ class CharLCD(object):
     def close(self, clear=False):
         if clear:
             self.clear()
-        RPIO.cleanup()
+        GPIO.cleanup()
 
     # Properties
 
@@ -443,11 +444,11 @@ class CharLCD(object):
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
 
         # Choose instruction or data mode
-        RPIO.output(self.pins.rs, mode)
+        GPIO.output(self.pins.rs, mode)
 
         # If the RW pin is used, set it to low in order to write.
         if self.pins.rw is not None:
-            RPIO.output(self.pins.rw, 0)
+            GPIO.output(self.pins.rw, 0)
 
         # Write data out in chunks of 4 or 8 bit
         if self.data_bus_mode == LCD_8BITMODE:
@@ -460,21 +461,21 @@ class CharLCD(object):
         """Write 4 bits of data into the data bus."""
         for i in range(4):
             bit = (value >> i) & 0x01
-            RPIO.output(self.pins[i + 7], bit)
+            GPIO.output(self.pins[i + 7], bit)
         self._pulse_enable()
 
     def _write8bits(self, value):
         """Write 8 bits of data into the data bus."""
         for i in range(8):
             bit = (value >> i) & 0x01
-            RPIO.output(self.pins[i + 3], bit)
+            GPIO.output(self.pins[i + 3], bit)
         self._pulse_enable()
 
     def _pulse_enable(self):
         """Pulse the `enable` flag to process data."""
-        RPIO.output(self.pins.e, 0)
+        GPIO.output(self.pins.e, 0)
         usleep(1)
-        RPIO.output(self.pins.e, 1)
+        GPIO.output(self.pins.e, 1)
         usleep(1)
-        RPIO.output(self.pins.e, 0)
+        GPIO.output(self.pins.e, 0)
         usleep(100)  # commands need > 37us to settle
