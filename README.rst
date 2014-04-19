@@ -21,11 +21,23 @@ on Raspbian) are needed to use this library.
 Features
 ========
 
+Implemented
+-----------
+
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies
+
+Wishlist
+--------
+
+These things may get implemented in the future, depending on my free time and
+motivation:
+
+- I²C support
+- Functions for creating custom characters
 
 
 Examples
