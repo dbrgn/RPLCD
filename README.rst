@@ -28,8 +28,8 @@ Features
 - No external dependencies
 
 
-Example
-=======
+Examples
+========
 
 Writing To Display
 ------------------
@@ -64,6 +64,14 @@ ends.
     >>>
     >>> with cursor(lcd, 2, 0):
     >>>     lcd.write_string(u'This is he 3rd line.')
+
+Scrolling Text
+--------------
+
+I wrote a blogpost on how to implement scrolling text:
+https://blog.dbrgn.ch/2014/4/20/scrolling-text-with-rplcd/
+
+To see the result, go to https://www.youtube.com/watch?v=49RkQeiVTGU.
 
 
 Installing
