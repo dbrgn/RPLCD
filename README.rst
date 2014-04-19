@@ -147,8 +147,8 @@ High Level Functions
 Mid Level Functions
 -------------------
 
-- ``write(value)``: Send a raw command to the LCD.
-- ``command(value)``: Write a raw byte to the LCD.
+- ``command(value)``: Send a raw command to the LCD.
+- ``write(value)``: Write a raw byte to the LCD.
 
 Context Managers
 ----------------
