@@ -40,9 +40,9 @@ Basic text output with multiline control.
 
     >>> from RPLCD import CharLCD
     >>> lcd = CharLCD()
-    >>> lcd.write_string('Raspberry Pi HD44780')
+    >>> lcd.write_string(u'Raspberry Pi HD44780')
     >>> lcd.cursor_pos = (2, 0)
-    >>> lcd.write_string('http://github.com/\n\rdbrgn/RPLCD')
+    >>> lcd.write_string(u'http://github.com/\n\rdbrgn/RPLCD')
 
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
     :alt: Photo of 20x4 LCD in action
@@ -60,10 +60,10 @@ ends.
     >>> lcd = CharLCD()
     >>>
     >>> with cleared(lcd):
-    >>>     lcd.write_string('LCD is cleared.')
+    >>>     lcd.write_string(u'LCD is cleared.')
     >>>
     >>> with cursor(lcd, 2, 0):
-    >>>     lcd.write_string('This is he 3rd line.')
+    >>>     lcd.write_string(u'This is he 3rd line.')
 
 
 Installing
@@ -137,8 +137,9 @@ Properties
 High Level Functions
 --------------------
 
-- ``write_string(value)``: Write the specified string to the display. You can
-  use newline (``\n``) and carriage return (``\r``) characters.
+- ``write_string(value)``: Write the specified unicode string to the display.
+  You can use newline (``\n``) and carriage return (``\r``) characters to
+  control line breaks.
 - ``clear()``: Overwrite display with blank characters and reset cursor position.
 - ``home()``: Set cursor to initial position and reset any shifting.
 - ``shift_display(amount)``: Shift the display. Use negative amounts to shift
@@ -155,6 +156,48 @@ Context Managers
 
 - ``cursor(lcd, row, col)``: Control the cursor position before entering the block.
 - ``cleared(lcd)``: Clear the display before entering the block.
+
+
+Writing Special Characters
+==========================
+
+You might find that some characters like umlauts aren't written correctly to the
+display. This is because the LCDs usually don't use ASCII, ISO-8859-1 or any
+other standard encoding.
+
+There is a script in this Project though that writes the entire character map
+between 0 and 255 to the display. Simply run it as root (so you have
+permissions to access /dev/mem) and pass it the number of rows and cols in your
+LCD::
+
+    $ sudo python show_charmap.py 2 16
+
+Confirm each page with the enter key. Try to find the position of your desired
+character using the console output. On my display for example, the "ü" character
+is at position 129 (in contrast to ISO-8859-1 or UTF-8, which use 252).
+
+Now you can simply create a unicode character from the bit value and write it
+to the LCD. On Python 2:
+
+.. code:: python
+
+    >>> u'Z%srich is a city in Switzerland.' % unichr(129)
+    u'Z\x81rich is a city in Switzerland.'
+
+And on Python 3, where strings are unicode by default:
+
+.. code:: python
+
+    >>> 'Z%srich is a city in Switzerland.' % chr(129)
+    'Z\x81rich is a city in Switzerland.'
+
+In case you need a character that is not included in the default device
+character map, there is a possibility to create custom characters and write them
+into the HD44780 CGRAM. Unfortunately, this is not supported in RPLCD with high
+level functions yet. But you can always use the ``write()`` and ``command()``
+methods to write raw commands to the LCD. Please refer to the `datasheet
+<http://www.adafruit.com/datasheets/HD44780.pdf>`_ for more information on the
+character creation commands.
 
 
 Testing

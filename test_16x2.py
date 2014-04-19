@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
+import sys
+
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
@@ -10,6 +12,10 @@ try:
 except NameError:
     pass
 
+try:
+    unichr = unichr
+except NameError:
+    unichr = chr
 
 
 lcd = CharLCD(cols=16, rows=2)
@@ -93,5 +99,10 @@ input('The numbers 1-6 should now be displayed in a zig zag line starting in the
 lcd.clear()
 lcd.write_string('This will wrap around both lines')
 input('Text should nicely wrap around lines. ')
+
+lcd.clear()
+lcd.write_string('Paris: 21{deg}C\n\rZ{uuml}rich: 18{deg}C'.format(deg=unichr(176), uuml=unichr(129)))
+print('Text should now show "Paris: 21°C, Zürich: 18°C" without any encoding issues.', end='')
+input()
 
 print('Test done.')

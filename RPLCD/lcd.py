@@ -338,12 +338,28 @@ class CharLCD(object):
     # High level commands
 
     def write_string(self, value):
-        """Write the specified string to the display.
+        """Write the specified unicode string to the display.
 
         To control multiline behavior, use newline (\n) and carriage return
         (\r) characters.
 
         Lines that are too long automatically continue on next line.
+
+        Make sure that you're only passing unicode objects to this function. If
+        you're dealing with bytestrings (the default string type in Python 2),
+        convert it to a unicode object using the ``.decode(encoding)`` method
+        and the appropriate encoding. Example for UTF-8 encoded strings:
+
+        .. code::
+
+            >>> bstring = 'Temperature: 30°C'
+            >>> bstring
+            'Temperature: 30\xc2\xb0C'
+            >>> bstring.decode('utf-8')
+            u'Temperature: 30\xb0C'
+
+        Only characters with an ``ord()`` value between 0 and 255 are currently
+        supported.
 
         """
         for char in value:
