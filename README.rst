@@ -245,11 +245,8 @@ And on Python 3, where strings are unicode by default:
 
 In case you need a character that is not included in the default device
 character map, there is a possibility to create custom characters and write them
-into the HD44780 CGRAM. Unfortunately, this is not supported in RPLCD with high
-level functions yet. But you can always use the ``write()`` and ``command()``
-methods to write raw commands to the LCD. Please refer to the `datasheet
-<http://www.adafruit.com/datasheets/HD44780.pdf>`_ for more information on the
-character creation commands.
+into the HD44780 CGRAM. For more information, see the "Custom Characters"
+section in the "Examples" section.
 
 
 Testing
