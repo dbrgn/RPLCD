@@ -185,7 +185,7 @@ You might find that some characters like umlauts aren't written correctly to the
 display. This is because the LCDs usually don't use ASCII, ISO-8859-1 or any
 other standard encoding.
 
-There is a script in this Project though that writes the entire character map
+There is a script in this project though that writes the entire character map
 between 0 and 255 to the display. Simply run it as root (so you have
 permissions to access /dev/mem) and pass it the number of rows and cols in your
 LCD::
@@ -246,8 +246,9 @@ This code is licensed under the MIT license, see the `LICENSE file
 <https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
 <http://www.tldrlegal.com/license/mit-license>`_ for more information. 
 
-The module `RPLCD/enum.py` is (c) 2004-2013 by Barry Warsaw. It was distributed
-as part of the `flufl.enum` package under the LGPL License version 3 or later.
+The module ``RPLCD/enum.py`` is (c) 2004-2013 by Barry Warsaw. It was
+distributed as part of the ``flufl.enum`` package under the LGPL License version
+3 or later.
 
 
 .. _charlcd: https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD

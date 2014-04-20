@@ -1,2 +1,2 @@
-include README.rst LICENSE test_20x4.py requirements.txt
+include README.rst LICENSE test_20x4.py test_16x2.py show_charmap.py
 recursive-exclude * *.pyc

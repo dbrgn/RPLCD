@@ -1,3 +1,0 @@
-#!/bin/bash
-# Helper script to easily run python scripts as root in a virtualenv
-sudo $VIRTUAL_ENV/bin/python $1
