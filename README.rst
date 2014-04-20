@@ -26,6 +26,7 @@ Implemented
 
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
+- Support for custom characters
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies
@@ -37,7 +38,6 @@ These things may get implemented in the future, depending on my free time and
 motivation:
 
 - I²C support
-- Functions for creating custom characters
 
 
 Examples
@@ -76,6 +76,36 @@ ends.
     >>>
     >>> with cursor(lcd, 2, 0):
     >>>     lcd.write_string(u'This is he 3rd line.')
+
+Custom Characters
+-----------------
+
+The HD44780 supports up to 8 user created characters. A character is defined by
+a 8x5 bitmap. The bitmap should be a tuple of 8 numbers, each representing a 5
+pixel row. Each character is written to a specific location in CGRAM (numbers
+0-7). To actually write a stored character to the display, use the ``unichr()``
+function in combination with the location number you specified.
+
+.. sourcecode:: python
+
+    >>> from RPLCD import CharLCD, cleared, cursor
+    >>> lcd = CharLCD()
+    >>>
+    >>> smiley = (
+    ...     0b00000,
+    ...     0b01010,
+    ...     0b01010,
+    ...     0b00000,
+    ...     0b10001,
+    ...     0b10001,
+    ...     0b01110,
+    ...     0b00000,
+    ... )
+    >>> lcd.create_char(0, smiley)
+    >>> lcd.write_string(unichr(0))
+
+The following tool can help you to create your custom characters:
+https://omerk.github.io/lcdchargen/
 
 Scrolling Text
 --------------
@@ -164,6 +194,8 @@ High Level Functions
 - ``home()``: Set cursor to initial position and reset any shifting.
 - ``shift_display(amount)``: Shift the display. Use negative amounts to shift
   left and positive amounts to shift right.
+- ``create_char(location, bitmap)``: Write a new character into the CGRAM at
+  the specified location (0-7). See the examples section for more information.
 
 Mid Level Functions
 -------------------

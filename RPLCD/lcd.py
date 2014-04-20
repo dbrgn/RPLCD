@@ -194,7 +194,7 @@ class CharLCD(object):
         displayfunction = self.data_bus_mode | LCD_5x8DOTS
         if rows == 1:
             displayfunction |= LCD_1LINE
-        elif rows in [2,4]:
+        elif rows in [2, 4]:
             # LCD only uses two lines on 4 row displays
             displayfunction |= LCD_2LINE
         if dotsize == 10:
@@ -402,6 +402,53 @@ class CharLCD(object):
         for i in range(abs(amount)):
             self.command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | direction)
             usleep(50)
+
+    def create_char(self, location, bitmap):
+        """Create a new character.
+
+        The HD44780 supports up to 8 custom characters (location 0-7).
+
+        Args:
+            location:
+                The place in memory where the character is stored. Values need
+                to be integers between 0 and 7.
+            bitmap:
+                The bitmap containing the character. This should be a tuple of
+                8 numbers, each representing a 5 pixel row.
+
+        Raises:
+            AssertionError:
+                Raised when an invalid location is passed in or when bitmap
+                has an incorrect size.
+
+        Example::
+
+            >>> smiley = (
+            ...     0b00000,
+            ...     0b01010,
+            ...     0b01010,
+            ...     0b00000,
+            ...     0b10001,
+            ...     0b10001,
+            ...     0b01110,
+            ...     0b00000,
+            ... )
+            >>> lcd.create_char(0, smiley)
+
+        """
+        assert 0 <= location <= 7, 'Only locations 0-7 are valid.'
+        assert len(bitmap) == 8, 'Bitmap should have exactly 8 rows.'
+
+        # Store previous position
+        pos = self.cursor_pos
+
+        # Write character to CGRAM
+        self.command(LCD_SETCGRAMADDR | location << 3)
+        for row in bitmap:
+            self._send(row, RS_DATA)
+
+        # Restore cursor pos
+        self.cursor_pos = pos
 
     # Mid level commands
 

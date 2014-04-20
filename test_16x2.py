@@ -101,8 +101,23 @@ lcd.write_string('This will wrap around both lines')
 input('Text should nicely wrap around lines. ')
 
 lcd.clear()
+lcd.cursor_mode = CursorMode.hide
 lcd.write_string('Paris: 21{deg}C\n\rZ{uuml}rich: 18{deg}C'.format(deg=unichr(176), uuml=unichr(129)))
 print('Text should now show "Paris: 21°C, Zürich: 18°C" without any encoding issues.', end='')
 input()
+
+# Test custom chars
+lcd.clear()
+happy = (0b00000, 0b01010, 0b01010, 0b00000, 0b10001, 0b10001, 0b01110, 0b00000)
+sad = (0b00000, 0b01010, 0b01010, 0b00000, 0b01110, 0b10001, 0b10001, 0b00000)
+lcd.create_char(0, sad)
+lcd.write_string(unichr(0))
+lcd.create_char(1, happy)
+lcd.write_string(unichr(1))
+input('You should now see a sad and a happy face next to each other. ')
+lcd.create_char(0, happy)
+lcd.home()
+lcd.write_string(unichr(0))
+input('Now both faces should be happy. ')
 
 print('Test done.')
