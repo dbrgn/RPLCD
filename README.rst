@@ -17,6 +17,16 @@ Arduino's LiquidCrystal_ library.
 No external dependencies (except the RPi.GPIO library, which comes preinstalled
 on Raspbian) are needed to use this library.
 
+If you like this library, I'm happy for support via Flattr or Gittip!
+
+.. image:: http://api.flattr.com/button/flattr-badge-large.png
+    :alt: Flattr this repo
+    :target: https://flattr.com/submit/auto?user_id=danilo&url=https://github.com/dbrgn/RPLCD&title=RPLCD&tags=github,raspberry%20pi,python&category=software 
+
+.. image:: https://dbrgn.ch/gittip-badge.png
+    :alt: Gittip this repo
+    :target: https://www.gittip.com/dbrgn/
+
 
 Features
 ========
@@ -83,8 +93,9 @@ Custom Characters
 The HD44780 supports up to 8 user created characters. A character is defined by
 a 8x5 bitmap. The bitmap should be a tuple of 8 numbers, each representing a 5
 pixel row. Each character is written to a specific location in CGRAM (numbers
-0-7). To actually write a stored character to the display, use the ``unichr()``
-function in combination with the location number you specified.
+0-7). To actually show a stored character on the display, use ``unichr()``
+function in combination with the location number you specified previously (e.g.
+``write_string(unichr(2))``.
 
 .. sourcecode:: python
 
@@ -134,21 +145,6 @@ You can also install the library manually without pip. Either just copy the
 scripts to your working directory and import them, or download the repository
 and run ``python setup.py install`` to install it into your Python package
 directory.
-
-
-Wiring
-======
-
-The standard wiring configuration uses the following pins (BOARD numbering
-scheme rev 2):
-
-- RS: 15
-- RW: 18
-- E: 16
-- Data 4-7: 21, 22, 23, 24
-
-.. image:: https://raw.github.com/dbrgn/RPLCD/master/docs/wiring.png
-    :alt: LCD wiring
 
 
 API
@@ -246,7 +242,7 @@ And on Python 3, where strings are unicode by default:
 In case you need a character that is not included in the default device
 character map, there is a possibility to create custom characters and write them
 into the HD44780 CGRAM. For more information, see the "Custom Characters"
-section in the "Examples" section.
+section in the "Examples" chapter.
 
 
 Testing
