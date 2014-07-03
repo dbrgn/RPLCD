@@ -267,7 +267,7 @@ class CharLCD(object):
         if value[0] not in range(self.lcd.rows) or value[1] not in range(self.lcd.cols):
             msg = 'Cursor position {pos!r} invalid on a {lcd.rows}x{lcd.cols} LCD.'
             raise ValueError(msg.format(pos=value, lcd=self.lcd))
-        row_offsets = [0x00, 0x40, 0x14, 0x54]  # TODO handle smaller displays
+        row_offsets = [0x00, 0x40, self.lcd.cols, 0x40 + self.lcd.cols]
         self._cursor_pos = value
         self.command(LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
         usleep(50)
