@@ -1,3 +1,8 @@
+v0.3.0 (2014-07-03)
+
+- [add] Implemented support for custom characters (#4)
+- [fix] Fixed a bug that caused offsets on 16x4 displays (#16)
+
 v0.2.0 (2014-04-20)
 
 - [add] Removed all external dependencies
