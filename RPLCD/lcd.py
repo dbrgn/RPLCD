@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2014 Danilo Bargen
+Copyright (C) 2013-2015 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -131,7 +131,8 @@ class CharLCD(object):
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                        numbering_mode=GPIO.BOARD,
-                       cols=20, rows=4, dotsize=8):
+                       cols=20, rows=4, dotsize=8,
+                       auto_linebreaks=True):
         """
         Character LCD controller.
 
@@ -161,6 +162,9 @@ class CharLCD(object):
             dotsize:
                 Some 1 line displays allow a font height of 10px.
                 Allowed: 8 or 10. Default: 8.
+            auto_linebreaks:
+                Whether or not to automatically insert line breaks.
+                Default: True.
 
         Returns:
             A :class:`CharLCD` instance.
@@ -203,6 +207,10 @@ class CharLCD(object):
 
         # Create content cache
         self._content = [[0x20] * cols for _ in range(rows)]
+
+        # Set up auto linebreaks
+        self.auto_linebreaks = auto_linebreaks
+        self.recent_auto_linebreak = False
 
         # Initialization
         msleep(50)
@@ -282,7 +290,7 @@ class CharLCD(object):
             raise ValueError('Internal _text_align_mode has invalid value.')
 
     def _set_text_align_mode(self, value):
-        if not value in Alignment:
+        if value not in Alignment:
             raise ValueError('Cursor move mode must be of ``Alignment`` type.')
         self._text_align_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
@@ -298,7 +306,7 @@ class CharLCD(object):
             raise ValueError('Internal _display_shift_mode has invalid value.')
 
     def _set_write_shift_mode(self, value):
-        if not value in ShiftMode:
+        if value not in ShiftMode:
             raise ValueError('Write shift mode must be of ``ShiftMode`` type.')
         self._display_shift_mode = int(value)
         self.command(LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
@@ -325,7 +333,7 @@ class CharLCD(object):
             raise ValueError('Internal _cursor_mode has invalid value.')
 
     def _set_cursor_mode(self, value):
-        if not value in CursorMode:
+        if value not in CursorMode:
             raise ValueError('Cursor mode must be of ``CursorMode`` type.')
         self._cursor_mode = int(value)
         self.command(LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
@@ -343,7 +351,8 @@ class CharLCD(object):
         To control multiline behavior, use newline (\n) and carriage return
         (\r) characters.
 
-        Lines that are too long automatically continue on next line.
+        Lines that are too long automatically continue on next line, as long as
+        ``auto_linebreaks`` has not been disabled.
 
         Make sure that you're only passing unicode objects to this function. If
         you're dealing with bytestrings (the default string type in Python 2),
@@ -362,11 +371,25 @@ class CharLCD(object):
         supported.
 
         """
+        ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
         for char in value:
             # Write regular chars
             if char not in '\n\r':
                 self.write(ord(char))
+                ignored = None
                 continue
+            # If an auto linebreak happened recently, ignore this write.
+            if self.recent_auto_linebreak is True:
+                # No newline chars have been ignored yet. Do it this time.
+                if ignored is None:
+                    ignored = char
+                    continue
+                # A newline character has been ignored recently. If the current
+                # character is different, ignore it again. Otherwise, reset the
+                # ignored character tracking.
+                if ignored != char:  # A carriage return and a newline
+                    ignored = None  # Reset ignore list
+                    continue
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
             if char == '\n':
@@ -472,33 +495,37 @@ class CharLCD(object):
 
         # Update cursor position.
         if self.text_align_mode is Alignment.left:
-            if col < self.lcd.cols - 1:
+            if self.auto_linebreaks is False or col < self.lcd.cols - 1:
                 # No newline, update internal pointer
                 newpos = (row, col + 1)
                 if unchanged:
                     self.cursor_pos = newpos
                 else:
                     self._cursor_pos = newpos
+                self.recent_auto_linebreak = False
             else:
                 # Newline, reset pointer
                 if row < self.lcd.rows - 1:
                     self.cursor_pos = (row + 1, 0)
                 else:
                     self.cursor_pos = (0, 0)
+                self.recent_auto_linebreak = True
         else:
-            if col > 0:
+            if self.auto_linebreaks is False or col > 0:
                 # No newline, update internal pointer
                 newpos = (row, col - 1)
                 if unchanged:
                     self.cursor_pos = newpos
                 else:
                     self._cursor_pos = newpos
+                self.recent_auto_linebreak = False
             else:
                 # Newline, reset pointer
                 if row < self.lcd.rows - 1:
                     self.cursor_pos = (row + 1, self.lcd.cols - 1)
                 else:
                     self.cursor_pos = (0, self.lcd.cols - 1)
+                self.recent_auto_linebreak = True
 
     # Low level commands
 
