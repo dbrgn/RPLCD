@@ -119,4 +119,13 @@ lcd.home()
 lcd.write_string(unichr(0))
 input('Now both faces should be happy. ')
 
+lcd.clear()
+lcd.write_string('12345678901234567890\r\n2nd line')
+input('The first line should be filled with numbers, the second line should show "2nd line"')
+
+lcd.clear()
+lcd.write_string('999456..............\n\r\n\n\n123')
+input('The display should show "123456...................." on the first line')
+
+lcd.clear()
 print('Test done.')
