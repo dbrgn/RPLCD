@@ -20,7 +20,11 @@ except NameError:
 
 
 lcd = CharLCD(cols=16, rows=2)
+# if you have a backlight circuit, initialize like this (substituting the
+# appropriate GPIO for your backlight circuit):
+#lcd = CharLCD(cols=16, rows=2, pin_backlight=7)
 
+lcd.backlight(True)
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink
@@ -130,4 +134,6 @@ lcd.write_string('999456\n\r\n123')
 input('The display should show "123456" on the first line')
 
 lcd.clear()
+lcd.backlight(False)
+lcd.close()
 print('Test done.')
