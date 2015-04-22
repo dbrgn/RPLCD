@@ -89,7 +89,7 @@ RS_DATA = 0x01
 
 ### NAMEDTUPLES ###
 
-PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 mode')
+PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 
@@ -130,6 +130,7 @@ class CharLCD(object):
     # Init, setup, teardown
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
+                       pin_backlight=None, backlight_active_low=False,
                        numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8):
         """
@@ -149,8 +150,14 @@ class CharLCD(object):
             pin_e:
                 Pin to start data read or write (E). Default: 16.
             pins_data:
-                List of data bus pins in 8 bit mode (DB0-DB7) or in 8 bit mode
+                List of data bus pins in 8 bit mode (DB0-DB7) or in 4 bit mode
                 (DB4-DB7) in ascending order. Default: [21, 22, 23, 24].
+            pin_backlight:
+                Pin for controlling backlight on/off. Set this to ``None`` for
+                no backlight control. Default: None.
+            backlight_active_low:
+                Set this to True if the backlight GPIO should be set Low to
+                turn ON the backlight. Default: False.
             numbering_mode:
                 Which scheme to use for numbering of the GPIO pins, either
                 ``GPIO.BOARD`` or ``GPIO.BCM``.  Default: ``GPIO.BOARD`` (1-26).
@@ -182,13 +189,18 @@ class CharLCD(object):
         self.pins = PinConfig(rs=pin_rs, rw=pin_rw, e=pin_e,
                               d0=block1[0], d1=block1[1], d2=block1[2], d3=block1[3],
                               d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
+                              backlight=pin_backlight,
                               mode=numbering_mode)
+        self.backlight_active_low=backlight_active_low
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
 
         # Setup GPIO
         GPIO.setmode(self.numbering_mode)
         for pin in list(filter(None, self.pins))[:-1]:
             GPIO.setup(pin, GPIO.OUT)
+        if pin_backlight != None:
+	    GPIO.setup(pin_backlight,GPIO.OUT)
+            GPIO.output(pin_backlight,GPIO.HIGH if backlight_active_low else GPIO.LOW)
 
         # Setup initial display configuration
         displayfunction = self.data_bus_mode | LCD_5x8DOTS
@@ -449,6 +461,11 @@ class CharLCD(object):
 
         # Restore cursor pos
         self.cursor_pos = pos
+
+    def backlight(self, value):
+        """Turn backlight GPIO on or off."""
+        if self.pins.backlight != None:
+            GPIO.output(self.pins.backlight, bool(value) ^ bool(self.backlight_active_low))
 
     # Mid level commands
 
