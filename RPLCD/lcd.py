@@ -110,6 +110,9 @@ class CursorMode(enum.Enum):
     line = LCD_CURSORON | LCD_BLINKOFF
     blink = LCD_CURSOROFF | LCD_BLINKON
 
+class BacklightMode(enum.Enum):
+    active_high = 1
+    active_low = 2
 
 ### HELPER FUNCTIONS ###
 
@@ -130,7 +133,7 @@ class CharLCD(object):
     # Init, setup, teardown
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                       pin_backlight=None, backlight_active_low=False,
+                       pin_backlight=None, backlight_mode=BacklightMode.active_low, backlight_enabled=True,
                        numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8,
                        auto_linebreaks=True):
@@ -156,9 +159,12 @@ class CharLCD(object):
             pin_backlight:
                 Pin for controlling backlight on/off. Set this to ``None`` for
                 no backlight control. Default: None.
-            backlight_active_low:
-                Set this to True if the backlight GPIO should be set Low to
-                turn ON the backlight. Default: False.
+            backlight_mode:
+                Set this to one of the BacklightMode enum values to configure the
+                operating control for the backlight. Has no effect if pin_backlight is ``None``
+            backlight_enabled:
+                Set this to True to turn on the backlight or False to turn it off.
+                Has no effect if pin_backlight is ``None``
             numbering_mode:
                 Which scheme to use for numbering of the GPIO pins, either
                 ``GPIO.BOARD`` or ``GPIO.BCM``.  Default: ``GPIO.BOARD`` (1-26).
@@ -195,16 +201,17 @@ class CharLCD(object):
                               d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
                               backlight=pin_backlight,
                               mode=numbering_mode)
-        self.backlight_active_low=backlight_active_low
+        self.backlight_mode=backlight_mode
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
 
         # Setup GPIO
         GPIO.setmode(self.numbering_mode)
         for pin in list(filter(None, self.pins))[:-1]:
             GPIO.setup(pin, GPIO.OUT)
-        if pin_backlight != None:
+        if pin_backlight is not None:
 	    GPIO.setup(pin_backlight,GPIO.OUT)
-            GPIO.output(pin_backlight,GPIO.HIGH if backlight_active_low else GPIO.LOW)
+            # must enable the backlight AFTER setting up GPIO
+            self.backlight_enabled=backlight_enabled
 
         # Setup initial display configuration
         displayfunction = self.data_bus_mode | LCD_5x8DOTS
@@ -355,6 +362,24 @@ class CharLCD(object):
             doc='How the cursor should behave (``CursorMode.hide``, ' +
                                    '``CursorMode.line`` or ``CursorMode.blink``).')
 
+    def _get_backlight_enabled(self):
+        # We could probably read the current GPIO output state via sysfs, but
+        # for now let's just store the state in the class
+        if self.pins.backlight is None:
+            raise ValueError('You did not configure a GPIO pin for backlight control!')
+        return bool(self._backlight_enabled)
+
+    def _set_backlight_enabled(self, value):
+        if self.pins.backlight is None:
+            raise ValueError('You did not configure a GPIO pin for backlight control!')
+        if not isinstance(value, bool):
+            raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
+        self._backlight_enabled = value
+        GPIO.output(self.pins.backlight, value ^ (self.backlight_mode is BacklightMode.active_low))
+
+    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
+            doc='Whether or not to turn on the backlight.')
+
     # High level commands
 
     def write_string(self, value):
@@ -484,11 +509,6 @@ class CharLCD(object):
 
         # Restore cursor pos
         self.cursor_pos = pos
-
-    def backlight(self, value):
-        """Turn backlight GPIO on or off."""
-        if self.pins.backlight != None:
-            GPIO.output(self.pins.backlight, bool(value) ^ bool(self.backlight_active_low))
 
     # Mid level commands
 
