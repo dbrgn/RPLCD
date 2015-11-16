@@ -7,6 +7,7 @@ import sys
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
+from RPLCD import BacklightMode
 
 try:
     input = raw_input
@@ -20,8 +21,9 @@ except NameError:
 
 
 lcd = CharLCD()
+# see note in test_16x2.py about configuring your backlight, if you have one
 
-lcd.backlight(True)
+lcd.backlight=True
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink
@@ -120,7 +122,7 @@ lcd.home()
 lcd.write_string(unichr(0))
 input('Now both faces should be happy. ')
 
-lcd.backlight(False)
+lcd.backlight=False
 lcd.close()
-print('Test done.')
+print('Test done. If you have a backlight, it should now be off.')
 
