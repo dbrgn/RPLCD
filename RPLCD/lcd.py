@@ -207,7 +207,6 @@ class CharLCD(object):
         if pin_backlight is not None:
 	    GPIO.setup(pin_backlight,GPIO.OUT)
             # must enable the backlight AFTER setting up GPIO
-            self._backlight_enabled=backlight_enabled
             self.backlight_enabled=backlight_enabled
 
         # Setup initial display configuration
