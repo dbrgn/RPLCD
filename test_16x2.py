@@ -23,7 +23,7 @@ except NameError:
 lcd = CharLCD(cols=16, rows=2)
 # if you have a backlight circuit, initialize like this (substituting the
 # appropriate GPIO and BacklightMode for your backlight circuit):
-lcd = CharLCD(cols=16, rows=2, pin_backlight=7, backlight_mode=BacklightMode.active_high)
+#lcd = CharLCD(cols=16, rows=2, pin_backlight=7, backlight_mode=BacklightMode.active_high)
 
 lcd.backlight = True
 input('Display should be blank. ')
