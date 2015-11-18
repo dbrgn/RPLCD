@@ -7,6 +7,7 @@ import sys
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
+from RPLCD import BacklightMode
 
 try:
     input = raw_input
@@ -20,7 +21,9 @@ except NameError:
 
 
 lcd = CharLCD()
+# see note in test_16x2.py about configuring your backlight, if you have one
 
+lcd.backlight = True
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink
@@ -128,4 +131,7 @@ lcd.write_string('999456..............\n\r\n\n\n123')
 input('The display should show "123456...................." on the first line')
 
 lcd.clear()
-print('Test done.')
+lcd.backlight = False
+lcd.close()
+print('Test done. If you have a backlight, it should now be off.')
+
