@@ -49,6 +49,7 @@ Implemented
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
 - Support for custom characters
+- Support for backlight control circuits
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies
