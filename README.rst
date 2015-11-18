@@ -156,14 +156,16 @@ Init, Setup, Teardown
 .. sourcecode:: python
 
     import RPi.GPIO as GPIO
-    from RPLCD import CharLCD
+    from RPLCD import CharLCD, BacklightMode
 
     # Initialize display. All values have default values and are therefore
     # optional.
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=GPIO.BOARD,
                   cols=20, rows=4, dotsize=8,
-                  auto_linebreaks=True)
+                  auto_linebreaks=True,
+                  pin_backlight=None, backlight_enabled=True,
+                  backlight_mode=BacklightMode.active_low)
 
     ...
 
@@ -180,6 +182,7 @@ Properties
 - ``text_align_mode`` -> ``Alignment.left`` / ``Alignment.right``
 - ``write_shift_mode`` -> ``ShiftMode.cursor`` / ``ShiftMode.display``
 - ``cursor_mode`` -> ``CursorMode.hide`` / ``CursorMode.line`` / ``CursorMode.blink``
+- ``backlight_enabled`` -> ``True`` / ``False``
 
 High Level Functions
 --------------------
@@ -244,6 +247,22 @@ In case you need a character that is not included in the default device
 character map, there is a possibility to create custom characters and write them
 into the HD44780 CGRAM. For more information, see the "Custom Characters"
 section in the "Examples" chapter.
+
+
+Adding Backlight Control
+========================
+
+By setting the ``pin_backlight`` parameter in the ``CharLCD`` constructor, you
+can control a backlight circuit.
+
+First of all, you need to build an external circuit to control the backlight,
+most LCD modules don't support it directly. You could do this for example by
+using a transistor and a pull-up resistor. Then connect the transistor to a GPIO
+pin and configure that pin using the ``pin_backlight`` parameter in the
+constructor. If you use an active high circuit instead of active low, you can
+change that behavior by setting the  ``backlight_mode`` to either
+``BacklightMode.active_high``. Now you can toggle the ``backlight_enabled``
+property.
 
 
 Testing
