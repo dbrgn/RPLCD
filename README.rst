@@ -258,6 +258,14 @@ To test a 16x2 display, procede as explained above, but use the ``test_16x2.py``
 script instead.
 
 
+Coding Guidelines
+=================
+
+`PEP8 <http://www.python.org/dev/peps/pep-0008/>`__ via `flake8
+<https://pypi.python.org/pypi/flake8>`_ with max-line-width set to 99 and
+E126-E128 ignored.
+
+
 Resources
 =========
 
