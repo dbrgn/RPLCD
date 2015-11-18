@@ -1,13 +1,27 @@
 RPLCD
 #####
 
-[![Build Status](https://img.shields.io/travis/dbrgn/RPLCD/master.svg)](https://travis-ci.org/dbrgn/RPLCD)
-[![PyPI Version](https://img.shields.io/pypi/v/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
-[![PyPI Wheel](https://img.shields.io/pypi/wheel/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
-[![PyPI Python Versions](https://img.shields.io/pypi/pyversions/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
-[![Dependencies](https://img.shields.io/badge/dependencies-none-blue.svg)](https://pypi.python.org/pypi/RPLCD/)
-[![License](https://img.shields.io/pypi/l/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+.. image:: https://img.shields.io/travis/dbrgn/RPLCD/master.svg
+    :target: https://travis-ci.org/dbrgn/RPLCD
+    :alt: Build Status
+.. image:: https://img.shields.io/pypi/v/RPLCD.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: PyPI Version
+.. image:: https://img.shields.io/pypi/dm/RPLCD.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: PyPI Downloads
+.. image:: https://img.shields.io/pypi/wheel/RPLCD.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: PyPI Wheel
+.. image:: https://img.shields.io/pypi/pyversions/RPLCD.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: PyPI Python Versions
+.. image:: https://img.shields.io/badge/dependencies-none-blue.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: Dependencies
+.. image:: https://img.shields.io/pypi/l/RPLCD.svg
+    :target: https://pypi.python.org/pypi/RPLCD/
+    :alt: License
 
 A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
 controller.
