@@ -23,7 +23,7 @@ except NameError:
 lcd = CharLCD()
 # see note in test_16x2.py about configuring your backlight, if you have one
 
-lcd.backlight=True
+lcd.backlight = True
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink

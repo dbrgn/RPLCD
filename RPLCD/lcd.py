@@ -110,9 +110,11 @@ class CursorMode(enum.Enum):
     line = LCD_CURSORON | LCD_BLINKOFF
     blink = LCD_CURSOROFF | LCD_BLINKON
 
+
 class BacklightMode(enum.Enum):
     active_high = 1
     active_low = 2
+
 
 ### HELPER FUNCTIONS ###
 
@@ -133,7 +135,8 @@ class CharLCD(object):
     # Init, setup, teardown
 
     def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                       pin_backlight=None, backlight_mode=BacklightMode.active_low, backlight_enabled=True,
+                       pin_backlight=None, backlight_mode=BacklightMode.active_low,
+                       backlight_enabled=True,
                        numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8):
         """
@@ -197,7 +200,7 @@ class CharLCD(object):
                               d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
                               backlight=pin_backlight,
                               mode=numbering_mode)
-        self.backlight_mode=backlight_mode
+        self.backlight_mode = backlight_mode
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
 
         # Setup GPIO
@@ -205,9 +208,9 @@ class CharLCD(object):
         for pin in list(filter(None, self.pins))[:-1]:
             GPIO.setup(pin, GPIO.OUT)
         if pin_backlight is not None:
-	    GPIO.setup(pin_backlight,GPIO.OUT)
+            GPIO.setup(pin_backlight, GPIO.OUT)
             # must enable the backlight AFTER setting up GPIO
-            self.backlight_enabled=backlight_enabled
+            self.backlight_enabled = backlight_enabled
 
         # Setup initial display configuration
         displayfunction = self.data_bus_mode | LCD_5x8DOTS
