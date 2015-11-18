@@ -16,7 +16,7 @@ RPLCD
 .. image:: https://img.shields.io/pypi/pyversions/RPLCD.svg
     :target: https://pypi.python.org/pypi/RPLCD/
     :alt: PyPI Python Versions
-.. image:: https://img.shields.io/badge/dependencies-none-blue.svg
+.. image:: https://img.shields.io/badge/dependencies-0-blue.svg
     :target: https://pypi.python.org/pypi/RPLCD/
     :alt: Dependencies
 .. image:: https://img.shields.io/pypi/l/RPLCD.svg
