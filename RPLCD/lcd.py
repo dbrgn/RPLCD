@@ -30,7 +30,7 @@ import RPi.GPIO as GPIO
 from . import enum
 
 
-### PYTHON 3 COMPAT ###
+# # # PYTHON 3 COMPAT # # #
 
 try:
     range = xrange
@@ -38,7 +38,7 @@ except NameError:
     pass
 
 
-### BIT PATTERNS ###
+# # # BIT PATTERNS # # #
 
 # Commands
 LCD_CLEARDISPLAY = 0x01
@@ -87,13 +87,13 @@ RS_INSTRUCTION = 0x00
 RS_DATA = 0x01
 
 
-### NAMEDTUPLES ###
+# # # NAMEDTUPLES # # #
 
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 
-### ENUMS ###
+# # # ENUMS # # #
 
 class Alignment(enum.Enum):
     left = LCD_ENTRYLEFT
@@ -116,7 +116,7 @@ class BacklightMode(enum.Enum):
     active_low = 2
 
 
-### HELPER FUNCTIONS ###
+# # # HELPER FUNCTIONS # # #
 
 def msleep(milliseconds):
     """Sleep the specified amount of milliseconds."""
@@ -128,7 +128,7 @@ def usleep(microseconds):
     time.sleep(microseconds / 1000000.0)
 
 
-### MAIN ###
+# # # MAIN # # #
 
 class CharLCD(object):
 
