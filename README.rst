@@ -1,6 +1,14 @@
 RPLCD
 #####
 
+[![Build Status](https://img.shields.io/travis/dbrgn/RPLCD/master.svg)](https://travis-ci.org/dbrgn/RPLCD)
+[![PyPI Version](https://img.shields.io/pypi/v/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+[![PyPI Wheel](https://img.shields.io/pypi/wheel/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+[![PyPI Python Versions](https://img.shields.io/pypi/pyversions/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+[![Dependencies](https://img.shields.io/badge/dependencies-none-blue.svg)](https://pypi.python.org/pypi/RPLCD/)
+[![License](https://img.shields.io/pypi/l/RPLCD.svg)](https://pypi.python.org/pypi/RPLCD/)
+
 A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
 controller.
 
@@ -16,16 +24,6 @@ Arduino's LiquidCrystal_ library.
 
 No external dependencies (except the RPi.GPIO library, which comes preinstalled
 on Raspbian) are needed to use this library.
-
-If you like this library, I'm happy for support via Flattr or Gittip!
-
-.. image:: http://api.flattr.com/button/flattr-badge-large.png
-    :alt: Flattr this repo
-    :target: https://flattr.com/submit/auto?user_id=danilo&url=https://github.com/dbrgn/RPLCD&title=RPLCD&tags=github,raspberry%20pi,python&category=software 
-
-.. image:: https://dbrgn.ch/gittip-badge.png
-    :alt: Gittip this repo
-    :target: https://www.gittip.com/dbrgn/
 
 
 Features
