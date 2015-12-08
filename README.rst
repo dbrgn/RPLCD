@@ -31,7 +31,8 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`__.
 
 Also tested with a 16x2 LCD from `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`__.
+<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`__ and
+JHD162A.
 
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
@@ -62,6 +63,51 @@ motivation:
 
 - I²C support
 
+Wiring up Pi with LCD display
+=============================
+
+The following is the easiest way to wire up Pi with LCD display
+in 4-bit mode using default values used in the library.
+
++------------+--------------------+---------------------------+
+| HD44780    | Pi GPIO            | Comments                  |
+| Pin Number | Pin Number (BOARD) |                           |
++============+====================+===========================+
+|     1      |        \-          | \* <Refer below>          |
++------------+--------------------+---------------------------+
+|     2      |        6           | GND                       |
++------------+--------------------+---------------------------+
+|     3      |        \-          | \* <Refer below>          |
++------------+--------------------+---------------------------+
+|     4      |        15          | Register Select           |
++------------+--------------------+---------------------------+
+|     5      |        18 or 6     | R/W. Can be directly      |
+|            |                    | attached to GND as well.  |
++------------+--------------------+---------------------------+
+|     6      |        16          | Enable                    |
++------------+--------------------+---------------------------+
+|     7-10   |  <Not connected>   | In 4-bit mode, we don't   |
+|            |                    | connect them.             |
++------------+--------------------+---------------------------+
+|     11     |        21          | D3                        |
++------------+--------------------+---------------------------+
+|     12     |        22          | D2                        |
++------------+--------------------+---------------------------+
+|     13     |        23          | D1                        |
++------------+--------------------+---------------------------+
+|     14     |        24          | D0                        |
++------------+--------------------+---------------------------+
+|     15     |        \-          | \* <Refer below>          |
++------------+--------------------+---------------------------+
+|     16     |        6           | GND                       |
++------------+--------------------+---------------------------+
+
+\* After wiring up the data pins, you have to connect the voltage
+input for controller, backlight and set up the contrast circuit. 
+As there are some differences regarding the hardware between 
+different panels, please refer to `Adafruit tutorial
+<https://learn.adafruit.com/character-lcds/wiring-a-character-lcd>`_ 
+to learn how to wire up these circuits.
 
 Examples
 ========
