@@ -73,9 +73,9 @@ in 4-bit mode using default values used in the library.
 | HD44780    | Pi GPIO             | Comments                  |
 | Pin Number | Pin Number (BOARD)  |                           |
 +============+=====================+===========================+
-|     1      | *Depends on module* | \* (See below)            |
+|     1      |        6            | GND                       |
 +------------+---------------------+---------------------------+
-|     2      |        6            | GND                       |
+|     2      | *Depends on module* | \* (See below)            |
 +------------+---------------------+---------------------------+
 |     3      | *Depends on module* | \* (See below)            |
 +------------+---------------------+---------------------------+
