@@ -67,10 +67,6 @@ LCD_BLINKOFF = 0x00
 # Flags for display/cursor shift
 LCD_DISPLAYMOVE = 0x08
 LCD_CURSORMOVE = 0x00
-
-# Flags for display/cursor shift
-LCD_DISPLAYMOVE = 0x08
-LCD_CURSORMOVE = 0x00
 LCD_MOVERIGHT = 0x04
 LCD_MOVELEFT = 0x00
 
@@ -442,6 +438,28 @@ class CharLCD(object):
                     self.cursor_pos = (row, 0)
                 else:
                     self.cursor_pos = (row, self.lcd.cols - 1)
+
+    def write_line(self, message, line):
+        """Writes to a specific line of the display with no auto new line."""
+        if line > self.lcd.rows:
+            raise ValueError('Cannot write to a line the LCD dose not has.')
+
+        message = message.ljust(self.lcd.cols, str(" "))
+        message_final = ''
+
+        for i in range(self.lcd.cols):
+            message_final += message[i]
+
+        self._set_cursor_pos((line-1,0))
+        self.write_string(message_final)
+
+    def write_lines(self, lines=()):
+        """Write several lines to the display with no auto new line."""
+        if len(lines) > self.lcd.rows:
+            raise ValueError('Cannot write more lines than the LCD has.')
+
+        for i in range(self.lcd.rows):
+            self.write_line(lines[i], i+1)
 
     def clear(self):
         """Overwrite display with blank characters and reset cursor position."""
