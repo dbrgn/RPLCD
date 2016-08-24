@@ -249,6 +249,13 @@ High Level Functions
 - ``write_string(value)``: Write the specified unicode string to the display.
   You can use newline (``\n``) and carriage return (``\r``) characters to
   control line breaks.
+- ``write_line(value, line#)``: Write the specified unicode string to the
+  display on the specified line. (Write over previous content)
+- ``write_lines(tuple with values for each line)``: Write the specified
+  unicode string to each line of the display.
+  E.g. ``lcd.write_lines(("1","2"))`` will write "1" to line 1 and "2" to
+       line 2. ``lcd.write_lines(("","2"))`` will clear line 1 and write "2"
+       to line 2.
 - ``clear()``: Overwrite display with blank characters and reset cursor position.
 - ``home()``: Set cursor to initial position and reset any shifting.
 - ``shift_display(amount)``: Shift the display. Use negative amounts to shift
