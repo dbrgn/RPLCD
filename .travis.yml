@@ -3,6 +3,6 @@ python:
     - 2.7
     - 3.4
 install:
-    - pip install flake8 --use-mirrors
+    - pip install flake8
 script:
     - flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
