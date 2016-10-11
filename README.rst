@@ -144,7 +144,7 @@ ends.
     >>>     lcd.write_string(u'LCD is cleared.')
     >>>
     >>> with cursor(lcd, 2, 0):
-    >>>     lcd.write_string(u'This is he 3rd line.')
+    >>>     lcd.write_string(u'This is the 3rd line.')
 
 Custom Characters
 -----------------
