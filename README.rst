@@ -123,7 +123,7 @@ Basic text output with multiline control.
     >>> lcd = CharLCD()
     >>> lcd.write_string(u'Raspberry Pi HD44780')
     >>> lcd.cursor_pos = (2, 0)
-    >>> lcd.write_string(u'http://github.com/\n\rdbrgn/RPLCD')
+    >>> lcd.write_string(u'https://github.com/\n\rdbrgn/RPLCD')
 
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo.jpg
     :alt: Photo of 20x4 LCD in action
@@ -144,7 +144,7 @@ ends.
     >>>     lcd.write_string(u'LCD is cleared.')
     >>>
     >>> with cursor(lcd, 2, 0):
-    >>>     lcd.write_string(u'This is he 3rd line.')
+    >>>     lcd.write_string(u'This is the 3rd line.')
 
 Custom Characters
 -----------------
@@ -332,7 +332,7 @@ confirm/verify each step with the enter key. If you don't use the standard
 wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
 ``test_20x4.py``.
 
-To test a 16x2 display, procede as explained above, but use the ``test_16x2.py``
+To test a 16x2 display, proceed as explained above, but use the ``test_16x2.py``
 script instead.
 
 
@@ -340,8 +340,8 @@ Coding Guidelines
 =================
 
 `PEP8 <http://www.python.org/dev/peps/pep-0008/>`__ via `flake8
-<https://pypi.python.org/pypi/flake8>`_ with max-line-width set to 99 and
-E126-E128,C901 ignored::
+<https://pypi.python.org/pypi/flake8>`_ with ``max-line-width`` set to 99 and
+``E126-E128,C901`` ignored::
 
     flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
 
