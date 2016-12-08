@@ -4,7 +4,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 import sys
 
-from RPLCD import CharLCD
+from RPLCD.i2c import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
 from RPLCD import BacklightMode
@@ -20,7 +20,7 @@ except NameError:
     unichr = chr
 
 
-lcd = CharLCD()
+lcd = CharLCD(0x3f)
 # see note in test_16x2.py about configuring your backlight, if you have one
 
 lcd.backlight = True
