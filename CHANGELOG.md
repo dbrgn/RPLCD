@@ -11,6 +11,10 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v0.5.0 UNRELEASED
+
+- [add] Support for i2c (#20)
+
 ### v0.4.0 (2016-09-12)
 
 - [fix] Fix problem when auto-linebreaks clash with manual linebreaks (#14)
