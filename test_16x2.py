@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-import sys
-
 from RPLCD.i2c import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
@@ -135,6 +133,9 @@ lcd.write_string('999456\n\r\n123')
 input('The display should show "123456" on the first line')
 
 lcd.clear()
-lcd.backlight_enabled = False
+try:
+    lcd.backlight_enabled = False
+except ValueError:
+    pass
 lcd.close()
 print('Test done. If you have a backlight, it should now be off.')
