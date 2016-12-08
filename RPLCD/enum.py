@@ -219,7 +219,7 @@ class EnumValue:
 # and Python 3.
 Enum = EnumMetaclass(str('Enum'), (), {
     '__doc__': 'The public API Enum class.',
-    })
+})
 
 
 class IntEnumValue(int, EnumValue):
@@ -258,7 +258,7 @@ class IntEnumMetaclass(EnumMetaclass):
 IntEnum = IntEnumMetaclass(str('IntEnum'), (Enum,), {
     '__doc__': 'A specialized enumeration with values that are also integers.',
     '__value_factory__': IntEnumValue,
-    })
+})
 
 
 if str is bytes:

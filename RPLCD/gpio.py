@@ -145,7 +145,8 @@ class CharLCD(BaseCharLCD):
         if not isinstance(value, bool):
             raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
         self._backlight_enabled = value
-        GPIO.output(self.pins.backlight, value ^ (self.backlight_mode is c.BacklightMode.active_low))
+        GPIO.output(self.pins.backlight,
+                    value ^ (self.backlight_mode is c.BacklightMode.active_low))
 
     backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
             doc='Whether or not to turn on the backlight.')
