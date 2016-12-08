@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2015 Danilo Bargen
+Copyright (C) 2013-2016 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -25,7 +25,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 import sys
 
-from RPLCD import CharLCD
+from RPLCD.i2c import CharLCD
 
 
 try:
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     rows, cols = int(sys.argv[1]), int(sys.argv[2])
-    lcd = CharLCD(cols=cols, rows=rows)
+    lcd = CharLCD(0x3f, cols=cols, rows=rows)
 
     print('This tool shows the character map of your LCD on the display.')
     print('Press ctrl+c at any time to abort.\n')

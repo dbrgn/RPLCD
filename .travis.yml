@@ -5,4 +5,4 @@ python:
 install:
     - pip install flake8
 script:
-    - flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
+    - flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/[a-zA-Z]*.py

@@ -24,7 +24,8 @@ RPLCD
     :alt: License
 
 A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
-controller.
+controller. It supports both GPIO (parallel) mode as well as boards with an I2C
+port expander (e.g. the PCF8574).
 
 Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch
@@ -40,7 +41,17 @@ Arduino's LiquidCrystal_ library.
 No external dependencies (except the RPi.GPIO library, which comes preinstalled
 on Raspbian) are needed to use this library.
 
+Setup
+=====
 
+Install this library using pip::
+
+    pip install RPLCD
+
+If you want to use I2C, you also need smbus::
+
+    sudo apt install python-smbus
+￼
 Features
 ========
 
@@ -119,7 +130,7 @@ Basic text output with multiline control.
 
 .. sourcecode:: python
 
-    >>> from RPLCD import CharLCD
+    >>> from RPLCD.gpio import CharLCD
     >>> lcd = CharLCD()
     >>> lcd.write_string(u'Raspberry Pi HD44780')
     >>> lcd.cursor_pos = (2, 0)
@@ -137,7 +148,7 @@ ends.
 
 .. sourcecode:: python
 
-    >>> from RPLCD import CharLCD, cleared, cursor
+    >>> from RPLCD.gpio import CharLCD, cleared, cursor
     >>> lcd = CharLCD()
     >>>
     >>> with cleared(lcd):
@@ -158,7 +169,7 @@ function in combination with the location number you specified previously (e.g.
 
 .. sourcecode:: python
 
-    >>> from RPLCD import CharLCD, cleared, cursor
+    >>> from RPLCD.gpio import CharLCD, cleared, cursor
     >>> lcd = CharLCD()
     >>>
     >>> smiley = (
@@ -215,7 +226,7 @@ Init, Setup, Teardown
 .. sourcecode:: python
 
     import RPi.GPIO as GPIO
-    from RPLCD import CharLCD, BacklightMode
+    from RPLCD.gpio import CharLCD, BacklightMode
 
     # Initialize display. All values have default values and are therefore
     # optional.

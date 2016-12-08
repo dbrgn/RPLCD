@@ -39,3 +39,6 @@ nosetests.xml
 *.log
 *.aux
 docs/*.pdf
+
+# Python
+VIRTUAL/
