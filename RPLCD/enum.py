@@ -263,7 +263,7 @@ IntEnum = IntEnumMetaclass(str('IntEnum'), (Enum,), {
 
 if str is bytes:
     # Python 2
-    STRING_TYPE = basestring
+    STRING_TYPE = basestring  # noqa: F821
 else:
     # Python 3
     STRING_TYPE = str
