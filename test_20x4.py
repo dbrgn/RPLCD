@@ -23,7 +23,6 @@ except NameError:
 lcd = CharLCD(0x3f)
 # see note in test_16x2.py about configuring your backlight, if you have one
 
-lcd.backlight = True
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink
@@ -131,7 +130,7 @@ lcd.write_string('999456..............\n\r\n\n\n123')
 input('The display should show "123456...................." on the first line')
 
 lcd.clear()
-lcd.backlight = False
+lcd.backlight_enabled = False
 lcd.close()
 print('Test done. If you have a backlight, it should now be off.')
 

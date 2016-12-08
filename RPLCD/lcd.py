@@ -24,8 +24,6 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 from collections import namedtuple
 
-import RPi.GPIO as GPIO
-
 from . import common as c
 from .compat import range
 
@@ -205,24 +203,6 @@ class BaseCharLCD(object):
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
             doc='How the cursor should behave (``CursorMode.hide``, ' +
                                    '``CursorMode.line`` or ``CursorMode.blink``).')
-
-    def _get_backlight_enabled(self):
-        # We could probably read the current GPIO output state via sysfs, but
-        # for now let's just store the state in the class
-        if self.pins.backlight is None:
-            raise ValueError('You did not configure a GPIO pin for backlight control!')
-        return bool(self._backlight_enabled)
-
-    def _set_backlight_enabled(self, value):
-        if self.pins.backlight is None:
-            raise ValueError('You did not configure a GPIO pin for backlight control!')
-        if not isinstance(value, bool):
-            raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
-        self._backlight_enabled = value
-        GPIO.output(self.pins.backlight, value ^ (self.backlight_mode is c.BacklightMode.active_low))
-
-    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
-            doc='Whether or not to turn on the backlight.')
 
     # High level commands
 

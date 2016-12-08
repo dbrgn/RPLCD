@@ -67,7 +67,7 @@ class CharLCD(BaseCharLCD):
                 Set this to one of the BacklightMode enum values to configure the
                 operating control for the backlight. Has no effect if pin_backlight is ``None``
             backlight_enabled:
-                Set this to True to turn on the backlight or False to turn it off.
+                Whether the backlight is enabled initially. Default: True.
                 Has no effect if pin_backlight is ``None``
             numbering_mode:
                 Which scheme to use for numbering of the GPIO pins, either
@@ -108,6 +108,10 @@ class CharLCD(BaseCharLCD):
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize, auto_linebreaks)
 
+        # Set backlight status
+        if pin_backlight is not None:
+            self.backlight_enabled = backlight_enabled
+
     def _init_connection(self):
         # Setup GPIO
         GPIO.setmode(self.numbering_mode)
@@ -115,9 +119,6 @@ class CharLCD(BaseCharLCD):
             GPIO.setup(pin, GPIO.OUT)
         if self.pins.backlight is not None:
             GPIO.setup(self.pins.backlight, GPIO.OUT)
-            # must enable the backlight AFTER setting up GPIO
-            # TODO
-            #self.backlight_enabled = backlight_enabled
 
         # Initialization
         c.msleep(50)
@@ -128,6 +129,26 @@ class CharLCD(BaseCharLCD):
 
     def _close_connection(self):
         GPIO.cleanup()
+
+    # Properties
+
+    def _get_backlight_enabled(self):
+        # We could probably read the current GPIO output state via sysfs, but
+        # for now let's just store the state in the class
+        if self.pins.backlight is None:
+            raise ValueError('You did not configure a GPIO pin for backlight control!')
+        return bool(self._backlight_enabled)
+
+    def _set_backlight_enabled(self, value):
+        if self.pins.backlight is None:
+            raise ValueError('You did not configure a GPIO pin for backlight control!')
+        if not isinstance(value, bool):
+            raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
+        self._backlight_enabled = value
+        GPIO.output(self.pins.backlight, value ^ (self.backlight_mode is c.BacklightMode.active_low))
+
+    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
+            doc='Whether or not to turn on the backlight.')
 
     # Low level commands
 

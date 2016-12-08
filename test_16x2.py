@@ -135,6 +135,6 @@ lcd.write_string('999456\n\r\n123')
 input('The display should show "123456" on the first line')
 
 lcd.clear()
-lcd.backlight = False
+lcd.backlight_enabled = False
 lcd.close()
 print('Test done. If you have a backlight, it should now be off.')

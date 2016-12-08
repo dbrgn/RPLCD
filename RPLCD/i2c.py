@@ -37,16 +37,44 @@ class CharLCD(BaseCharLCD):
         D7 | D6 | D5 | D4 | BL | EN | RW | RS
 
     """
-    def __init__(self, address, port=1, cols=20, rows=4, dotsize=8):
+    def __init__(self, address, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True):
+        """
+        Character LCD controller.
+
+        Args:
+            address:
+                The I2C address of your LCD.
+            port:
+                The I2C port number. Default: 1.
+            cols:
+                Number of columns per row (usually 16 or 20). Default: 20.
+            rows:
+                Number of display rows (usually 1, 2 or 4). Default: 4.
+            dotsize:
+                Some 1 line displays allow a font height of 10px.
+                Allowed: 8 or 10. Default: 8.
+            backlight_enabled:
+                Whether the backlight is enabled initially. Default: True.
+
+        Returns:
+            A :class:`CharLCD` instance.
+
+        """
+        # Set own address and port.
         self.address = address
         self.port = port
-        self._backlight = c.LCD_BACKLIGHT
 
         # Currently the I2C mode only supports 4 bit communication
         self.data_bus_mode = c.LCD_4BITMODE
 
+        # Set backlight status
+        self._backlight = c.LCD_BACKLIGHT if backlight_enabled else c.LCD_NOBACKLIGHT
+
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize)
+
+        # Refresh backlight status
+        self.backlight_enabled = backlight_enabled
 
     def _init_connection(self):
         print('init connection')
@@ -56,7 +84,7 @@ class CharLCD(BaseCharLCD):
     def _close_connection(self):
         print('close connection')
 
-    # High level commands
+    # Properties
 
     def _get_backlight_enabled(self):
         return self._backlight == c.LCD_BACKLIGHT
