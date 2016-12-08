@@ -63,11 +63,12 @@ Implemented
 
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
+- Support for both parallel and I²C connection
 - Support for custom characters
 - Support for backlight control circuits
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
-- No external dependencies
+- No external dependencies (except `RPi.GPIO`)
 
 Wishlist
 --------
@@ -75,7 +76,8 @@ Wishlist
 These things may get implemented in the future, depending on my free time and
 motivation:
 
-- I²C support
+- MicroPython port
+
 
 Wiring up Pi with LCD display
 =============================
