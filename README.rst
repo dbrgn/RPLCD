@@ -24,7 +24,8 @@ RPLCD
     :alt: License
 
 A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
-controller.
+controller. It supports both GPIO (parallel) mode as well as boards with an I2C
+port expander (e.g. the PCF8574).
 
 Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://www.adafruit.com/products/198>`_ or `mikroshop.ch

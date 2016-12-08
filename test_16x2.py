@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-from RPLCD.i2c import CharLCD
+from RPLCD.gpio import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
 from RPLCD import BacklightMode
@@ -18,7 +18,7 @@ except NameError:
     unichr = chr
 
 
-lcd = CharLCD(0x3f, cols=16, rows=2)
+lcd = CharLCD(cols=16, rows=2)
 # if you have a backlight circuit, initialize like this (substituting the
 # appropriate GPIO and BacklightMode for your backlight circuit):
 #lcd = CharLCD(cols=16, rows=2, pin_backlight=7, backlight_mode=BacklightMode.active_high)
