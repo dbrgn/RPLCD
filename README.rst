@@ -41,6 +41,9 @@ Arduino's LiquidCrystal_ library.
 No external dependencies (except the RPi.GPIO library, which comes preinstalled
 on Raspbian) are needed to use this library.
 
+.. image:: https://raw.github.com/dbrgn/RPLCD/master/photo-i2c.jpg
+    :alt: Photo of 20x4 LCD in action
+
 Setup
 =====
 
@@ -51,7 +54,7 @@ Install this library using pip::
 If you want to use I2C, you also need smbus::
 
     sudo apt install python-smbus
-￼
+
 Features
 ========
 
