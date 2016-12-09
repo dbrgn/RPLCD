@@ -14,13 +14,14 @@
 # serve to show the default.
 
 import sys
+import mock
 import os
 import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ------------------------------------------------
 
@@ -50,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RPLCD'
-copyright = '2013-2015, Danilo Bargen'
+copyright = '2013-2016, Danilo Bargen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -262,3 +263,6 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+sys.modules['RPi'] = mock.Mock()
+sys.modules['RPi.GPIO'] = mock.Mock()

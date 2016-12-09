@@ -207,10 +207,11 @@ class BaseCharLCD(object):
     # High level commands
 
     def write_string(self, value):
-        """Write the specified unicode string to the display.
+        """
+        Write the specified unicode string to the display.
 
-        To control multiline behavior, use newline (\n) and carriage return
-        (\r) characters.
+        To control multiline behavior, use newline (``\\n``) and carriage
+        return (``\\r``) characters.
 
         Lines that are too long automatically continue on next line, as long as
         ``auto_linebreaks`` has not been disabled.

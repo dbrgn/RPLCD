@@ -1,2 +1,6 @@
 Sphinx==1.5
 sphinx-rtd-theme==0.1.9
+RPi.GPIO==0.6.3
+mock==2.0.0
+smbus-cffi==0.5.1
+smbus-cffi==0.5.1
