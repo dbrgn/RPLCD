@@ -266,3 +266,5 @@ texinfo_documents = [
 
 sys.modules['RPi'] = mock.Mock()
 sys.modules['RPi.GPIO'] = mock.Mock()
+
+autoclass_content = 'init'
