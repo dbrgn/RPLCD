@@ -46,7 +46,8 @@ class CharLCD(BaseCharLCD):
         :type cols: int
         :param rows: Number of display rows (usually 1, 2 or 4). Default: 4.
         :type rows: int
-        :param dotsize: Some 1 line displays allow a font height of 10px. Allowed: 8 or 10. Default: 8.
+        :param dotsize: Some 1 line displays allow a font height of 10px.
+            Allowed: 8 or 10. Default: 8.
         :type dotsize: int
         :param backlight_enabled: Whether the backlight is enabled initially. Default: True.
         :type backlight_enabled: bool
