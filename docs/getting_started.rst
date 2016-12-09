@@ -72,9 +72,10 @@ First, import the RPLCD library from your Python script.
 
     from RPLCD.i2c import CharLCD
 
-Then create a new instance of the CharLCD class. For that, you need to know the
-address of your LCD. You can find it on the command line using the ``i2cdetect
-1`` command. In my case the address of the display was ``0x27``:
+Then create a new instance of the :class:`~RPLCD.i2c.CharLCD` class. For that,
+you need to know the address of your LCD. You can find it on the command line
+using the ``i2cdetect 1`` command. In my case the address of the display was
+``0x27``:
 
 .. sourcecode:: python
 
@@ -83,6 +84,8 @@ address of your LCD. You can find it on the command line using the ``i2cdetect
 If you want to customize the way the LCD is instantiated (e.g. by changing the
 number of columns and rows on your display or the I²C port), you can change the
 corresponding parameters. All of them are optional.
+
+.. sourcecode:: python
 
     lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True)
 
@@ -95,8 +98,9 @@ First, import the RPLCD library from your Python script.
 
     from RPLCD.i2c import CharLCD
 
-Then create a new instance of the CharLCD class. If you used the default wiring
-above and have a 20x4 LCD, all that you need is the following:
+Then create a new instance of the :class:`~RPLCD.i2c.CharLCD` class. If you used
+the default wiring above and have a 20x4 LCD, all that you need is the
+following:
 
 .. sourcecode:: python
 
