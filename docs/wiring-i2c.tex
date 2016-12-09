@@ -1,0 +1,42 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usepackage{ifthen}
+\usepackage[sfdefault]{roboto}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+	\begin{tikzpicture}
+
+		% Frame
+		\draw[thick] (0,0) rectangle (13,2);
+
+		% Pins and rectangles
+		\tikzstyle{every node}=[font=\scriptsize]
+		\foreach \x [
+			evaluate = \x as \toppin using int(\x*2),
+			evaluate = \x as \bottompin using int(\x*2-1)
+		] in {1,...,13} {
+			\draw (\x-0.5,1.5) node {\toppin} circle (0.3) circle (0.35);
+			\draw (\x-0.5,0.5) node {\bottompin} circle (0.3) circle (0.35);
+			\draw (\x-0.85,2.2) rectangle (\x-0.15,4);
+			\draw (\x-0.85,-0.2) rectangle (\x-0.15,-2);
+		}
+
+		% Labelling function
+		\newcommand{\pinlabel}[2]{%
+			\ifthenelse{\isodd{#1}}%
+			{\node[anchor=west,rotate=90] at (#1/2, -2) {#2}}%
+			{\node[anchor=west,rotate=90] at (#1/2-0.5, 2.2) {#2}}
+		};
+
+		% Labels
+		\pinlabel{2}{VCC};
+		\pinlabel{6}{GND};
+		\pinlabel{3}{SCL};
+		\pinlabel{5}{SDA};
+
+	\end{tikzpicture}
+
+\end{document}

@@ -32,7 +32,7 @@ Tested with the 20x4 LCD that is sold for example by `adafruit.com
 <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`__.
 
 Also tested with a 16x2 LCD from `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15>`__ and
+<!-- <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15> -->`__ and
 JHD162A.
 
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
@@ -47,13 +47,19 @@ on Raspbian) are needed to use this library.
 Setup
 =====
 
-Install this library using pip::
+You can install RPLCD directly from `PyPI
+<https://pypi.python.org/pypi/RPLCD/>`_ using pip::
 
-    pip install RPLCD
+    $ sudo pip install RPLCD
 
 If you want to use I2C, you also need smbus::
 
-    sudo apt install python-smbus
+    $ sudo apt install python-smbus
+
+You can also install the library manually without pip. Either just copy the
+scripts to your working directory and import them, or download the repository
+and run ``python setup.py install`` to install it into your Python package
+directory.
 
 Features
 ========
@@ -78,52 +84,11 @@ motivation:
 
 - MicroPython port
 
+Documentation
+=============
 
-Wiring up Pi with LCD display
-=============================
+You can find the documentation here: <TODO link>
 
-The following is the easiest way to wire up Pi with LCD display
-in 4-bit mode using default values used in the library.
-
-+------------+---------------------+---------------------------+
-| HD44780    | Pi GPIO             | Comments                  |
-| Pin Number | Pin Number (BOARD)  |                           |
-+============+=====================+===========================+
-|     1      |        6            | GND                       |
-+------------+---------------------+---------------------------+
-|     2      | *Depends on module* | \* (See below)            |
-+------------+---------------------+---------------------------+
-|     3      | *Depends on module* | \* (See below)            |
-+------------+---------------------+---------------------------+
-|     4      |        15           | Register Select           |
-+------------+---------------------+---------------------------+
-|     5      |        18 or 9      | R/W. Can be directly      |
-|            |                     | attached to GND as well.  |
-+------------+---------------------+---------------------------+
-|     6      |        16           | Enable                    |
-+------------+---------------------+---------------------------+
-|     7-10   |   *Not connected*   | In 4-bit mode, we don't   |
-|            |                     | connect them.             |
-+------------+---------------------+---------------------------+
-|     11     |        21           | D3                        |
-+------------+---------------------+---------------------------+
-|     12     |        22           | D2                        |
-+------------+---------------------+---------------------------+
-|     13     |        23           | D1                        |
-+------------+---------------------+---------------------------+
-|     14     |        24           | D0                        |
-+------------+---------------------+---------------------------+
-|     15     | *Depends on module* | \* (See below)            |
-+------------+---------------------+---------------------------+
-|     16     |        14           | GND                       |
-+------------+---------------------+---------------------------+
-
-\* After wiring up the data pins, you have to connect the voltage
-input for controller and backlight, and set up the contrast circuit.
-As there are some differences regarding the hardware between 
-different modules, please refer to the `Adafruit tutorial
-<https://learn.adafruit.com/character-lcds/wiring-a-character-lcd>`_ 
-to learn how to wire up these circuits.
 
 Examples
 ========
@@ -200,26 +165,6 @@ I wrote a blogpost on how to implement scrolling text:
 https://blog.dbrgn.ch/2014/4/20/scrolling-text-with-rplcd/
 
 To see the result, go to https://www.youtube.com/watch?v=49RkQeiVTGU.
-
-
-Installing
-==========
-
-From PyPI
----------
-
-You can install RPLCD directly from `PyPI
-<https://pypi.python.org/pypi/RPLCD/>`_ using pip::
-
-    $ sudo pip install RPLCD
-
-Manual Installation
--------------------
-
-You can also install the library manually without pip. Either just copy the
-scripts to your working directory and import them, or download the repository
-and run ``python setup.py install`` to install it into your Python package
-directory.
 
 
 API
