@@ -153,45 +153,6 @@ Context Managers
 - ``cleared(lcd)``: Clear the display before entering the block.
 
 
-Writing Special Characters
-==========================
-
-You might find that some characters like umlauts aren't written correctly to the
-display. This is because the LCDs usually don't use ASCII, ISO-8859-1 or any
-other standard encoding.
-
-There is a script in this project though that writes the entire character map
-between 0 and 255 to the display. Simply run it as root (so you have
-permissions to access /dev/mem) and pass it the number of rows and cols in your
-LCD::
-
-    $ sudo python show_charmap.py 2 16
-
-Confirm each page with the enter key. Try to find the position of your desired
-character using the console output. On my display for example, the "ü" character
-is at position 129 (in contrast to ISO-8859-1 or UTF-8, which use 252).
-
-Now you can simply create a unicode character from the bit value and write it
-to the LCD. On Python 2:
-
-.. code:: python
-
-    >>> u'Z%srich is a city in Switzerland.' % unichr(129)
-    u'Z\x81rich is a city in Switzerland.'
-
-And on Python 3, where strings are unicode by default:
-
-.. code:: python
-
-    >>> 'Z%srich is a city in Switzerland.' % chr(129)
-    'Z\x81rich is a city in Switzerland.'
-
-In case you need a character that is not included in the default device
-character map, there is a possibility to create custom characters and write them
-into the HD44780 CGRAM. For more information, see the "Custom Characters"
-section in the "Examples" chapter.
-
-
 Adding Backlight Control
 ========================
 
