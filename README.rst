@@ -27,19 +27,11 @@ A Python 3/2 Raspberry PI Character LCD library for the Hitachi HD44780
 controller. It supports both GPIO (parallel) mode as well as boards with an I2C
 port expander (e.g. the PCF8574).
 
-Tested with the 20x4 LCD that is sold for example by `adafruit.com
-<http://www.adafruit.com/products/198>`_ or `mikroshop.ch
-<http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=84>`__.
-
-Also tested with a 16x2 LCD from `mikroshop.ch
-<!-- <http://mikroshop.ch/LED_LCD.html?gruppe=7&artikel=15> -->`__ and
-JHD162A.
-
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
 
-No external dependencies (except the RPi.GPIO library, which comes preinstalled
-on Raspbian) are needed to use this library.
+No external dependencies (except the ``RPi.GPIO`` library, which comes
+preinstalled on Raspbian) are needed to use this library.
 
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo-i2c.jpg
     :alt: Photo of 20x4 LCD in action
