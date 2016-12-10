@@ -23,7 +23,7 @@ RPLCD
     :target: https://pypi.python.org/pypi/RPLCD/
     :alt: License
 
-A Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
+A Python 3/2 Raspberry PI Character LCD library for the Hitachi HD44780
 controller. It supports both GPIO (parallel) mode as well as boards with an I2C
 port expander (e.g. the PCF8574).
 
@@ -44,6 +44,7 @@ on Raspbian) are needed to use this library.
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo-i2c.jpg
     :alt: Photo of 20x4 LCD in action
 
+
 Setup
 =====
 
@@ -60,6 +61,7 @@ You can also install the library manually without pip. Either just copy the
 scripts to your working directory and import them, or download the repository
 and run ``python setup.py install`` to install it into your Python package
 directory.
+
 
 Features
 ========
@@ -84,73 +86,11 @@ motivation:
 
 - MicroPython port
 
+
 Documentation
 =============
 
 You can find the documentation here: https://readthedocs.org/projects/rplcd/
-
-
-API
-===
-
-Init, Setup, Teardown
----------------------
-
-.. sourcecode:: python
-
-    import RPi.GPIO as GPIO
-    from RPLCD.gpio import CharLCD, BacklightMode
-
-    # Initialize display. All values have default values and are therefore
-    # optional.
-    lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
-                  numbering_mode=GPIO.BOARD,
-                  cols=20, rows=4, dotsize=8,
-                  auto_linebreaks=True,
-                  pin_backlight=None, backlight_enabled=True,
-                  backlight_mode=BacklightMode.active_low)
-
-    ...
-
-    # If desired, reset the GPIO configuration and optionally clear the screen.
-    # Note that this can lead to undesired effects on the LCD, because the GPIO
-    # pins are not configured as input or output anymore.
-    lcd.close(clear=True)
-
-Properties
-----------
-
-- ``display_enabled`` -> ``True`` / ``False``
-- ``cursor_pos`` -> ``(row, col)``
-- ``text_align_mode`` -> ``Alignment.left`` / ``Alignment.right``
-- ``write_shift_mode`` -> ``ShiftMode.cursor`` / ``ShiftMode.display``
-- ``cursor_mode`` -> ``CursorMode.hide`` / ``CursorMode.line`` / ``CursorMode.blink``
-- ``backlight_enabled`` -> ``True`` / ``False``
-
-High Level Functions
---------------------
-
-- ``write_string(value)``: Write the specified unicode string to the display.
-  You can use newline (``\n``) and carriage return (``\r``) characters to
-  control line breaks.
-- ``clear()``: Overwrite display with blank characters and reset cursor position.
-- ``home()``: Set cursor to initial position and reset any shifting.
-- ``shift_display(amount)``: Shift the display. Use negative amounts to shift
-  left and positive amounts to shift right.
-- ``create_char(location, bitmap)``: Write a new character into the CGRAM at
-  the specified location (0-7). See the examples section for more information.
-
-Mid Level Functions
--------------------
-
-- ``command(value)``: Send a raw command to the LCD.
-- ``write(value)``: Write a raw byte to the LCD.
-
-Context Managers
-----------------
-
-- ``cursor(lcd, row, col)``: Control the cursor position before entering the block.
-- ``cleared(lcd)``: Clear the display before entering the block.
 
 
 Testing

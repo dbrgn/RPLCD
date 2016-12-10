@@ -70,12 +70,12 @@ class CharLCD(BaseCharLCD):
         self.backlight_enabled = backlight_enabled
 
     def _init_connection(self):
-        print('init connection')
         self.bus = SMBus(self.port)
         c.msleep(50)
 
     def _close_connection(self):
-        print('close connection')
+        # Nothing to do here?
+        pass
 
     # Properties
 

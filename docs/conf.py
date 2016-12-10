@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -269,3 +270,8 @@ sys.modules['RPi.GPIO'] = mock.Mock()
 
 autodoc_default_flags = ['members', 'inherited-members', 'undoc-members']
 autoclass_content = 'init'
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'python2': ('https://docs.python.org/2.7', None),
+}

@@ -1,3 +1,5 @@
+.. _getting-started:
+
 Getting Started
 ###############
 
@@ -60,8 +62,8 @@ the `Adafruit tutorial
 how to wire up these circuits.
 
 
-Sending Simple Text to LCD
-==========================
+Initializing the LCD
+====================
 
 Setup: I²C
 ~~~~~~~~~~
@@ -126,7 +128,7 @@ Now you can write a string to the LCD:
 
 .. sourcecode:: python
 
-    lcd.write_string(u'Hello world')
+    lcd.write_string('Hello world')
 
 To clean the display, use the ``clear()`` method:
 
@@ -139,7 +141,7 @@ carriage return (``\r``, moves to beginning of line) characters.
 
 .. sourcecode:: python
 
-    lcd.write_string(u'Hello\r\n  World!')
+    lcd.write_string('Hello\r\n  World!')
 
 And you can also set the cursor position directly:
 
