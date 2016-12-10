@@ -29,35 +29,28 @@ from .lcd import BaseCharLCD
 
 
 class CharLCD(BaseCharLCD):
-    """CharLCD via PCF8574 I2C port expander.
-
-    Pin mapping::
-
-        7  | 6  | 5  | 4  | 3  | 2  | 1  | 0
-        D7 | D6 | D5 | D4 | BL | EN | RW | RS
-
-    """
     def __init__(self, address, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True):
         """
-        Character LCD controller.
+        CharLCD via PCF8574 I2C port expander.
 
-        Args:
-            address:
-                The I2C address of your LCD.
-            port:
-                The I2C port number. Default: 1.
-            cols:
-                Number of columns per row (usually 16 or 20). Default: 20.
-            rows:
-                Number of display rows (usually 1, 2 or 4). Default: 4.
-            dotsize:
-                Some 1 line displays allow a font height of 10px.
-                Allowed: 8 or 10. Default: 8.
-            backlight_enabled:
-                Whether the backlight is enabled initially. Default: True.
+        Pin mapping::
 
-        Returns:
-            A :class:`CharLCD` instance.
+            7  | 6  | 5  | 4  | 3  | 2  | 1  | 0
+            D7 | D6 | D5 | D4 | BL | EN | RW | RS
+
+        :param address: The I2C address of your LCD.
+        :type address: int
+        :param port: The I2C port number. Default: 1.
+        :type port: int
+        :param cols: Number of columns per row (usually 16 or 20). Default: 20.
+        :type cols: int
+        :param rows: Number of display rows (usually 1, 2 or 4). Default: 4.
+        :type rows: int
+        :param dotsize: Some 1 line displays allow a font height of 10px.
+            Allowed: 8 or 10. Default: 8.
+        :type dotsize: int
+        :param backlight_enabled: Whether the backlight is enabled initially. Default: True.
+        :type backlight_enabled: bool
 
         """
         # Set own address and port.
@@ -77,12 +70,12 @@ class CharLCD(BaseCharLCD):
         self.backlight_enabled = backlight_enabled
 
     def _init_connection(self):
-        print('init connection')
         self.bus = SMBus(self.port)
         c.msleep(50)
 
     def _close_connection(self):
-        print('close connection')
+        # Nothing to do here?
+        pass
 
     # Properties
 
@@ -94,7 +87,7 @@ class CharLCD(BaseCharLCD):
         self.bus.write_byte(self.address, self._backlight)
 
     backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
-            doc='Whether or not to enable the backlight.')
+            doc='Whether or not to enable the backlight. Either ``True`` or ``False``.')
 
     # Low level commands
 

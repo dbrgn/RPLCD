@@ -207,10 +207,11 @@ class BaseCharLCD(object):
     # High level commands
 
     def write_string(self, value):
-        """Write the specified unicode string to the display.
+        """
+        Write the specified unicode string to the display.
 
-        To control multiline behavior, use newline (\n) and carriage return
-        (\r) characters.
+        To control multiline behavior, use newline (``\\n``) and carriage
+        return (``\\r``) characters.
 
         Lines that are too long automatically continue on next line, as long as
         ``auto_linebreaks`` has not been disabled.
@@ -292,20 +293,18 @@ class BaseCharLCD(object):
 
         The HD44780 supports up to 8 custom characters (location 0-7).
 
-        Args:
-            location:
-                The place in memory where the character is stored. Values need
-                to be integers between 0 and 7.
-            bitmap:
-                The bitmap containing the character. This should be a tuple of
-                8 numbers, each representing a 5 pixel row.
+        :param location: The place in memory where the character is stored.
+            Values need to be integers between 0 and 7.
+        :type location: int
+        :param bitmap: The bitmap containing the character. This should be a
+            tuple of 8 numbers, each representing a 5 pixel row.
+        :type bitmap: tuple of int
+        :raises AssertionError: Raised when an invalid location is passed in or
+            when bitmap has an incorrect size.
 
-        Raises:
-            AssertionError:
-                Raised when an invalid location is passed in or when bitmap
-                has an incorrect size.
+        Example:
 
-        Example::
+        .. sourcecode:: python
 
             >>> smiley = (
             ...     0b00000,
