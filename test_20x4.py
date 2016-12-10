@@ -4,7 +4,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 from RPLCD.i2c import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
-from RPLCD import cursor, cleared
+from RPLCD import cursor
 from RPLCD import BacklightMode
 
 try:
@@ -63,15 +63,15 @@ input('The string "cursor" should now be on the third row, column 0. ')
 lcd.home()
 input('Cursor should now be at initial position. Everything should be shifted to the right by 5 characters. ')
 
-with cursor(lcd, 3, 19):
-    lcd.write_string('X')
+lcd.cursor_pos = (3, 19)
+lcd.write_string('X')
 input('The last character on the LCD should now be an "X"')
 
 lcd.display_enabled = False
 input('Display should now be blank. ')
 
-with cleared(lcd):
-    lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
+lcd.clear()
+lcd.write_string('Eggs, Ham, Bacon\n\rand Spam')
 lcd.display_enabled = True
 input('Display should now show "Eggs, Ham, Bacon and Spam". ')
 
