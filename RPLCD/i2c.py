@@ -29,7 +29,10 @@ from .lcd import BaseCharLCD
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, address, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True):
+    def __init__(self, address, port=1,
+                       cols=20, rows=4, dotsize=8,
+                       auto_linebreaks=True,
+                       backlight_enabled=True):
         """
         CharLCD via PCF8574 I2C port expander.
 
@@ -49,6 +52,9 @@ class CharLCD(BaseCharLCD):
         :param dotsize: Some 1 line displays allow a font height of 10px.
             Allowed: 8 or 10. Default: 8.
         :type dotsize: int
+        :param auto_linebreaks: Whether or not to automatically insert line breaks.
+            Default: True.
+        :type auto_linebreaks: bool
         :param backlight_enabled: Whether the backlight is enabled initially. Default: True.
         :type backlight_enabled: bool
 
@@ -64,7 +70,7 @@ class CharLCD(BaseCharLCD):
         self._backlight = c.LCD_BACKLIGHT if backlight_enabled else c.LCD_NOBACKLIGHT
 
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize)
+        super(CharLCD, self).__init__(cols, rows, dotsize, auto_linebreaks=auto_linebreaks)
 
         # Refresh backlight status
         self.backlight_enabled = backlight_enabled
