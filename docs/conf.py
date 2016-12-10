@@ -267,4 +267,5 @@ texinfo_documents = [
 sys.modules['RPi'] = mock.Mock()
 sys.modules['RPi.GPIO'] = mock.Mock()
 
+autodoc_default_flags = ['members', 'inherited-members', 'undoc-members']
 autoclass_content = 'init'

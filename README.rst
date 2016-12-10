@@ -153,22 +153,6 @@ Context Managers
 - ``cleared(lcd)``: Clear the display before entering the block.
 
 
-Adding Backlight Control
-========================
-
-By setting the ``pin_backlight`` parameter in the ``CharLCD`` constructor, you
-can control a backlight circuit.
-
-First of all, you need to build an external circuit to control the backlight,
-most LCD modules don't support it directly. You could do this for example by
-using a transistor and a pull-up resistor. Then connect the transistor to a GPIO
-pin and configure that pin using the ``pin_backlight`` parameter in the
-constructor. If you use an active high circuit instead of active low, you can
-change that behavior by setting the  ``backlight_mode`` to either
-``BacklightMode.active_high``. Now you can toggle the ``backlight_enabled``
-property.
-
-
 Testing
 =======
 

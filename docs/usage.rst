@@ -96,6 +96,33 @@ The following tool can help you to create your custom characters:
 https://omerk.github.io/lcdchargen/
 
 
+Backlight Control
+=================
+
+I²C
+~~~
+
+If you're using an LCD connected through the I²C bus, you can directly turn on
+the backlight using the boolean :attr:`~RPLCD.i2c.CharLCD.backlight_enabled` property.
+
+GPIO
+~~~~
+
+By setting the ``pin_backlight`` parameter in the :class:`~RPLCD.gpio.CharLCD`
+constructor, you can control a backlight circuit.
+
+First of all, you need to build an external circuit to control the backlight,
+most LCD modules don't support it directly. You could do this for example by
+using a transistor and a pull-up resistor. Then connect the transistor to a GPIO
+pin and configure that pin using the ``pin_backlight`` parameter in the
+constructor. If you use an active high circuit instead of active low, you can
+change that behavior by setting the  ``backlight_mode`` to either
+:attr:`BacklightMode.active_high <RPLCD.common.BacklightMode.active_high>` or
+:attr:`BacklightMode.active_low <RPLCD.common.BacklightMode.active_low>`. Now
+you can toggle the :attr:`~RPLCD.gpio.CharLCD.backlight_enabled` property to
+turn the backlight on and off.
+
+
 Scrolling Text
 ==============
 
