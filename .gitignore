@@ -42,3 +42,4 @@ docs/*.pdf
 
 # Python
 VIRTUAL/
+.cache/

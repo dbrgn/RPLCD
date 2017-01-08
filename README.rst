@@ -88,6 +88,9 @@ You can find the documentation here: https://readthedocs.org/projects/rplcd/
 Testing
 =======
 
+Test Scripts
+------------
+
 To test your 20x4 display, please run the ``test_20x4.py`` script and
 confirm/verify each step with the enter key. If you don't use the standard
 wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
@@ -95,6 +98,17 @@ wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
 
 To test a 16x2 display, proceed as explained above, but use the ``test_16x2.py``
 script instead.
+
+Unit Tests
+----------
+
+There are also unit tests. First, install dependencies:
+
+    pip install -U -r requirements-dev.txt
+
+Then run the tests:
+
+    py.test -v
 
 
 Coding Guidelines

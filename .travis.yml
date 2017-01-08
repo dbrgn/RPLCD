@@ -1,8 +1,11 @@
 language: python
 python:
-    - 2.7
-    - 3.4
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
 install:
-    - pip install flake8
+    - pip install -r requirements-dev.txt
 script:
-    - flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/[a-zA-Z]*.py
+    - py.test -v
