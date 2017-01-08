@@ -60,14 +60,14 @@ class BaseCharLCD(object):
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
 
-        # Register codecs
+        # Initialize codec
         if charmap == 'A00':
-            self.codec = 'hd44780-a00'
+            self.codec = codecs.A00Codec()
         elif charmap == 'A02':
-            self.codec = 'hd44780-a02'
+            self.codec = codecs.A02Codec()
+            pass
         else:
             raise ValueError('The ``charmap`` argument must be either ``A00`` or ``A02``')
-        codecs.register()
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
@@ -246,7 +246,7 @@ class BaseCharLCD(object):
             u'Temperature: 30\xb0C'
 
         """
-        encoded = value.encode(self.codec)
+        encoded = self.codec.encode(value)
 
         CR = ord('\r')
         LF = ord('\n')

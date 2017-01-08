@@ -72,7 +72,7 @@ def test_charmap(mocker, charmap, ue):
     text = 'Züri'
 
     lcd.write_string(text)
-    assert send.call_count == 4
+    assert send.call_count == 4, 'call count was %d' % send.call_count
     calls = [c[0] for c in send.call_args_list]
     assert calls[0] == (90, RS_DATA)
     assert calls[1] == (ue, RS_DATA)
