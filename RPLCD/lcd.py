@@ -24,6 +24,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 from collections import namedtuple
 
+from . import codecs
 from . import common as c
 from .compat import range
 
@@ -37,24 +38,28 @@ class BaseCharLCD(object):
 
     # Init, setup, teardown
 
-    def __init__(self, cols=20, rows=4, dotsize=8, auto_linebreaks=True):
+    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True):
         """
         Character LCD controller. Base class only, you should use a subclass.
 
         Args:
-            rows:
-                Number of display rows (usually 1, 2 or 4). Default: 4.
             cols:
                 Number of columns per row (usually 16 or 20). Default 20.
+            rows:
+                Number of display rows (usually 1, 2 or 4). Default: 4.
             dotsize:
                 Some 1 line displays allow a font height of 10px.
                 Allowed: 8 or 10. Default: 8.
+            charmap:
+                The character map used. Depends on your LCD. This must be
+                either ``A00`` or ``A02``.  Default: ``A02``.
             auto_linebreaks:
                 Whether or not to automatically insert line breaks.
                 Default: True.
 
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
+        assert charmap in ['A00', 'A02'], 'The ``charmap`` argument should be either A00 or A02.'
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
@@ -119,6 +124,9 @@ class BaseCharLCD(object):
         self._cursor_pos = (0, 0)
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
+
+        # Register codecs
+        codecs.register()
 
     def close(self, clear=False):
         if clear:
