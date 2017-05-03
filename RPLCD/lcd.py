@@ -59,7 +59,15 @@ class BaseCharLCD(object):
 
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
-        assert charmap in ['A00', 'A02'], 'The ``charmap`` argument should be either A00 or A02.'
+
+        # Register codecs
+        if charmap == 'A00':
+            self.codec = 'hd44780-a00'
+        elif charmap == 'A02':
+            self.codec = 'hd44780-a02'
+        else:
+            raise ValueError('The ``charmap`` argument must be either ``A00`` or ``A02``')
+        codecs.register()
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
@@ -124,9 +132,6 @@ class BaseCharLCD(object):
         self._cursor_pos = (0, 0)
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
-
-        # Register codecs
-        codecs.register()
 
     def close(self, clear=False):
         if clear:
@@ -224,10 +229,13 @@ class BaseCharLCD(object):
         Lines that are too long automatically continue on next line, as long as
         ``auto_linebreaks`` has not been disabled.
 
-        Make sure that you're only passing unicode objects to this function. If
-        you're dealing with bytestrings (the default string type in Python 2),
-        convert it to a unicode object using the ``.decode(encoding)`` method
-        and the appropriate encoding. Example for UTF-8 encoded strings:
+        Make sure that you're only passing unicode objects to this function.
+        The unicode string is then converted to the correct LCD encoding by
+        using the charmap specified at instantiation time.
+
+        If you're dealing with bytestrings (the default string type in Python
+        2), convert it to a unicode object using the ``.decode(encoding)``
+        method and the appropriate encoding. Example for UTF-8 encoded strings:
 
         .. code::
 
@@ -237,15 +245,18 @@ class BaseCharLCD(object):
             >>> bstring.decode('utf-8')
             u'Temperature: 30\xb0C'
 
-        Only characters with an ``ord()`` value between 0 and 255 are currently
-        supported.
-
         """
+        encoded = value.encode(self.codec)
+
+        CR = ord('\r')
+        LF = ord('\n')
+
         ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
-        for char in value:
+
+        for char in encoded:
             # Write regular chars
-            if char not in '\n\r':
-                self.write(ord(char))
+            if char not in [CR, LF]:
+                self.write(char)
                 ignored = None
                 continue
             # If an auto linebreak happened recently, ignore this write.
@@ -262,12 +273,12 @@ class BaseCharLCD(object):
                     continue
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
-            if char == '\n':
+            if char == LF:
                 if row < self.lcd.rows - 1:
                     self.cursor_pos = (row + 1, col)
                 else:
                     self.cursor_pos = (0, col)
-            elif char == '\r':
+            elif char == CR:
                 if self.text_align_mode is c.Alignment.left:
                     self.cursor_pos = (row, 0)
                 else:
