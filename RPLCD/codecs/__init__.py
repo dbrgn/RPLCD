@@ -35,7 +35,7 @@ class Codec(object):
         assert hasattr(codec, 'combined_chars')
         self.codec = codec
 
-    def encode(self, input_):
+    def encode(self, input_):  # type: (str) -> bytes
         result = []
         window_iter = _window(input_, self.codec.combined_chars_lookahead)
         while True:
@@ -65,7 +65,7 @@ class Codec(object):
             # Otherwise, do a regular lookup in the encoding table
             result.append(self.codec.encoding_table.get(char, self.codec.replacement_char))
 
-        return bytes(result)
+        return bytes(bytearray(result))  # Note: bytearray is needed for py2 compat
 
 
 class A00Codec(Codec):

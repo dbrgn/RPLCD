@@ -246,14 +246,14 @@ class BaseCharLCD(object):
             u'Temperature: 30\xb0C'
 
         """
-        encoded = self.codec.encode(value)
+        encoded = self.codec.encode(value)  # type: bytes
 
         CR = ord('\r')
         LF = ord('\n')
 
         ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
 
-        for char in encoded:
+        for char in bytearray(encoded):
             # Write regular chars
             if char not in [CR, LF]:
                 self.write(char)
@@ -358,7 +358,7 @@ class BaseCharLCD(object):
         """Send a raw command to the LCD."""
         self._send(value, c.RS_INSTRUCTION)
 
-    def write(self, value):
+    def write(self, value):  # type: (int) -> None
         """Write a raw byte to the LCD."""
 
         # Get current position
