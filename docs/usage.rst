@@ -7,7 +7,8 @@ Writing To Display
 ==================
 
 Regular text can be written to the :class:`~RPLCD.i2c.CharLCD` instance using
-the :meth:`~RPLCD.i2c.CharLCD.write_string` method. It accepts unicode strings.
+the :meth:`~RPLCD.i2c.CharLCD.write_string` method. It accepts unicode strings
+(``str`` in Python 3, ``unicode`` in Python 2).
 
 The cursor position can be set by assigning a ``(row, col)`` tuple to
 :attr:`~RPLCD.i2c.CharLCD.cursor_pos`. It can be reset to the starting position
@@ -58,38 +59,32 @@ When using a LCD connected via GPIO pins, the wiring can be customized in the
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24])
 
 
-Writing Special Characters
-==========================
+Character Maps
+==============
 
-You might find that some characters like umlauts aren't written correctly to the
-display. This is because the LCDs usually don't use `ASCII`, `ISO-8859-1` or any
-other standard encoding. Furthermore, different LCDs from different vendors
-actualls use different character maps.
+RPLCD supports the two most commonly used character maps for HD44780 style
+displays: A00 and A02. You can find them on pages 17 and 18 of `the datasheet
+<https://www.sparkfun.com/datasheets/LCD/HD44780.pdf>`_.
 
-There is a script in this project though that writes the entire character map
-between 0 and 255 to the display. Simply run it as root (so you have permissions
-to access `/dev/mem`) and pass it the number of rows and cols in your LCD::
+The default character map is ``A02``. If you find that some of the characters
+you are writing to the display turn out wrong, then try using the ``A00``
+character map:
 
-    $ sudo python show_charmap.py 2 16
+.. sourcecode:: python
 
-Confirm each page with the enter key. Try to find the position of your desired
-character using the console output. On my display for example, the "ü" character
-is at position 129 (in contrast to `ISO-8859-1` or `UTF-8`, which use 252).
+    lcd = CharLCD(charmap='A00')
 
-Now you can simply create a unicode character from the bit value and write it
-to the LCD. If you're using Python 3:
+As a rule of thumb, if your display can show Japanese characters, it uses
+``A00``, otherwise ``A02``. To show the entire character map on your LCD, you
+can use the ``show_charmap.py`` script.
 
-.. code:: python
+Should you run into the situation that your character map does not seem to match
+either the ``A00`` or the ``A02`` tables, please `open an issue
+<https://github.com/dbrgn/RPLCD/issues>`_ on Github.
 
-    >>> 'Z%srich is a city in Switzerland.' % chr(129)
-    'Z\x81rich is a city in Switzerland.'
-
-And on Python 2, where you need to explicitly use unicode strings:
-
-.. code:: python
-
-    >>> u'Z%srich is a city in Switzerland.' % unichr(129)
-    u'Z\x81rich is a city in Switzerland.'
+The same thing counts if you have a character that should be supported by your
+character map, but which doesn't get written correctly to the display. Let me
+know by `opening an issue <https://github.com/dbrgn/RPLCD/issues>`_!
 
 In case you need a character that is not included in the default device
 character map, there is a possibility to create custom characters and write them
@@ -122,14 +117,19 @@ pixel row. Each character is written to a specific location in CGRAM (numbers
     ... )
     >>> lcd.create_char(0, smiley)
 
-To actually show a stored character on the display, use :py:func:`chr()
-<python:chr>` (Python 3) or :py:func:`unichr() <python2:unichr>` (if you're
-still stuck on Python 2) function in combination with the location number you
-specified previously (e.g. ``write_string(unichr(2))``).
+To actually show a stored character on the display, you can use hex escape codes
+with the location number you specified previously. For example, to write the
+character at location 3:
 
 .. sourcecode:: python
 
-    >>> lcd.write_string(chr(0))
+    >>> lcd.write_string('\x03')
+
+The escape code can also be embedded in a longer string:
+
+.. sourcecode:: python
+
+    >>> lcd.write_string('Hello there \x03')
 
 The following tool can help you to create your custom characters:
 https://omerk.github.io/lcdchargen/
