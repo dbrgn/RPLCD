@@ -25,7 +25,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 import sys
 
-from RPLCD.i2c import CharLCD
+from RPLCD import i2c, gpio
 
 
 try:
@@ -44,13 +44,29 @@ except NameError:  # Python 3
     unichr = chr
 
 
-if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print('Usage: %s <rows> <cols>' % sys.argv[0])
-        sys.exit(1)
+def print_usage():
+    print('Usage: %s i2c <addr> <rows> <cols>' % sys.argv[0])
+    print('       %s gpio <rows> <cols>' % sys.argv[0])
+    print('')
+    print('Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.')
+    sys.exit(1)
 
-    rows, cols = int(sys.argv[1]), int(sys.argv[2])
-    lcd = CharLCD(0x3f, cols=cols, rows=rows)
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print_usage()
+    if sys.argv[1] == 'i2c':
+        if len(sys.argv) != 5:
+            print_usage()
+        rows, cols = int(sys.argv[3]), int(sys.argv[4])
+        lcd = i2c.CharLCD(int(sys.argv[2], 16), cols=cols, rows=rows)
+    elif sys.argv[1] == 'gpio':
+        if len(sys.argv) != 4:
+            print_usage()
+        rows, cols = int(sys.argv[2]), int(sys.argv[3])
+        lcd = i2c.CharLCD(cols=cols, rows=rows)
+    else:
+        print_usage()
 
     print('This tool shows the character map of your LCD on the display.')
     print('Press ctrl+c at any time to abort.\n')
