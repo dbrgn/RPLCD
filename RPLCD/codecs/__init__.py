@@ -6,6 +6,12 @@ import itertools
 from . import hd44780_a00, hd44780_a02
 
 
+# Constants used to encode special characters.
+# Negative to avoid conflict with regular bytes.
+CR = -1
+LF = -2
+
+
 def _window(seq, lookahead):
     """
     Create a sliding window with the specified number of lookahead characters.
@@ -35,7 +41,7 @@ class Codec(object):
         assert hasattr(codec, 'combined_chars')
         self.codec = codec
 
-    def encode(self, input_):  # type: (str) -> bytes
+    def encode(self, input_):  # type: (str) -> List[int]
         result = []
         window_iter = _window(input_, self.codec.combined_chars_lookahead)
         while True:
@@ -46,7 +52,15 @@ class Codec(object):
             char = window[0]
             lookahead = window[1:]
 
-            # First, test whether the character starts a multi-char mapping
+            # First, test for newlines and carriage returns
+            if char == '\r':
+                result.append(CR)
+                continue
+            elif char == '\n':
+                result.append(LF)
+                continue
+
+            # Then, test whether the character starts a multi-char mapping
             try:
                 if char in self.codec.combined_chars:
                     mappings = self.codec.combined_chars[char]
@@ -65,7 +79,7 @@ class Codec(object):
             # Otherwise, do a regular lookup in the encoding table
             result.append(self.codec.encoding_table.get(char, self.codec.replacement_char))
 
-        return bytes(bytearray(result))  # Note: bytearray is needed for py2 compat
+        return result
 
 
 class A00Codec(Codec):

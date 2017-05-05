@@ -246,16 +246,13 @@ class BaseCharLCD(object):
             u'Temperature: 30\xb0C'
 
         """
-        encoded = self.codec.encode(value)  # type: bytes
-
-        CR = ord('\r')
-        LF = ord('\n')
+        encoded = self.codec.encode(value)  # type: List[int]
 
         ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
 
-        for char in bytearray(encoded):
+        for char in encoded:
             # Write regular chars
-            if char not in [CR, LF]:
+            if char not in [codecs.CR, codecs.LF]:
                 self.write(char)
                 ignored = None
                 continue
@@ -273,12 +270,12 @@ class BaseCharLCD(object):
                     continue
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
-            if char == LF:
+            if char == codecs.LF:
                 if row < self.lcd.rows - 1:
                     self.cursor_pos = (row + 1, col)
                 else:
                     self.cursor_pos = (0, col)
-            elif char == CR:
+            elif char == codecs.CR:
                 if self.text_align_mode is c.Alignment.left:
                     self.cursor_pos = (row, 0)
                 else:

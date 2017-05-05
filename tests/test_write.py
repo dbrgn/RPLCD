@@ -78,3 +78,30 @@ def test_charmap(mocker, charmap, ue):
     assert calls[1] == (ue, RS_DATA)
     assert calls[2] == (114, RS_DATA)
     assert calls[3] == (105, RS_DATA)
+
+
+@pytest.mark.parametrize(['rows', 'cols'], [
+    (2, 16),
+    (4, 20),
+])
+def test_write_newline(mocker, rows, cols):
+    """
+    Write text containing CR/LF chars to the display.
+    """
+    lcd = CharLCD(rows=rows, cols=cols)
+    send = mocker.patch.object(lcd, '_send')
+    text = '\nab\n\rcd'
+    lcd.write_string(text)
+    assert send.call_count == len(text)
+    calls = [c[0] for c in send.call_args_list]
+    assert calls[0] == (0x80 + 0x40, RS_INSTRUCTION), calls
+    assert calls[1] == (97, RS_DATA), calls
+    assert calls[2] == (98, RS_DATA), calls
+    if rows == 2:
+        assert calls[3] == (0x80 + 2, RS_INSTRUCTION), calls
+        assert calls[4] == (0x80 + 0, RS_INSTRUCTION), calls
+    else:
+        assert calls[3] == (0x80 + cols + 2, RS_INSTRUCTION), calls
+        assert calls[4] == (0x80 + cols + 0, RS_INSTRUCTION), calls
+    assert calls[5] == (99, RS_DATA), calls
+    assert calls[6] == (100, RS_DATA), calls
