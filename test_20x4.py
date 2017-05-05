@@ -2,24 +2,41 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-from RPLCD.i2c import CharLCD
+import sys
+
+from RPLCD import gpio, i2c
 from RPLCD import Alignment, CursorMode, ShiftMode
-from RPLCD import cursor
-from RPLCD import BacklightMode
 
 try:
     input = raw_input
 except NameError:
     pass
 
-try:
-    unichr = unichr
-except NameError:
-    unichr = chr
+
+def print_usage():
+    print('Usage: %s i2c <addr> <charmap>' % sys.argv[0])
+    print('       %s gpio <charmap>' % sys.argv[0])
+    print('')
+    print('Note: Charmap can be either A00 or A02. If your display contains Japanese')
+    print('      characters, it probably uses the A00 charmap, otherwise A02.')
+    print('Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.')
+    sys.exit(1)
 
 
-lcd = CharLCD(0x3f)
-# see note in test_16x2.py about configuring your backlight, if you have one
+# Parse command line parameters
+if len(sys.argv) < 2:
+    print_usage()
+if sys.argv[1] == 'i2c':
+    if len(sys.argv) != 4:
+        print_usage()
+    lcd = i2c.CharLCD(int(sys.argv[2], 16), cols=16, rows=2, charmap=sys.argv[3])
+elif sys.argv[1] == 'gpio':
+    if len(sys.argv) != 3:
+        print_usage()
+    lcd = gpio.CharLCD(cols=16, rows=2, charmap=sys.argv[2])
+else:
+    print_usage()
+
 
 input('Display should be blank. ')
 
@@ -101,7 +118,7 @@ input('Text should nicely wrap around lines. ')
 
 lcd.clear()
 lcd.cursor_mode = CursorMode.hide
-lcd.write_string('Paris: 21{deg}C\n\rZ{uuml}rich: 18{deg}C'.format(deg=unichr(176), uuml=unichr(129)))
+lcd.write_string('Paris: 21°C\n\rZürich: 18°C')
 print('Text should now show "Paris: 21°C, Zürich: 18°C" without any encoding issues.', end='')
 input()
 
@@ -110,13 +127,13 @@ lcd.clear()
 happy = (0b00000, 0b01010, 0b01010, 0b00000, 0b10001, 0b10001, 0b01110, 0b00000)
 sad = (0b00000, 0b01010, 0b01010, 0b00000, 0b01110, 0b10001, 0b10001, 0b00000)
 lcd.create_char(0, sad)
-lcd.write_string(unichr(0))
+lcd.write_string('\x00')
 lcd.create_char(1, happy)
-lcd.write_string(unichr(1))
+lcd.write_string('\x01')
 input('You should now see a sad and a happy face next to each other. ')
 lcd.create_char(0, happy)
 lcd.home()
-lcd.write_string(unichr(0))
+lcd.write_string('\x00')
 input('Now both faces should be happy. ')
 
 lcd.clear()
@@ -134,4 +151,3 @@ except ValueError:
     pass
 lcd.close()
 print('Test done. If you have a backlight, it should now be off.')
-

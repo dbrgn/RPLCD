@@ -89,7 +89,8 @@ corresponding parameters. All of them are optional.
 
 .. sourcecode:: python
 
-    lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True)
+    lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8,
+                  charmap='A02', backlight_enabled=True)
 
 Setup: GPIO
 ~~~~~~~~~~~
@@ -119,6 +120,7 @@ change the corresponding parameters. All of them are optional.
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=GPIO.BOARD,
                   cols=20, rows=4, dotsize=8,
+                  charmap='A02',
                   auto_linebreaks=True)
 
 Writing Data

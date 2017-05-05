@@ -24,6 +24,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 from collections import namedtuple
 
+from . import codecs
 from . import common as c
 from .compat import range
 
@@ -37,24 +38,36 @@ class BaseCharLCD(object):
 
     # Init, setup, teardown
 
-    def __init__(self, cols=20, rows=4, dotsize=8, auto_linebreaks=True):
+    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True):
         """
         Character LCD controller. Base class only, you should use a subclass.
 
         Args:
-            rows:
-                Number of display rows (usually 1, 2 or 4). Default: 4.
             cols:
                 Number of columns per row (usually 16 or 20). Default 20.
+            rows:
+                Number of display rows (usually 1, 2 or 4). Default: 4.
             dotsize:
                 Some 1 line displays allow a font height of 10px.
                 Allowed: 8 or 10. Default: 8.
+            charmap:
+                The character map used. Depends on your LCD. This must be
+                either ``A00`` or ``A02``.  Default: ``A02``.
             auto_linebreaks:
                 Whether or not to automatically insert line breaks.
                 Default: True.
 
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
+
+        # Initialize codec
+        if charmap == 'A00':
+            self.codec = codecs.A00Codec()
+        elif charmap == 'A02':
+            self.codec = codecs.A02Codec()
+            pass
+        else:
+            raise ValueError('The ``charmap`` argument must be either ``A00`` or ``A02``')
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
@@ -216,10 +229,13 @@ class BaseCharLCD(object):
         Lines that are too long automatically continue on next line, as long as
         ``auto_linebreaks`` has not been disabled.
 
-        Make sure that you're only passing unicode objects to this function. If
-        you're dealing with bytestrings (the default string type in Python 2),
-        convert it to a unicode object using the ``.decode(encoding)`` method
-        and the appropriate encoding. Example for UTF-8 encoded strings:
+        Make sure that you're only passing unicode objects to this function.
+        The unicode string is then converted to the correct LCD encoding by
+        using the charmap specified at instantiation time.
+
+        If you're dealing with bytestrings (the default string type in Python
+        2), convert it to a unicode object using the ``.decode(encoding)``
+        method and the appropriate encoding. Example for UTF-8 encoded strings:
 
         .. code::
 
@@ -229,15 +245,15 @@ class BaseCharLCD(object):
             >>> bstring.decode('utf-8')
             u'Temperature: 30\xb0C'
 
-        Only characters with an ``ord()`` value between 0 and 255 are currently
-        supported.
-
         """
+        encoded = self.codec.encode(value)  # type: List[int]
+
         ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
-        for char in value:
+
+        for char in encoded:
             # Write regular chars
-            if char not in '\n\r':
-                self.write(ord(char))
+            if char not in [codecs.CR, codecs.LF]:
+                self.write(char)
                 ignored = None
                 continue
             # If an auto linebreak happened recently, ignore this write.
@@ -254,12 +270,12 @@ class BaseCharLCD(object):
                     continue
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
-            if char == '\n':
+            if char == codecs.LF:
                 if row < self.lcd.rows - 1:
                     self.cursor_pos = (row + 1, col)
                 else:
                     self.cursor_pos = (0, col)
-            elif char == '\r':
+            elif char == codecs.CR:
                 if self.text_align_mode is c.Alignment.left:
                     self.cursor_pos = (row, 0)
                 else:
@@ -339,7 +355,7 @@ class BaseCharLCD(object):
         """Send a raw command to the LCD."""
         self._send(value, c.RS_INSTRUCTION)
 
-    def write(self, value):
+    def write(self, value):  # type: (int) -> None
         """Write a raw byte to the LCD."""
 
         # Get current position

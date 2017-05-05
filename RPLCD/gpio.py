@@ -40,6 +40,7 @@ class CharLCD(BaseCharLCD):
                        backlight_enabled=True,
                        numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8,
+                       charmap='A02',
                        auto_linebreaks=True):
         """
         Character LCD controller.
@@ -49,42 +50,42 @@ class CharLCD(BaseCharLCD):
         You can save 1 pin by not using RW. Set ``pin_rw`` to ``None`` if you
         want this.
 
-        Args:
-            pin_rs:
-                Pin for register select (RS). Default: 15.
-            pin_rw:
-                Pin for selecting read or write mode (R/W). Set this to
-                ``None`` for read only mode. Default: 18.
-            pin_e:
-                Pin to start data read or write (E). Default: 16.
-            pins_data:
-                List of data bus pins in 8 bit mode (DB0-DB7) or in 4 bit mode
-                (DB4-DB7) in ascending order. Default: [21, 22, 23, 24].
-            pin_backlight:
-                Pin for controlling backlight on/off. Set this to ``None`` for
-                no backlight control. Default: None.
-            backlight_mode:
-                Set this to one of the BacklightMode enum values to configure the
-                operating control for the backlight. Has no effect if pin_backlight is ``None``
-            backlight_enabled:
-                Whether the backlight is enabled initially. Default: True.
-                Has no effect if pin_backlight is ``None``
-            numbering_mode:
-                Which scheme to use for numbering of the GPIO pins, either
-                ``GPIO.BOARD`` or ``GPIO.BCM``.  Default: ``GPIO.BOARD`` (1-26).
-            rows:
-                Number of display rows (usually 1, 2 or 4). Default: 4.
-            cols:
-                Number of columns per row (usually 16 or 20). Default 20.
-            dotsize:
-                Some 1 line displays allow a font height of 10px.
-                Allowed: 8 or 10. Default: 8.
-            auto_linebreaks:
-                Whether or not to automatically insert line breaks.
-                Default: True.
-
-        Returns:
-            A :class:`CharLCD` instance.
+        :param pin_rs: Pin for register select (RS). Default: ``15``.
+        :type pin_rs: int
+        :param pin_rw: Pin for selecting read or write mode (R/W). Set this to
+            ``None`` for read only mode. Default: ``18``.
+        :type pin_rw: int
+        :param pin_e: Pin to start data read or write (E). Default: ``16``.
+        :type pin_e: int
+        :param pins_data: List of data bus pins in 8 bit mode (DB0-DB7) or in 4
+            bit mode (DB4-DB7) in ascending order. Default: ``[21, 22, 23, 24]``.
+        :type pins_data: list of int
+        :param pin_backlight: Pin for controlling backlight on/off. Set this to
+            ``None`` for no backlight control. Default: ``None``.
+        :type pin_backlight: int
+        :param backlight_mode: Set this to one of the BacklightMode enum values
+            to configure the operating control for the backlight. Has no effect if
+            pin_backlight is ``None``
+        :type backlight_mode: BacklightMode
+        :param backlight_enabled: Whether the backlight is enabled initially.
+            Default: ``True``. Has no effect if pin_backlight is ``None``
+        :type backlight_enabled: bool
+        :param numbering_mode: Which scheme to use for numbering of the GPIO pins,
+            either ``GPIO.BOARD`` or ``GPIO.BCM``. Default: ``GPIO.BOARD`` (1-26).
+        :type numbering_mode: int
+        :param rows: Number of display rows (usually 1, 2 or 4). Default: ``4``.
+        :type rows: int
+        :param cols: Number of columns per row (usually 16 or 20). Default ``20``.
+        :type cols: int
+        :param dotsize: Some 1 line displays allow a font height of 10px.
+            Allowed: ``8`` or ``10``. Default: ``8``.
+        :type dotsize: int
+        :param charmap: The character map used. Depends on your LCD. This must
+            be either ``A00`` or ``A02``. Default: ``A02``.
+        :type charmap: str
+        :param auto_linebreaks: Whether or not to automatically insert line
+            breaks. Default: ``True``.
+        :type auto_linebreaks: bool
 
         """
         # Set attributes
@@ -106,7 +107,9 @@ class CharLCD(BaseCharLCD):
         self.backlight_mode = backlight_mode
 
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize, auto_linebreaks)
+        super(CharLCD, self).__init__(cols, rows, dotsize,
+                                      charmap=charmap,
+                                      auto_linebreaks=auto_linebreaks)
 
         # Set backlight status
         if pin_backlight is not None:
