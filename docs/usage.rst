@@ -14,7 +14,7 @@ The cursor position can be set by assigning a ``(row, col)`` tuple to
 :attr:`~RPLCD.i2c.CharLCD.cursor_pos`. It can be reset to the starting position
 with :meth:`~RPLCD.i2c.CharLCD.home`.
 
-Newline characters (``\n``) move down one line and carriage returns (``\r``)
+Line feed characters (``\n``) move down one line and carriage returns (``\r``)
 move to the beginning of the current line.
 
 .. sourcecode:: python
@@ -25,6 +25,15 @@ move to the beginning of the current line.
 
 .. image:: _static/photo.jpg
     :alt: Photo of 20x4 LCD in action
+
+You can also use the convenience functions ``cr()``, ``lf()`` and ``crlf()`` to
+write line feed (``\n``) or carriage return (``\r``) characters to the display.
+
+.. sourcecode:: python
+
+    lcd.write_string('Hello')
+    lcd.crlf()
+    lcd.write_string('world!')
 
 After your script has finished, you may want to close the connection and
 optionally clear the screen with the :meth:`~RPLCD.gpio.CharLCD.close` method.

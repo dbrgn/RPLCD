@@ -87,7 +87,9 @@ lcd.display_enabled = False
 input('Display should now be blank. ')
 
 lcd.clear()
-lcd.write_string('Eggs, Ham\n\rand Spam')
+lcd.write_string('Eggs, Ham')
+lcd.crlf()
+lcd.write_string('and Spam')
 lcd.display_enabled = True
 input('Display should now show "Eggs, Ham and Spam" with a line break after "Ham". ')
 
@@ -105,7 +107,8 @@ lcd.write_string(' Wurscht')
 input('The word "mapS" should now be replaced with "Wurscht". ')
 
 lcd.clear()
-lcd.write_string('1\n')
+lcd.write_string('1')
+lcd.lf()
 lcd.write_string('2\n')
 lcd.cursor_pos = (0, 2)
 lcd.write_string('3\n')
