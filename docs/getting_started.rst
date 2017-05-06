@@ -90,7 +90,9 @@ corresponding parameters. All of them are optional.
 .. sourcecode:: python
 
     lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8,
-                  charmap='A02', backlight_enabled=True)
+                  charmap='A02',
+                  auto_linebreaks=True,
+                  backlight_enabled=True)
 
 Setup: GPIO
 ~~~~~~~~~~~
