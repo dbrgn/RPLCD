@@ -402,3 +402,15 @@ class BaseCharLCD(object):
                 else:
                     self.cursor_pos = (0, self.lcd.cols - 1)
                 self.recent_auto_linebreak = True
+
+    def cr(self):  # type: () -> None
+        """Write a carriage return (``\r``) character to the LCD."""
+        self.write_string('\r')
+
+    def lf(self):  # type: () -> None
+        """Write a line feed (``\n``) character to the LCD."""
+        self.write_string('\n')
+
+    def crlf(self):  # type: () -> None
+        """Write a line feed and a carriage return (``\r\n``) character to the LCD."""
+        self.write_string('\r\n')
