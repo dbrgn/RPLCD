@@ -150,8 +150,6 @@ class EnumValue:
         return '{0}.{1}'.format(self._enum.__name__, self._name)
 
     def __int__(self):
-        warnings.warn('int() is deprecated; use IntEnums',
-                      DeprecationWarning, 2)
         return self._value
 
     def __reduce__(self):
