@@ -93,13 +93,17 @@ Testing
 Test Scripts
 ------------
 
-To test your 20x4 display, please run the ``test_20x4.py`` script and
-confirm/verify each step with the enter key. If you don't use the standard
-wiring, make sure to add your pin numbers to the ``CharLCD`` constructor in
-``test_20x4.py``.
+To test your LCD, please run the ``test_16x2.py`` or ``test_20x4.py`` script and
+confirm/verify each step with the enter key.
 
-To test a 16x2 display, proceed as explained above, but use the ``test_16x2.py``
-script instead.
+Usage::
+
+    Usage: test_16x2.py i2c <addr> <charmap>
+           test_16x2.py gpio <charmap>
+
+    Note: Charmap can be either A00 or A02. If your display contains Japanese
+          characters, it probably uses the A00 charmap, otherwise A02.
+    Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.
 
 Unit Tests
 ----------
