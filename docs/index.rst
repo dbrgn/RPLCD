@@ -26,9 +26,11 @@ Features
 - Support for both parallel (GPIO) and I²C connection
 - Support for custom characters
 - Support for backlight control circuits
+- Built-in support for `A00` and `A02` character tables
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
-- No external dependencies
+- No external dependencies (except `RPi.GPIO`, and `python-smbus` if you need
+  I²C support)
 
 **Wishlist**
 

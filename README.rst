@@ -63,7 +63,7 @@ Implemented
 
 - Simple to use API
 - Support for both 4 bit and 8 bit modes
-- Support for both parallel and I²C connection
+- Support for both parallel (GPIO) and I²C connection
 - Support for custom characters
 - Support for backlight control circuits
 - Built-in support for `A00` and `A02` character tables
