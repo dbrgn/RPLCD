@@ -11,9 +11,17 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
-### v0.5.0 UNRELEASED
+### v0.9.0 (2017-05-09)
 
-- [add] Support for i2c (#20)
+This version can be considered the release candidate for the 1.0 release.
+
+- [add] Support for i2c port expanders (#20)
+- [add] Implement proper automatic encoding of unicode strings,
+        add encoding tables for A00 and A02 character maps (#40)
+- [add] Implement convenience functions for CR/LF (#45) 
+- [add] Add documentation (#37)
+- [dep] Deprecate context managers (#18)
+- [rem] Drop support for Python 3.2
 
 ### v0.4.0 (2016-09-12)
 
