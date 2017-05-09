@@ -1,2 +1,3 @@
-include README.rst LICENSE test_20x4.py test_16x2.py show_charmap.py
+include README.rst LICENSE CHANGELOG.md CONTRIBUTORS
+include test_20x4.py test_16x2.py show_charmap.py
 recursive-exclude * *.pyc
