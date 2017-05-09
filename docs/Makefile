@@ -6,6 +6,8 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
+PDFLATEX      = pdflatex
+IMCONVERT     = convert
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -175,3 +177,9 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+latex:
+	$(PDFLATEX) wiring-i2c.tex
+	$(IMCONVERT) -density 400 wiring-i2c.pdf -resize 500x500 -background white -alpha remove -bordercolor white -border 5 _static/wiring-i2c.png
+	$(PDFLATEX) wiring-gpio.tex
+	$(IMCONVERT) -density 400 wiring-gpio.pdf -resize 500x500 -background white -alpha remove -bordercolor white -border 5 _static/wiring-gpio.png

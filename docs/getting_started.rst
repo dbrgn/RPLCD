@@ -23,8 +23,8 @@ First, connect the pins on the right with the Raspberry Pi:
 
 - GND: Pin 6 (GND)
 - VCC: Pin 2 (5V)
-- SDA: Pin 5 (SDA)
-- SCL: Pin 3 (SCL)
+- SDA: Pin 3 (SDA)
+- SCL: Pin 5 (SCL)
 
 To make things clearer, here's a little visualization:
 
