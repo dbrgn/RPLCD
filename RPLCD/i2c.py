@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2016 Danilo Bargen
+Copyright (C) 2013-2017 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -31,6 +31,7 @@ from .lcd import BaseCharLCD
 class CharLCD(BaseCharLCD):
     def __init__(self, address, port=1,
                        cols=20, rows=4, dotsize=8,
+                       charmap='A02',
                        auto_linebreaks=True,
                        backlight_enabled=True, i2c_expander="PCF8574"):
         """
@@ -68,19 +69,22 @@ class CharLCD(BaseCharLCD):
 
         :param address: The I2C address of your LCD.
         :type address: int
-        :param port: The I2C port number. Default: 1.
+        :param port: The I2C port number. Default: ``1``.
         :type port: int
-        :param cols: Number of columns per row (usually 16 or 20). Default: 20.
+        :param cols: Number of columns per row (usually 16 or 20). Default: ``20``.
         :type cols: int
-        :param rows: Number of display rows (usually 1, 2 or 4). Default: 4.
+        :param rows: Number of display rows (usually 1, 2 or 4). Default: ``4``.
         :type rows: int
         :param dotsize: Some 1 line displays allow a font height of 10px.
-            Allowed: 8 or 10. Default: 8.
+            Allowed: 8 or 10. Default: ``8``.
         :type dotsize: int
+        :param charmap: The character map used. Depends on your LCD. This must
+            be either ``A00`` or ``A02``. Default: ``A02``.
+        :type charmap: str
         :param auto_linebreaks: Whether or not to automatically insert line breaks.
-            Default: True.
+            Default: ``True``.
         :type auto_linebreaks: bool
-        :param backlight_enabled: Whether the backlight is enabled initially. Default: True.
+        :param backlight_enabled: Whether the backlight is enabled initially. Default: ``True``.
         :type backlight_enabled: bool
         :param i2c_expander: Set your i2c chip type. "PCF8574" or "MCP23008" supported. Default: "PCF8574"
         """
@@ -103,7 +107,9 @@ class CharLCD(BaseCharLCD):
         else:
             raise NotImplementedError('I2C expander is not supported.')
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize, auto_linebreaks=auto_linebreaks)
+        super(CharLCD, self).__init__(cols, rows, dotsize,
+                                      charmap=charmap,
+                                      auto_linebreaks=auto_linebreaks)
 
         # Refresh backlight status
         self.backlight_enabled = backlight_enabled

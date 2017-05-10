@@ -23,8 +23,8 @@ First, connect the pins on the right with the Raspberry Pi:
 
 - GND: Pin 6 (GND)
 - VCC: Pin 2 (5V)
-- SDA: Pin 5 (SDA)
-- SCL: Pin 3 (SCL)
+- SDA: Pin 3 (SDA)
+- SCL: Pin 5 (SCL)
 
 To make things clearer, here's a little visualization:
 
@@ -89,7 +89,10 @@ corresponding parameters. All of them are optional.
 
 .. sourcecode:: python
 
-    lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8, backlight_enabled=True)
+    lcd = CharLCD(address=0x27, port=1, cols=20, rows=4, dotsize=8,
+                  charmap='A02',
+                  auto_linebreaks=True,
+                  backlight_enabled=True)
 
 Setup: GPIO
 ~~~~~~~~~~~
@@ -119,6 +122,7 @@ change the corresponding parameters. All of them are optional.
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=GPIO.BOARD,
                   cols=20, rows=4, dotsize=8,
+                  charmap='A02',
                   auto_linebreaks=True)
 
 Writing Data
