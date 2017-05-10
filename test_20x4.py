@@ -14,12 +14,14 @@ except NameError:
 
 
 def print_usage():
-    print('Usage: %s i2c <addr> <charmap>' % sys.argv[0])
+    print('Usage: %s i2c <expander> <addr> <charmap>' % sys.argv[0])
     print('       %s gpio <charmap>' % sys.argv[0])
     print('')
-    print('Note: Charmap can be either A00 or A02. If your display contains Japanese')
-    print('      characters, it probably uses the A00 charmap, otherwise A02.')
-    print('Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.')
+    print('<addr>     The I²C address can be found with `i2cdetect 1` from the i2c-tools')
+    print('           package.')
+    print('<charmap>  Charmap can be either A00 or A02. If your display contains Japanese')
+    print('           characters, it probably uses the A00 charmap, otherwise A02.')
+    print('<expander> Supported expanders are PCF8574 and MCP23008')
     sys.exit(1)
 
 
@@ -27,9 +29,9 @@ def print_usage():
 if len(sys.argv) < 2:
     print_usage()
 if sys.argv[1] == 'i2c':
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print_usage()
-    lcd = i2c.CharLCD(int(sys.argv[2], 16), cols=20, rows=4, charmap=sys.argv[3])
+    lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=20, rows=4, charmap=sys.argv[4], i2c_expander=sys.argv[2])
 elif sys.argv[1] == 'gpio':
     if len(sys.argv) != 3:
         print_usage()

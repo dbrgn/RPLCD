@@ -156,12 +156,30 @@ class CharLCD(BaseCharLCD):
 
     # Low level commands
 
-    def _send(self, value, mode):
-        """Send the specified value to the display with automatic 4bit / 8bit
-        selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
+    def _send_data(self, value):
+        """Send data to the display with automatic 4bit / 8bit
+        selection."""
 
-        # Choose instruction or data mode
-        GPIO.output(self.pins.rs, mode)
+        # Set data mode
+        GPIO.output(self.pins.rs, c.RS_DATA)
+
+        # If the RW pin is used, set it to low in order to write.
+        if self.pins.rw is not None:
+            GPIO.output(self.pins.rw, 0)
+
+        # Write data out in chunks of 4 or 8 bit
+        if self.data_bus_mode == c.LCD_8BITMODE:
+            self._write8bits(value)
+        else:
+            self._write4bits(value >> 4)
+            self._write4bits(value)
+
+    def _send_instruction(self, value):
+        """Send instruction to the display with automatic 4bit / 8bit
+        selection. """
+
+        # Set instruction mode
+        GPIO.output(self.pins.rs, c.RS_INSTRUCTION)
 
         # If the RW pin is used, set it to low in order to write.
         if self.pins.rw is not None:

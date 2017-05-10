@@ -344,7 +344,7 @@ class BaseCharLCD(object):
         # Write character to CGRAM
         self.command(c.LCD_SETCGRAMADDR | location << 3)
         for row in bitmap:
-            self._send(row, c.RS_DATA)
+            self._send_data(row)
 
         # Restore cursor pos
         self.cursor_pos = pos
@@ -353,7 +353,7 @@ class BaseCharLCD(object):
 
     def command(self, value):
         """Send a raw command to the LCD."""
-        self._send(value, c.RS_INSTRUCTION)
+        self._send_instruction(value)
 
     def write(self, value):  # type: (int) -> None
         """Write a raw byte to the LCD."""
@@ -363,7 +363,7 @@ class BaseCharLCD(object):
 
         # Write byte if changed
         if self._content[row][col] != value:
-            self._send(value, c.RS_DATA)
+            self._send_data(value)
             self._content[row][col] = value  # Update content cache
             unchanged = False
         else:

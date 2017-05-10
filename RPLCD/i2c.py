@@ -27,6 +27,29 @@ from smbus import SMBus
 from . import common as c
 from .lcd import BaseCharLCD
 
+# PCF8574 backlight control
+PCF8574_BACKLIGHT = 0x08
+PCF8574_NOBACKLIGHT = 0x00
+
+# PCF8574 Pin bitmasks
+PCF8574_E = 0x4
+PIN_READ_WRITE = 0x2  # Not used?
+PIN_REGISTER_SELECT = 0x1  # Not used?
+
+# MCP23008 backlight control
+MCP23008_BACKLIGHT = 0x80
+MCP23008_NOBACKLIGHT = 0x7f
+
+# MCP23008 pin bitmasks and datamask
+MCP23008_RS = 0x02
+MCP23008_E = 0x4
+MCP23008_DATAMASK = 0x78
+MCP23008_DATASHIFT = 3
+
+# MCP23008 Register addresses
+MCP23008_IODIR = 0x00
+MCP23008_GPIO = 0x09
+
 
 class CharLCD(BaseCharLCD):
     def __init__(self, address, port=1,
@@ -94,18 +117,18 @@ class CharLCD(BaseCharLCD):
         self.port = port
 
         # Set i2c expander, "PCF8574" and "MCP23008" are supported.
-        self.i2c_expander = i2c_expander
+        self._i2c_expander = i2c_expander
 
         # Currently the I2C mode only supports 4 bit communication
         self.data_bus_mode = c.LCD_4BITMODE
 
         # Set backlight status
-        if(self.i2c_expander == "PCF8574"):
-            self._backlight = c.LCD_BACKLIGHT if backlight_enabled else c.LCD_NOBACKLIGHT
-        elif(self.i2c_expander == "MCP23008"):
-            self._backlight = c.MCP23008_BACKLIGHT if backlight_enabled else c.MCP23008_NOBACKLIGHT
+        if self._i2c_expander == 'PCF8574':
+            self._backlight = PCF8574_BACKLIGHT if backlight_enabled else PCF8574_NOBACKLIGHT
+        elif self._i2c_expander == 'MCP23008':
+            self._backlight = MCP23008_BACKLIGHT if backlight_enabled else MCP23008_NOBACKLIGHT
         else:
-            raise NotImplementedError('I2C expander is not supported.')
+            raise NotImplementedError('I2C expander "%s" is not supported.' % self._i2c_expander)
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize,
                                       charmap=charmap,
@@ -117,15 +140,13 @@ class CharLCD(BaseCharLCD):
     def _init_connection(self):
         self.bus = SMBus(self.port)
 
-        if(self.i2c_expander == "PCF8574"):
+        if self._i2c_expander == 'PCF8574':
             c.msleep(50)
-        elif(self.i2c_expander == "MCP23008"):
+        elif self._i2c_expander == 'MCP23008':
             # Set IO DIRection to output on all GPIOs (GP0-GP7)
-            self.bus.write_byte_data(self.address, c.MCP23008_IODIR, 0x00)
+            self.bus.write_byte_data(self.address, MCP23008_IODIR, 0x00)
             # Variable for storing data and applying bitmasks and shifting.
             self._mcp_data = 0
-        else:
-            raise NotImplementedError('I2C expander is not supported.')
 
     def _close_connection(self):
         # Nothing to do here?
@@ -134,78 +155,67 @@ class CharLCD(BaseCharLCD):
     # Properties
 
     def _get_backlight_enabled(self):
-        if(self.i2c_expander == "PCF8574"):
-            return self._backlight == c.LCD_BACKLIGHT
-        elif(self.i2c_expander == "MCP23008"):
-            return self._backlight == c.MCP23008_BACKLIGHT
-        else:
-            raise NotImplementedError('I2C expander is not supported.')
+        if self._i2c_expander == 'PCF8574':
+            return self._backlight == PCF8574_BACKLIGHT
+        elif self._i2c_expander == 'MCP23008':
+            return self._backlight == MCP23008_BACKLIGHT
 
     def _set_backlight_enabled(self, value):
-        if(self.i2c_expander == "PCF8574"):
-            self._backlight = c.LCD_BACKLIGHT if value else c.LCD_NOBACKLIGHT
+        if self._i2c_expander == 'PCF8574':
+            self._backlight = PCF8574_BACKLIGHT if value else PCF8574_NOBACKLIGHT
             self.bus.write_byte(self.address, self._backlight)
-        elif(self.i2c_expander == "MCP23008"):
-            if(value):
-                self._mcp_data |= c.MCP23008_BACKLIGHT
+        elif self._i2c_expander == 'MCP23008':
+            if value is True:
+                self._mcp_data |= MCP23008_BACKLIGHT
             else:
-                self._mcp_data &= c.MCP23008_NOBACKLIGHT
-            self.bus.write_byte_data(self.address, c.MCP23008_GPIO, self._mcp_data)
-        else:
-            raise NotImplementedError('I2C expander is not supported.')
+                self._mcp_data &= MCP23008_NOBACKLIGHT
+            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
 
     backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
             doc='Whether or not to enable the backlight. Either ``True`` or ``False``.')
 
     # Low level commands
 
-    def _send(self, value, mode):
-        """Send the specified value to the display with automatic 4bit / 8bit selection.
-        The rs_mode is either ``common.RS_DATA`` or ``common.RS_INSTRUCTION``."""
-        if(self.i2c_expander == "PCF8574"):
-            self._write4bits(mode | (value & 0xF0))
-            self._write4bits(mode | ((value << 4) & 0xF0))
-        elif(self.i2c_expander == "MCP23008"):
-            if(mode == c.RS_INSTRUCTION):
-                self._mcp_data &= ~c.MCP23008_RS
-                self._pulse_data(value >> 4)
-                self._pulse_data(value & 0x0F)
-            elif(mode == c.RS_DATA):
-                self._mcp_data |= c.MCP23008_RS
-                self._pulse_data(value >> 4)
-                self._pulse_data(value & 0x0F)
-        else:
-            raise NotImplementedError('I2C expander is not supported.')
+    def _send_data(self, value):
+        if self._i2c_expander == 'PCF8574':
+            self.bus.write_byte(self.address, (c.RS_DATA | (value & 0xF0)) | self._backlight)
+            self._pulse_data(c.RS_DATA | (value & 0xF0))
+            self.bus.write_byte(self.address, (c.RS_DATA | ((value << 4) & 0xF0)) | self._backlight)
+            self._pulse_data(c.RS_DATA | ((value << 4) & 0xF0))
+        elif self._i2c_expander == 'MCP23008':
+            self._mcp_data |= MCP23008_RS
+            self._pulse_data(value >> 4)
+            self._pulse_data(value & 0x0F)
 
-    def _write4bits(self, value):
-        """Write 4 bits of data into the data bus."""
-        self.bus.write_byte(self.address, value | self._backlight)
-        self._pulse_data(value)
-
-    def _write8bits(self, value):
-        """Write 8 bits of data into the data bus."""
-        raise NotImplementedError('I2C currently supports only 4bit.')
+    def _send_instruction(self, value):
+        if self._i2c_expander == 'PCF8574':
+            self.bus.write_byte(self.address, (c.RS_INSTRUCTION | (value & 0xF0)) | self._backlight)
+            self._pulse_data(c.RS_INSTRUCTION | (value & 0xF0))
+            self.bus.write_byte(self.address, (c.RS_INSTRUCTION | ((value << 4) & 0xF0)) | self._backlight)
+            self._pulse_data(c.RS_INSTRUCTION | ((value << 4) & 0xF0))
+        elif self._i2c_expander == 'MCP23008':
+            self._mcp_data &= ~MCP23008_RS
+            self._pulse_data(value >> 4)
+            self._pulse_data(value & 0x0F)
 
     def _pulse_data(self, value):
         """Pulse the `enable` flag to process value."""
-        if(self.i2c_expander == "PCF8574"):
-            self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | self._backlight))
+        if self._i2c_expander == 'PCF8574':
+            self.bus.write_byte(self.address, ((value & ~PCF8574_E) | self._backlight))
             c.usleep(1)
-            self.bus.write_byte(self.address, value | c.PIN_ENABLE | self._backlight)
+            self.bus.write_byte(self.address, value | PCF8574_E | self._backlight)
             c.usleep(1)
-            self.bus.write_byte(self.address, ((value & ~c.PIN_ENABLE) | self._backlight))
+            self.bus.write_byte(self.address, ((value & ~PCF8574_E) | self._backlight))
             c.usleep(100)
-        elif(self.i2c_expander == "MCP23008"):
-            self._mcp_data &= ~c.MCP23008_DATAMASK
-            self._mcp_data |= value << c.MCP23008_DATASHIFT
-            self._mcp_data &= ~c.MCP23008_E
-            self.bus.write_byte_data(self.address, c.MCP23008_GPIO, self._mcp_data)
+        elif self._i2c_expander == 'MCP23008':
+            self._mcp_data &= ~MCP23008_DATAMASK
+            self._mcp_data |= value << MCP23008_DATASHIFT
+            self._mcp_data &= ~MCP23008_E
+            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
             c.usleep(1)
-            self._mcp_data |= c.MCP23008_E
-            self.bus.write_byte_data(self.address, c.MCP23008_GPIO, self._mcp_data)
+            self._mcp_data |= MCP23008_E
+            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
             c.usleep(1)
-            self._mcp_data &= ~c.MCP23008_E
-            self.bus.write_byte_data(self.address, c.MCP23008_GPIO, self._mcp_data)
+            self._mcp_data &= ~MCP23008_E
+            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
             c.usleep(100)
-        else:
-            raise NotImplementedError('I2C expander is not supported.')
