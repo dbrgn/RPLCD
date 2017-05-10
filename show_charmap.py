@@ -45,10 +45,13 @@ except NameError:  # Python 3
 
 
 def print_usage():
-    print('Usage: %s i2c <addr> <rows> <cols>' % sys.argv[0])
+    print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
     print('       %s gpio <rows> <cols>' % sys.argv[0])
     print('')
-    print('Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.')
+    print('<addr>     The I²C address can be found with `i2cdetect 1` from the i2c-tools')
+    print('           package.')
+    print('<expander> Supported expanders are PCF8574 and MCP23008')
+
     sys.exit(1)
 
 
@@ -56,10 +59,10 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print_usage()
     if sys.argv[1] == 'i2c':
-        if len(sys.argv) != 5:
+        if len(sys.argv) != 6:
             print_usage()
-        rows, cols = int(sys.argv[3]), int(sys.argv[4])
-        lcd = i2c.CharLCD(int(sys.argv[2], 16), cols=cols, rows=rows)
+        rows, cols = int(sys.argv[4]), int(sys.argv[5])
+        lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=cols, rows=rows, i2c_expander=sys.argv[2])
     elif sys.argv[1] == 'gpio':
         if len(sys.argv) != 4:
             print_usage()
@@ -86,7 +89,7 @@ if __name__ == '__main__':
                         print('Displaying page %d (characters %d-%d).\nDone.' %
                               (page, start, i - 1))
                     else:
-                        print('Done.')
+                        pass
                     sys.exit(0)
                 lcd.write_string(unichr(i))
             page += 1
@@ -94,5 +97,11 @@ if __name__ == '__main__':
                        (page, start, end - 1))
     except KeyboardInterrupt:
         print('Aborting.')
-
-    lcd.clear()
+    finally:
+        lcd.clear()
+        try:
+            lcd.backlight_enabled = False
+        except ValueError:
+            pass
+        lcd.close()
+        print('Test done. If you have a backlight, it should now be off.')
