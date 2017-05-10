@@ -7,9 +7,6 @@ RPLCD
 .. image:: https://img.shields.io/pypi/v/RPLCD.svg
     :target: https://pypi.python.org/pypi/RPLCD/
     :alt: PyPI Version
-.. image:: https://img.shields.io/pypi/dm/RPLCD.svg
-    :target: https://pypi.python.org/pypi/RPLCD/
-    :alt: PyPI Downloads
 .. image:: https://img.shields.io/pypi/wheel/RPLCD.svg
     :target: https://pypi.python.org/pypi/RPLCD/
     :alt: PyPI Wheel
