@@ -66,13 +66,13 @@ class CharLCD(BaseCharLCD):
             D7 | D6 | D5 | D4 | BL | EN | RW | RS
 
 
-       CharLCD via Adafruit i2c/SPI LCD Backback with MCP23008 I2C port expander:
+        CharLCD via Adafruit i2c/SPI LCD Backback with MCP23008 I2C port expander:
 
-            Warning: You will most likely need a level shifter (that supports i2c)
+            Warning: You might need a level shifter (that supports i2c)
             between the SCL/SDA connections on the backpack and the Raspberry Pi.
             Or you might damage the Pi and possibly any other 3.3V i2c devices
-            connected on the i2c bus. The SCL/SDA outputs are rated 0.7*VDD
-            which means the MCP23008 outputs 3.5V when 5V is applied to drive the LCD.
+            connected on the i2c bus. Or cause reliability issues. The SCL/SDA are rated 0.7*VDD
+            on the MCP23008, so it needs 3.5V on the SCL/SDA when 5V is applied to drive the LCD.
 
             Will most likely work with only a MCP23008 as well, but not tested.
             The MCP23008 needs to be connected the exactly the same way as the backpack.
@@ -80,12 +80,12 @@ class CharLCD(BaseCharLCD):
             For complete schematics see the adafruit page at:
             https://learn.adafruit.com/i2c-spi-lcd-backpack/
 
-            4-bit operation only supported.
+            4-bit operation. I2C only supported.
 
             Pin mapping::
 
-            7    |  6  |  5  |  4  |  3  | 2 | 1  | 0
-            LITE | DB7 | DB6 | DB5 | DB4 | E | RS | -
+            7  | 6  | 5  | 4  | 3  | 2 | 1  | 0
+            BL | D7 | D6 | D5 | D4 | E | RS | -
 
             Note: MCP23017 is NOT supported, but the code can easily be adapted for it.
 
@@ -109,15 +109,19 @@ class CharLCD(BaseCharLCD):
         :type auto_linebreaks: bool
         :param backlight_enabled: Whether the backlight is enabled initially. Default: ``True``.
         :type backlight_enabled: bool
-        :param i2c_expander: Set your i2c chip type. "PCF8574" or "MCP23008" supported. Default: "PCF8574"
+        :param i2c_expander: Set your i2c chip type. "PCF8574" or "MCP23008" supported.
+            Default: ``PCF8574``.
         """
 
         # Set own address and port.
-        self.address = address
-        self.port = port
+        self._address = address
+        self._port = port
 
         # Set i2c expander, "PCF8574" and "MCP23008" are supported.
-        self._i2c_expander = i2c_expander
+        if i2c_expander in ['PCF8574', 'MCP23008']:
+            self._i2c_expander = i2c_expander
+        else:
+            raise NotImplementedError('I2C expander "%s" is not supported.' % i2c_expander)
 
         # Currently the I2C mode only supports 4 bit communication
         self.data_bus_mode = c.LCD_4BITMODE
@@ -127,24 +131,22 @@ class CharLCD(BaseCharLCD):
             self._backlight = PCF8574_BACKLIGHT if backlight_enabled else PCF8574_NOBACKLIGHT
         elif self._i2c_expander == 'MCP23008':
             self._backlight = MCP23008_BACKLIGHT if backlight_enabled else MCP23008_NOBACKLIGHT
-        else:
-            raise NotImplementedError('I2C expander "%s" is not supported.' % self._i2c_expander)
+
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize,
                                       charmap=charmap,
                                       auto_linebreaks=auto_linebreaks)
-
         # Refresh backlight status
         self.backlight_enabled = backlight_enabled
 
     def _init_connection(self):
-        self.bus = SMBus(self.port)
+        self.bus = SMBus(self._port)
 
         if self._i2c_expander == 'PCF8574':
             c.msleep(50)
         elif self._i2c_expander == 'MCP23008':
             # Set IO DIRection to output on all GPIOs (GP0-GP7)
-            self.bus.write_byte_data(self.address, MCP23008_IODIR, 0x00)
+            self.bus.write_byte_data(self._address, MCP23008_IODIR, 0x00)
             # Variable for storing data and applying bitmasks and shifting.
             self._mcp_data = 0
 
@@ -163,13 +165,13 @@ class CharLCD(BaseCharLCD):
     def _set_backlight_enabled(self, value):
         if self._i2c_expander == 'PCF8574':
             self._backlight = PCF8574_BACKLIGHT if value else PCF8574_NOBACKLIGHT
-            self.bus.write_byte(self.address, self._backlight)
+            self.bus.write_byte(self._address, self._backlight)
         elif self._i2c_expander == 'MCP23008':
             if value is True:
                 self._mcp_data |= MCP23008_BACKLIGHT
             else:
                 self._mcp_data &= MCP23008_NOBACKLIGHT
-            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
+            self.bus.write_byte_data(self._address, MCP23008_GPIO, self._mcp_data)
 
     backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
             doc='Whether or not to enable the backlight. Either ``True`` or ``False``.')
@@ -178,9 +180,10 @@ class CharLCD(BaseCharLCD):
 
     def _send_data(self, value):
         if self._i2c_expander == 'PCF8574':
-            self.bus.write_byte(self.address, (c.RS_DATA | (value & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (c.RS_DATA | (value & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_DATA | (value & 0xF0))
-            self.bus.write_byte(self.address, (c.RS_DATA | ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (c.RS_DATA |
+                                               ((value << 4) & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_DATA | ((value << 4) & 0xF0))
         elif self._i2c_expander == 'MCP23008':
             self._mcp_data |= MCP23008_RS
@@ -189,9 +192,11 @@ class CharLCD(BaseCharLCD):
 
     def _send_instruction(self, value):
         if self._i2c_expander == 'PCF8574':
-            self.bus.write_byte(self.address, (c.RS_INSTRUCTION | (value & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
+                                               (value & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_INSTRUCTION | (value & 0xF0))
-            self.bus.write_byte(self.address, (c.RS_INSTRUCTION | ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
+                                               ((value << 4) & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_INSTRUCTION | ((value << 4) & 0xF0))
         elif self._i2c_expander == 'MCP23008':
             self._mcp_data &= ~MCP23008_RS
@@ -201,21 +206,21 @@ class CharLCD(BaseCharLCD):
     def _pulse_data(self, value):
         """Pulse the `enable` flag to process value."""
         if self._i2c_expander == 'PCF8574':
-            self.bus.write_byte(self.address, ((value & ~PCF8574_E) | self._backlight))
+            self.bus.write_byte(self._address, ((value & ~PCF8574_E) | self._backlight))
             c.usleep(1)
-            self.bus.write_byte(self.address, value | PCF8574_E | self._backlight)
+            self.bus.write_byte(self._address, value | PCF8574_E | self._backlight)
             c.usleep(1)
-            self.bus.write_byte(self.address, ((value & ~PCF8574_E) | self._backlight))
+            self.bus.write_byte(self._address, ((value & ~PCF8574_E) | self._backlight))
             c.usleep(100)
         elif self._i2c_expander == 'MCP23008':
             self._mcp_data &= ~MCP23008_DATAMASK
             self._mcp_data |= value << MCP23008_DATASHIFT
             self._mcp_data &= ~MCP23008_E
-            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
+            self.bus.write_byte_data(self._address, MCP23008_GPIO, self._mcp_data)
             c.usleep(1)
             self._mcp_data |= MCP23008_E
-            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
+            self.bus.write_byte_data(self._address, MCP23008_GPIO, self._mcp_data)
             c.usleep(1)
             self._mcp_data &= ~MCP23008_E
-            self.bus.write_byte_data(self.address, MCP23008_GPIO, self._mcp_data)
+            self.bus.write_byte_data(self._address, MCP23008_GPIO, self._mcp_data)
             c.usleep(100)
