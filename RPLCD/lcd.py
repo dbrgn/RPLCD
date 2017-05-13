@@ -256,7 +256,8 @@ class BaseCharLCD(object):
                 self.write(char)
                 ignored = None
                 continue
-            # If an auto linebreak happened recently, ignore this write.
+            # We're now left with only CR and LF characters. If an auto
+            # linebreak happened recently, ignore this write.
             if self.recent_auto_linebreak is True:
                 # No newline chars have been ignored yet. Do it this time.
                 if ignored is None:
@@ -267,6 +268,7 @@ class BaseCharLCD(object):
                 # ignored character tracking.
                 if ignored != char:  # A carriage return and a newline
                     ignored = None  # Reset ignore list
+                    self.recent_auto_linebreak = False  # This has now been handled
                     continue
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
