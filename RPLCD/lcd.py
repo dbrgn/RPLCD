@@ -364,12 +364,19 @@ class BaseCharLCD(object):
         row, col = self._cursor_pos
 
         # Write byte if changed
-        if self._content[row][col] != value:
+        try:
+            if self._content[row][col] != value:
+                self._send_data(value)
+                self._content[row][col] = value  # Update content cache
+                unchanged = False
+            else:
+                unchanged = True
+        except IndexError as e:
+            # Position out of range
+            if self.auto_linebreaks is True:
+                raise e
             self._send_data(value)
-            self._content[row][col] = value  # Update content cache
             unchanged = False
-        else:
-            unchanged = True
 
         # Update cursor position.
         if self.text_align_mode is c.Alignment.left:
