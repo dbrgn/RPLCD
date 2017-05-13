@@ -38,11 +38,6 @@ try:
 except NameError:  # Python 3
     safe_input = input
 
-try:
-    unichr = unichr
-except NameError:  # Python 3
-    unichr = chr
-
 
 def print_usage():
     print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
@@ -76,6 +71,7 @@ if __name__ == '__main__':
 
     page = 0
     chars = rows * cols
+    text_tpl = 'Displaying page %d (characters %d-%d). Press <ENTER> to continue.'
 
     try:
         while True:
@@ -86,15 +82,13 @@ if __name__ == '__main__':
             for i in range(offset, offset + chars):
                 if i > 255:
                     if i > start:
-                        print('Displaying page %d (characters %d-%d).\nDone.' %
-                              (page, start, i - 1))
+                        safe_input(text_tpl % (page + 1, start, i - 1))
                     else:
                         pass
                     sys.exit(0)
-                lcd.write_string(unichr(i))
+                lcd.write(i)
+            safe_input(text_tpl % (page + 1, start, end - 1))
             page += 1
-            safe_input('Displaying page %d (characters %d-%d). Press <ENTER> to continue.' %
-                       (page, start, end - 1))
     except KeyboardInterrupt:
         print('Aborting.')
     finally:
