@@ -247,29 +247,30 @@ class BaseCharLCD(object):
 
         """
         encoded = self.codec.encode(value)  # type: List[int]
+        ignored = False
 
-        ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
+        for [char, lookahead] in c.sliding_window(encoded, lookahead=1):
 
-        for char in encoded:
+            # If the previous character has been ignored, skip this one too.
+            if ignored is True:
+                ignored = False
+                continue
+
             # Write regular chars
             if char not in [codecs.CR, codecs.LF]:
                 self.write(char)
-                ignored = None
                 continue
+
             # We're now left with only CR and LF characters. If an auto
-            # linebreak happened recently, ignore this write.
+            # linebreak happened recently, and the lookahead matches too,
+            # ignore this write.
             if self.recent_auto_linebreak is True:
-                # No newline chars have been ignored yet. Do it this time.
-                if ignored is None:
-                    ignored = char
+                crlf = (char == codecs.CR and lookahead == codecs.LF)
+                lfcr = (char == codecs.LF and lookahead == codecs.CR)
+                if crlf or lfcr:
+                    ignored = True
                     continue
-                # A newline character has been ignored recently. If the current
-                # character is different, ignore it again. Otherwise, reset the
-                # ignored character tracking.
-                if ignored != char:  # A carriage return and a newline
-                    ignored = None  # Reset ignore list
-                    self.recent_auto_linebreak = False  # This has now been handled
-                    continue
+
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
             if char == codecs.LF:

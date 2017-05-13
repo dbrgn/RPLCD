@@ -191,8 +191,8 @@ Automatic Line Breaks
 By default, RPLCD tries to automatically insert line breaks where appropriate
 to achieve (hopefully) intuitive line wrapping.
 
-Part of these rules is that manual linebreaks that immediately follow an
-automatically issued line break are ignored.
+Part of these rules is that manual linebreaks (either ``\r\n`` or ``\n\r``) that
+immediately follow an automatically issued line break are ignored.
 
 If you want more control over line breaks, you can disable the automatic system
 by setting the ``auto_linebreaks`` parameter of the ``CharLCD`` constructor to
