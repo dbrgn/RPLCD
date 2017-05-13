@@ -38,11 +38,6 @@ try:
 except NameError:  # Python 3
     safe_input = input
 
-try:
-    unichr = unichr
-except NameError:  # Python 3
-    unichr = chr
-
 
 def print_usage():
     print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
@@ -91,7 +86,7 @@ if __name__ == '__main__':
                     else:
                         pass
                     sys.exit(0)
-                lcd.write_string(unichr(i))
+                lcd.write(i)
             safe_input('Displaying page %d (characters %d-%d). Press <ENTER> to continue.' %
                        (page + 1, start, end - 1))
             page += 1
