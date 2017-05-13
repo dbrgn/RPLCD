@@ -52,11 +52,11 @@ MCP23008_GPIO = 0x09
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, address, port=1,
+    def __init__(self, i2c_expander, address, port=1,
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
                        auto_linebreaks=True,
-                       backlight_enabled=True, i2c_expander="PCF8574"):
+                       backlight_enabled=True):
         """
         CharLCD via PCF8574 I2C port expander:
 
@@ -66,7 +66,7 @@ class CharLCD(BaseCharLCD):
             D7 | D6 | D5 | D4 | BL | EN | RW | RS
 
 
-        CharLCD via Adafruit i2c/SPI LCD Backback with MCP23008 I2C port expander:
+        CharLCD via Adafruit I2C/SPI LCD Backback with MCP23008 I2C port expander:
 
             Warning: You might need a level shifter (that supports i2c)
             between the SCL/SDA connections on the backpack and the Raspberry Pi.
@@ -92,6 +92,8 @@ class CharLCD(BaseCharLCD):
 
         :param address: The I2C address of your LCD.
         :type address: int
+        :param i2c_expander: Set your I²C chip type. Supported: "PCF8574" or "MCP23008".
+        :type i2c_expander: string
         :param port: The I2C port number. Default: ``1``.
         :type port: int
         :param cols: Number of columns per row (usually 16 or 20). Default: ``20``.
@@ -109,10 +111,8 @@ class CharLCD(BaseCharLCD):
         :type auto_linebreaks: bool
         :param backlight_enabled: Whether the backlight is enabled initially. Default: ``True``.
         :type backlight_enabled: bool
-        :param i2c_expander: Set your i2c chip type. "PCF8574" or "MCP23008" supported.
-            Default: ``PCF8574``.
-        """
 
+        """
         # Set own address and port.
         self._address = address
         self._port = port
