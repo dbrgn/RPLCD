@@ -1,5 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Copyright (C) 2013-2017 Danilo Bargen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+"""
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import sys
@@ -17,11 +38,12 @@ def print_usage():
     print('Usage: %s i2c <expander> <addr> <charmap>' % sys.argv[0])
     print('       %s gpio <charmap>' % sys.argv[0])
     print('')
-    print('<addr>     The I²C address can be found with `i2cdetect 1` from the i2c-tools')
-    print('           package.')
-    print('<charmap>  Charmap can be either A00 or A02. If your display contains Japanese')
-    print('           characters, it probably uses the A00 charmap, otherwise A02.')
-    print('<expander> Supported expanders are PCF8574 and MCP23008')
+    print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
+    print('<addr>      The I²C address (in hex format) can be found with')
+    print('            `i2cdetect 1` from the i2c-tools package.')
+    print('<charmap>   Charmap can be either A00 or A02. If your display contains Japanese')
+    print('            characters, it probably uses the A00 charmap, otherwise A02.')
+    print('')
     sys.exit(1)
 
 
@@ -40,6 +62,7 @@ else:
     print_usage()
 
 
+lcd.backlight = True
 input('Display should be blank. ')
 
 lcd.cursor_mode = CursorMode.blink

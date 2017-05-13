@@ -43,10 +43,12 @@ def print_usage():
     print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
     print('       %s gpio <rows> <cols>' % sys.argv[0])
     print('')
-    print('<addr>     The I²C address can be found with `i2cdetect 1` from the i2c-tools')
-    print('           package.')
-    print('<expander> Supported expanders are PCF8574 and MCP23008')
-
+    print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
+    print('<addr>      The I²C address (in hex format) can be found with')
+    print('            `i2cdetect 1` from the i2c-tools package.')
+    print('<rows>      The number of rows on your LCD, e.g. 2')
+    print('<cols>      The number of columns on your LCD, e.g. 16')
+    print('')
     sys.exit(1)
 
 
