@@ -247,27 +247,30 @@ class BaseCharLCD(object):
 
         """
         encoded = self.codec.encode(value)  # type: List[int]
+        ignored = False
 
-        ignored = None  # Used for ignoring manual linebreaks after auto linebreaks
+        for [char, lookahead] in c.sliding_window(encoded, lookahead=1):
 
-        for char in encoded:
+            # If the previous character has been ignored, skip this one too.
+            if ignored is True:
+                ignored = False
+                continue
+
             # Write regular chars
             if char not in [codecs.CR, codecs.LF]:
                 self.write(char)
-                ignored = None
                 continue
-            # If an auto linebreak happened recently, ignore this write.
+
+            # We're now left with only CR and LF characters. If an auto
+            # linebreak happened recently, and the lookahead matches too,
+            # ignore this write.
             if self.recent_auto_linebreak is True:
-                # No newline chars have been ignored yet. Do it this time.
-                if ignored is None:
-                    ignored = char
+                crlf = (char == codecs.CR and lookahead == codecs.LF)
+                lfcr = (char == codecs.LF and lookahead == codecs.CR)
+                if crlf or lfcr:
+                    ignored = True
                     continue
-                # A newline character has been ignored recently. If the current
-                # character is different, ignore it again. Otherwise, reset the
-                # ignored character tracking.
-                if ignored != char:  # A carriage return and a newline
-                    ignored = None  # Reset ignore list
-                    continue
+
             # Handle newlines and carriage returns
             row, col = self.cursor_pos
             if char == codecs.LF:
@@ -362,12 +365,19 @@ class BaseCharLCD(object):
         row, col = self._cursor_pos
 
         # Write byte if changed
-        if self._content[row][col] != value:
+        try:
+            if self._content[row][col] != value:
+                self._send_data(value)
+                self._content[row][col] = value  # Update content cache
+                unchanged = False
+            else:
+                unchanged = True
+        except IndexError as e:
+            # Position out of range
+            if self.auto_linebreaks is True:
+                raise e
             self._send_data(value)
-            self._content[row][col] = value  # Update content cache
             unchanged = False
-        else:
-            unchanged = True
 
         # Update cursor position.
         if self.text_align_mode is c.Alignment.left:
