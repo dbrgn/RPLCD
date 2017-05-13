@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from __future__ import print_function, division, absolute_import, unicode_literals
 
+import itertools
 import time
 
 from . import enum
@@ -109,3 +110,17 @@ def msleep(milliseconds):
 def usleep(microseconds):
     """Sleep the specified amount of microseconds."""
     time.sleep(microseconds / 1000000.0)
+
+
+def sliding_window(seq, lookahead):
+    """
+    Create a sliding window with the specified number of lookahead characters.
+    """
+    it = itertools.chain(iter(seq), ' ' * lookahead)  # Padded iterator
+    window_size = lookahead + 1
+    result = tuple(itertools.islice(it, window_size))
+    if len(result) == window_size:
+        yield result
+    for elem in it:
+        result = result[1:] + (elem,)
+        yield result
