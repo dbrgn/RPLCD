@@ -71,18 +71,9 @@ LCD_1LINE = 0x00
 LCD_5x10DOTS = 0x04
 LCD_5x8DOTS = 0x00
 
-# Flags for backlight control
-LCD_BACKLIGHT = 0x08
-LCD_NOBACKLIGHT = 0x00
-
 # Flags for RS pin modes
 RS_INSTRUCTION = 0x00
 RS_DATA = 0x01
-
-# Pin bitmasks
-PIN_ENABLE = 0x4
-PIN_READ_WRITE = 0x2
-PIN_REGISTER_SELECT = 0x1
 
 
 # # # ENUMS # # #

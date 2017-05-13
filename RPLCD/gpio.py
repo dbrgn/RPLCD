@@ -174,6 +174,14 @@ class CharLCD(BaseCharLCD):
             self._write4bits(value >> 4)
             self._write4bits(value)
 
+    def _send_data(self, value):
+        """Send data to the display. """
+        self._send(value, c.RS_DATA)
+
+    def _send_instruction(self, value):
+        """Send instruction to the display. """
+        self._send(value, c.RS_INSTRUCTION)
+
     def _write4bits(self, value):
         """Write 4 bits of data into the data bus."""
         for i in range(4):
