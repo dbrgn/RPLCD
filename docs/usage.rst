@@ -185,6 +185,23 @@ you can toggle the :attr:`~RPLCD.gpio.CharLCD.backlight_enabled` property to
 turn the backlight on and off.
 
 
+Automatic Line Breaks
+=====================
+
+By default, RPLCD tries to automatically insert line breaks where appropriate
+to achieve (hopefully) intuitive line wrapping.
+
+Part of these rules is that manual linebreaks that immediately follow an
+automatically issued line break are ignored.
+
+If you want more control over line breaks, you can disable the automatic system
+by setting the ``auto_linebreaks`` parameter of the ``CharLCD`` constructor to
+``False``.
+
+.. sourcecode:: python
+
+    lcd = CharLCD(..., auto_linebreaks=False)
+
 Scrolling Text
 ==============
 
