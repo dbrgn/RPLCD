@@ -87,14 +87,14 @@ if __name__ == '__main__':
                 if i > 255:
                     if i > start:
                         print('Displaying page %d (characters %d-%d).\nDone.' %
-                              (page, start, i - 1))
+                              (page + 1, start, i - 1))
                     else:
                         pass
                     sys.exit(0)
                 lcd.write_string(unichr(i))
-            page += 1
             safe_input('Displaying page %d (characters %d-%d). Press <ENTER> to continue.' %
-                       (page, start, end - 1))
+                       (page + 1, start, end - 1))
+            page += 1
     except KeyboardInterrupt:
         print('Aborting.')
     finally:
