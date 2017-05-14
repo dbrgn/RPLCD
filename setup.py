@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 readme = open('README.rst').read()
 
@@ -13,7 +13,7 @@ setup(name='RPLCD',
       url='https://github.com/dbrgn/RPLCD',
       license='MIT',
       keywords='raspberry, raspberry pi, lcd, liquid crystal, hitachi, hd44780',
-      packages=['RPLCD', 'RPLCD.codecs'],
+      packages=find_packages(),
       platforms=['any'],
       classifiers=[
           'Development Status :: 4 - Beta',
