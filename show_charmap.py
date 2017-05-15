@@ -40,14 +40,14 @@ except NameError:  # Python 3
 
 
 def print_usage():
-    print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
+    print('Usage: %s i2c <expander> <addr> <cols> <rows>' % sys.argv[0])
     print('       %s gpio <rows> <cols>' % sys.argv[0])
     print('')
     print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
     print('<addr>      The I²C address (in hex format) can be found with')
     print('            `i2cdetect 1` from the i2c-tools package.')
-    print('<rows>      The number of rows on your LCD, e.g. 2')
     print('<cols>      The number of columns on your LCD, e.g. 16')
+    print('<rows>      The number of rows on your LCD, e.g. 2')
     print('')
     sys.exit(1)
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'i2c':
         if len(sys.argv) != 6:
             print_usage()
-        rows, cols = int(sys.argv[4]), int(sys.argv[5])
+        cols, rows = int(sys.argv[4]), int(sys.argv[5])
         lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=cols, rows=rows)
     elif sys.argv[1] == 'gpio':
         if len(sys.argv) != 4:
