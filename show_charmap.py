@@ -100,4 +100,4 @@ if __name__ == '__main__':
         except ValueError:
             pass
         lcd.close()
-        print('Test done. If you have a backlight, it should now be off.')
+        print('Test done. If you have a programmable backlight, it should now be off.')
