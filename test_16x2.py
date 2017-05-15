@@ -53,7 +53,7 @@ if len(sys.argv) < 2:
 if sys.argv[1] == 'i2c':
     if len(sys.argv) != 5:
         print_usage()
-    lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=16, rows=2, charmap=sys.argv[4], i2c_expander=sys.argv[2])
+    lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=16, rows=2, charmap=sys.argv[4])
 elif sys.argv[1] == 'gpio':
     if len(sys.argv) != 3:
         print_usage()
@@ -180,4 +180,4 @@ try:
 except ValueError:
     pass
 lcd.close()
-print('Test done. If you have a backlight, it should now be off.')
+print('Test done. If you have a programmable backlight, it should now be off.')
