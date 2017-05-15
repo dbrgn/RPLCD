@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from __future__ import print_function, division, absolute_import, unicode_literals
 
+import itertools
 import time
 
 from . import enum
@@ -71,18 +72,9 @@ LCD_1LINE = 0x00
 LCD_5x10DOTS = 0x04
 LCD_5x8DOTS = 0x00
 
-# Flags for backlight control
-LCD_BACKLIGHT = 0x08
-LCD_NOBACKLIGHT = 0x00
-
 # Flags for RS pin modes
 RS_INSTRUCTION = 0x00
 RS_DATA = 0x01
-
-# Pin bitmasks
-PIN_ENABLE = 0x4
-PIN_READ_WRITE = 0x2
-PIN_REGISTER_SELECT = 0x1
 
 
 # # # ENUMS # # #
@@ -118,3 +110,17 @@ def msleep(milliseconds):
 def usleep(microseconds):
     """Sleep the specified amount of microseconds."""
     time.sleep(microseconds / 1000000.0)
+
+
+def sliding_window(seq, lookahead):
+    """
+    Create a sliding window with the specified number of lookahead characters.
+    """
+    it = itertools.chain(iter(seq), ' ' * lookahead)  # Padded iterator
+    window_size = lookahead + 1
+    result = tuple(itertools.islice(it, window_size))
+    if len(result) == window_size:
+        yield result
+    for elem in it:
+        result = result[1:] + (elem,)
+        yield result

@@ -4,7 +4,6 @@ RPLCD
 .. image:: https://badges.gitter.im/RPLCD/Lobby.svg
    :alt: Join the chat at https://gitter.im/RPLCD/Lobby
    :target: https://gitter.im/RPLCD/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
 .. image:: https://img.shields.io/travis/dbrgn/RPLCD/master.svg
     :target: https://travis-ci.org/dbrgn/RPLCD
     :alt: Build Status
@@ -26,7 +25,7 @@ RPLCD
 
 A Python 3/2 Raspberry PI Character LCD library for the Hitachi HD44780
 controller. It supports both GPIO (parallel) mode as well as boards with an I2C
-port expander (e.g. the PCF8574).
+port expander (e.g. the PCF8574 or the MCP23008).
 
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.
@@ -96,15 +95,6 @@ Test Scripts
 
 To test your LCD, please run the ``test_16x2.py`` or ``test_20x4.py`` script and
 confirm/verify each step with the enter key.
-
-Usage::
-
-    Usage: test_16x2.py i2c <addr> <charmap>
-           test_16x2.py gpio <charmap>
-
-    Note: Charmap can be either A00 or A02. If your display contains Japanese
-          characters, it probably uses the A00 charmap, otherwise A02.
-    Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.
 
 Unit Tests
 ----------

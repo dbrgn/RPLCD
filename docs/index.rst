@@ -7,7 +7,7 @@ About
 
 RPLCD is a Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
 controller. It supports both GPIO (parallel) mode as well as boards with an I2C
-port expander (e.g. the PCF8574).
+port expander (e.g. the PCF8574 or the MCP23008).
 
 This library is inspired by Adafruit Industries' CharLCD_ library as well as by
 Arduino's LiquidCrystal_ library.

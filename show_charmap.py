@@ -38,17 +38,17 @@ try:
 except NameError:  # Python 3
     safe_input = input
 
-try:
-    unichr = unichr
-except NameError:  # Python 3
-    unichr = chr
-
 
 def print_usage():
-    print('Usage: %s i2c <addr> <rows> <cols>' % sys.argv[0])
+    print('Usage: %s i2c <expander> <addr> <rows> <cols>' % sys.argv[0])
     print('       %s gpio <rows> <cols>' % sys.argv[0])
     print('')
-    print('Note: The I²C address can be found with `i2cdetect 1` from the i2c-tools package.')
+    print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
+    print('<addr>      The I²C address (in hex format) can be found with')
+    print('            `i2cdetect 1` from the i2c-tools package.')
+    print('<rows>      The number of rows on your LCD, e.g. 2')
+    print('<cols>      The number of columns on your LCD, e.g. 16')
+    print('')
     sys.exit(1)
 
 
@@ -56,15 +56,15 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print_usage()
     if sys.argv[1] == 'i2c':
-        if len(sys.argv) != 5:
+        if len(sys.argv) != 6:
             print_usage()
-        rows, cols = int(sys.argv[3]), int(sys.argv[4])
-        lcd = i2c.CharLCD(int(sys.argv[2], 16), cols=cols, rows=rows)
+        rows, cols = int(sys.argv[4]), int(sys.argv[5])
+        lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=cols, rows=rows, i2c_expander=sys.argv[2])
     elif sys.argv[1] == 'gpio':
         if len(sys.argv) != 4:
             print_usage()
         rows, cols = int(sys.argv[2]), int(sys.argv[3])
-        lcd = i2c.CharLCD(cols=cols, rows=rows)
+        lcd = gpio.CharLCD(cols=cols, rows=rows)
     else:
         print_usage()
 
@@ -73,6 +73,7 @@ if __name__ == '__main__':
 
     page = 0
     chars = rows * cols
+    text_tpl = 'Displaying page %d (characters %d-%d). Press <ENTER> to continue.'
 
     try:
         while True:
@@ -83,16 +84,20 @@ if __name__ == '__main__':
             for i in range(offset, offset + chars):
                 if i > 255:
                     if i > start:
-                        print('Displaying page %d (characters %d-%d).\nDone.' %
-                              (page, start, i - 1))
+                        safe_input(text_tpl % (page + 1, start, i - 1))
                     else:
-                        print('Done.')
+                        pass
                     sys.exit(0)
-                lcd.write_string(unichr(i))
+                lcd.write(i)
+            safe_input(text_tpl % (page + 1, start, end - 1))
             page += 1
-            safe_input('Displaying page %d (characters %d-%d). Press <ENTER> to continue.' %
-                       (page, start, end - 1))
     except KeyboardInterrupt:
         print('Aborting.')
-
-    lcd.clear()
+    finally:
+        lcd.clear()
+        try:
+            lcd.backlight_enabled = False
+        except ValueError:
+            pass
+        lcd.close()
+        print('Test done. If you have a backlight, it should now be off.')

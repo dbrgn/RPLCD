@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-import itertools
-
+from ..common import sliding_window
 from . import hd44780_a00, hd44780_a02
 
 
@@ -10,20 +9,6 @@ from . import hd44780_a00, hd44780_a02
 # Negative to avoid conflict with regular bytes.
 CR = -1
 LF = -2
-
-
-def _window(seq, lookahead):
-    """
-    Create a sliding window with the specified number of lookahead characters.
-    """
-    it = itertools.chain(iter(seq), ' ' * lookahead)  # Padded iterator
-    window_size = lookahead + 1
-    result = tuple(itertools.islice(it, window_size))
-    if len(result) == window_size:
-        yield result
-    for elem in it:
-        result = result[1:] + (elem,)
-        yield result
 
 
 class FoundMultiCharMapping(Exception):
@@ -43,7 +28,7 @@ class Codec(object):
 
     def encode(self, input_):  # type: (str) -> List[int]
         result = []
-        window_iter = _window(input_, self.codec.combined_chars_lookahead)
+        window_iter = sliding_window(input_, self.codec.combined_chars_lookahead)
         while True:
             try:
                 window = next(window_iter)

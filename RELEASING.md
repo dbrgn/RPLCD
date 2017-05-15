@@ -9,7 +9,7 @@ Used variables:
 
 Update version numbers:
 
-    vim -p setup.py CHANGELOG.md docs/conf.py
+    vim -p setup.py CHANGELOG.md RPLCD/__init__.py docs/conf.py
 
 Do a signed commit and signed tag of the release:
 
