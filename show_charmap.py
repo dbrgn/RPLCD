@@ -59,7 +59,7 @@ if __name__ == '__main__':
         if len(sys.argv) != 6:
             print_usage()
         rows, cols = int(sys.argv[4]), int(sys.argv[5])
-        lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=cols, rows=rows, i2c_expander=sys.argv[2])
+        lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=cols, rows=rows)
     elif sys.argv[1] == 'gpio':
         if len(sys.argv) != 4:
             print_usage()
