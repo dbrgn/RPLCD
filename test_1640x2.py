@@ -35,12 +35,14 @@ except NameError:
 
 
 def print_usage():
-    print('Usage: %s i2c <expander> <addr> <charmap>' % sys.argv[0])
-    print('       %s gpio <charmap>' % sys.argv[0])
+    print('Usage: %s i2c <expander> <addr> <cols> <rows> <charmap>' % sys.argv[0])
+    print('       %s gpio <cols> <rows> <charmap>' % sys.argv[0])
     print('')
     print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
     print('<addr>      The I²C address (in hex format) can be found with')
     print('            `i2cdetect 1` from the i2c-tools package.')
+    print('<cols>      The number of columns on your LCD, e.g. 16')
+    print('<rows>      The number of rows on your LCD, e.g. 2')    
     print('<charmap>   Charmap can be either A00 or A02. If your display contains Japanese')
     print('            characters, it probably uses the A00 charmap, otherwise A02.')
     print('')
@@ -51,16 +53,20 @@ def print_usage():
 if len(sys.argv) < 2:
     print_usage()
 if sys.argv[1] == 'i2c':
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 7:
         print_usage()
-    lcd = i2c.CharLCD(int(sys.argv[3], 16), cols=40, rows=2, charmap=sys.argv[4], i2c_expander=sys.argv[2])
+    cols, rows = int(sys.argv[4]), int(sys.argv[5])    
+    lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=cols, rows=rows, charmap=sys.argv[6])
 elif sys.argv[1] == 'gpio':
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print_usage()
-    lcd = gpio.CharLCD(cols=16, rows=2, charmap=sys.argv[2])
+    lcd = gpio.CharLCD(cols=cols, rows=rows, charmap=sys.argv[2])
 else:
     print_usage()
 
+# Get max column index
+maxcol = cols -1
+numstr = ''
 
 lcd.backlight = True
 input('Display should be blank. ')
@@ -76,11 +82,10 @@ input('"Hello world!" should be on the LCD. ')
 
 assert lcd.cursor_pos == (0, 12), 'cursor_pos should now be (0, 12)'
 
-lcd.cursor_pos = (0, 39)
+lcd.cursor_pos = (0, maxcol)
 lcd.write_string('1')
-lcd.cursor_pos = (1, 39)
+lcd.cursor_pos = (1, maxcol)
 lcd.write_string('2')
-
 assert lcd.cursor_pos == (0, 0), 'cursor_pos should now be (0, 0)'
 input('Lines 1 and 2 should now be labelled with the right numbers on the right side. ')
 
@@ -104,7 +109,7 @@ input('The string "cursor" should now be on the second row, column 0. ')
 lcd.home()
 input('Cursor should now be at initial position. Everything should be shifted to the right by 5 characters. ')
 
-lcd.cursor_pos = (1, 39)
+lcd.cursor_pos = (1, maxcol)
 lcd.write_string('X')
 input('The last character on the LCD should now be an "X"')
 
@@ -118,9 +123,9 @@ lcd.write_string('and Spam')
 lcd.display_enabled = True
 input('Display should now show "Eggs, Ham and Spam" with a line break after "Ham". ')
 
-lcd.shift_display(20)
+lcd.shift_display(4)
 input('Text should now be shifted to the right by 4 characters. ')
-lcd.shift_display(-20)
+lcd.shift_display(-4)
 input('Shift should now be undone. ')
 
 lcd.text_align_mode = Alignment.right
@@ -144,7 +149,7 @@ lcd.write_string('6')
 input('The numbers 1-6 should now be displayed in a zig zag line starting in the top left corner. ')
 
 lcd.clear()
-lcd.write_string('This text will wrap around both lines from column 0 to column 39')
+lcd.write_string('This will wrap around both lines')
 input('Text should nicely wrap around lines. ')
 
 lcd.clear()
@@ -168,12 +173,21 @@ lcd.write_string('\x00')
 input('Now both faces should be happy. ')
 
 lcd.clear()
-lcd.write_string('1234567890abcdefghijklmnopqrstuvxyzABCDE\r\n2nd line')
+if (cols % 10) == 0:
+     numstr = '1234567890' * (cols/10)
+else:
+     for i in range (cols):
+          if i < 10:
+                  numstr += str(i)
+          else:
+                  numstr += str(i-10)
+
+lcd.write_string('%s\r\n2nd line' % numstr)
 input('The first line should be filled with numbers, the second line should show "2nd line"')
 
 lcd.clear()
-lcd.write_string('1234567890\n\r\n123')
-input('The display should show "1234567890" on the first line')
+lcd.write_string('999456\n\r\n123')
+input('The display should show "123456" on the first line')
 
 lcd.clear()
 try:
@@ -181,5 +195,4 @@ try:
 except ValueError:
     pass
 lcd.close()
-print('Test done. If you have a backlight, it should now be off.')
-
+print('Test done. If you have a programmable backlight, it should now be off.')
