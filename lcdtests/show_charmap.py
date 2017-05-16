@@ -21,12 +21,10 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import sys
-
-from RPLCD import i2c, gpio
-
 
 try:
     range = xrange
@@ -39,54 +37,10 @@ except NameError:  # Python 3
     safe_input = input
 
 
-def print_usage():
-    print('Usage: %s i2c <expander> <addr> <cols> <rows> [expander_params]' % sys.argv[0])
-    print('       %s gpio <rows> <cols>' % sys.argv[0])
-    print('')
-    print('<expander>  Supported I²C port expanders are PCF8574 and MCP23008')
-    print('<addr>      The I²C address (in hex format) can be found with')
-    print('            `i2cdetect 1` from the i2c-tools package.')
-    print('<cols>      The number of columns on your LCD, e.g. 16')
-    print('<rows>      The number of rows on your LCD, e.g. 2')
-    print('')
-    print('[expander params] Parameters to be sent to expander. Only required for MCP23017')
-    print('                  Format: parameter_name=value')
-    print('')
-    print('                  MCP23017 Parameters')
-    print('                  gpio_bank=A or gpio_bank=B')
-    print('')
-    print('Example: %s i2c MCP23017 0x20 20 4 gpio_bank=A' % sys.argv[0])
-
-    sys.exit(1)
+from RPLCD import i2c, gpio
 
 
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print_usage()
-    if sys.argv[1] == 'i2c':
-        if len(sys.argv) < 6:
-            print_usage()
-        cols, rows = int(sys.argv[4]), int(sys.argv[5])
-
-        # Parse expander parameters
-        expander_params = {}
-        if sys.version_info > (3, 0):
-                expander_params = dict([arg.split(sep='=', maxsplit=1) for arg in sys.argv[6:]])
-        else:
-            expander_params = dict([arg.split('=', 1) for arg in sys.argv[6:]])
-        if 'gpio_bank' in expander_params:
-            lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=cols, rows=rows,
-                              expander_params=expander_params)
-        else:
-            print_usage()
-
-    elif sys.argv[1] == 'gpio':
-        if len(sys.argv) != 4:
-            print_usage()
-        rows, cols = int(sys.argv[2]), int(sys.argv[3])
-        lcd = gpio.CharLCD(cols=cols, rows=rows)
-    else:
-        print_usage()
+def run(lcd, rows, cols):
 
     print('This tool shows the character map of your LCD on the display.')
     print('Press ctrl+c at any time to abort.\n')
@@ -121,3 +75,8 @@ if __name__ == '__main__':
             pass
         lcd.close()
         print('Test done. If you have a backlight, it should now be off.')
+
+
+if __name__ == '__main__':
+
+    print('This is a submodule of lcdtest.py, please run it instead.')

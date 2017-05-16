@@ -53,7 +53,7 @@ if len(sys.argv) < 2:
 if sys.argv[1] == 'i2c':
     if len(sys.argv) != 5:
         print_usage()
-    lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=20, rows=4, charmap=sys.argv[4])
+    lcd = i2c.CharLCD(sys.argv[2], int(sys.argv[3], 16), cols=20, rows=4, charmap=sys.argv[4], expander_params={'gpio_bank': 'A'})
 elif sys.argv[1] == 'gpio':
     if len(sys.argv) != 3:
         print_usage()
