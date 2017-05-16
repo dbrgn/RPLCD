@@ -83,7 +83,7 @@ def print_usage():
         print('              default=A00')
         print('')
         print('Options format: name=value e.g. expander=MCP23008 (Example below)')
-        print('%s gpio charmap cols=20 mode=GPIO.BCM rows=4 rs=15 rw=18 e=16 d4=21 d5=22 d6=23 d7=24 bl=None charmap=A00' % sys.argv[0])
+        print('%s gpio show_charmap cols=20 mode=GPIO.BCM rows=4 rs=15 rw=18 e=16 data=21,22,23,24 bl=None charmap=A00' % sys.argv[0])
     else:
         print('<options> For info about options run:')
         print('')
