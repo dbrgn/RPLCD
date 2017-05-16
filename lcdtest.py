@@ -40,7 +40,7 @@ def print_usage():
     print('[test] Which test to run:')
     print('')
     print('   show_charmap - Displays all characters in the charmap')
-    print('   test_format  - Tests display formating')
+    print('   format_test  - Tests display formating')
     print('')
     # Options for i2c mode
     if ((len(sys.argv) > 1) and (sys.argv[1] == 'i2c')):
