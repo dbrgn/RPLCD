@@ -61,13 +61,13 @@ def print_usage():
         print('')
         print('Options format: name=value e.g. expander=MCP23008 (Example below)')
 
-        print('%s i2c charmap expander=MCP23017 addr=0x20 cols=20 rows=4 gpio_bank=A' % sys.argv[0])
+        print('%s i2c charmap expander=MCP23017 addr=0x20 cols=20 rows=4 charmap=A00 gpio_bank=A' % sys.argv[0])
     # Options for GPIO mode
     elif ((len(sys.argv) > 1) and (sys.argv[1] == 'gpio')):
 
         print('<options> gpio options:')
         print('')
-        print('   mode     - GPIO numbering mode, either BOARD or BCM, default=BOARD')
+        print('   mode     - GPIO numbering mode, either GPIO.BOARD or GPIO.BCM, default=GPIO.BCM')
         print('   cols    - The number of columns on your LCD, e.g. 16')
         print('   rows    - The number of rows on your LCD, e.g. 2')
         print('   rs      - RS pin number')
@@ -83,7 +83,7 @@ def print_usage():
         print('              default=A00')
         print('')
         print('Options format: name=value e.g. expander=MCP23008 (Example below)')
-        print('%s gpio charmap cols=20 numbering_mode=BCM rows=4 rs=15 rw=18 e=16 d4=21 d5=22 d6=23 d7=24 backlight=None' % sys.argv[0])
+        print('%s gpio show_charmap cols=20 mode=GPIO.BCM rows=4 rs=15 rw=18 e=16 data=21,22,23,24 bl=None charmap=A00' % sys.argv[0])
     else:
         print('<options> For info about options run:')
         print('')
