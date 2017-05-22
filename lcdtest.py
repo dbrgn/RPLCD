@@ -107,7 +107,7 @@ def print_usage(error=None):
 
 def options_pop(value, default=-1):
     ''' Pops value from options with error checking
-        value: which option to check.
+        value: which option to pop and check.
         default: optional, sets a default if not defined.
         returns: a string corresponding to the option on the command line
     '''
@@ -156,7 +156,7 @@ if __name__ == '__main__':
         port = int(options_pop('port', '1'))
         try:
             lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols,
-                          rows=rows, expander_params=options)
+                              rows=rows, expander_params=options)
         except IOError:
             print_usage('IOError: Usually caused by the wrong i2c address/port or device not connected properly')
     elif lcdmode == 'gpio':
@@ -170,24 +170,23 @@ if __name__ == '__main__':
         elif mode == 'BOARD':
             numbering_mode = GPIO.BOARD
         else:
-            print_usage('Invalid GPIO numbering mode: mode=%s , must be either BOARD or BCM' % mode)
+            print_usage('Invalid GPIO numbering mode: %s, must be either BOARD or BCM' % mode)
 
         data = options_pop('data')
         rs = int(options_pop('rs'))
         e = int(options_pop('e'))
         rw = options_pop('rw', 'None')
-        rw = None if rw == 'None' else rw = int(rw)
+        rw = None if rw is 'None' else int(rw)
         bl = options_pop('bl', 'None')
-        bl = None if bl == 'None' else bl = int(bl)
+        bl = None if bl == 'None' else int(bl)
 
         # Parse data pins into a list
         pins_data = {}
         pins_data = data.split(',')
         # Convert data pins to int
         pins_data = [int(pin) for pin in pins_data]
-        lcd = gpio.CharLCD(pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data,
-                       pin_backlight=bl, numbering_mode=numbering_mode, cols=cols, rows=rows,
-                       charmap=charmap)
+        lcd = gpio.CharLCD(pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
+                           numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
     else:
         print_usage('Connection type ' + lcdmode + ' is not supported. Must be either i2c or gpio')
 
@@ -200,6 +199,6 @@ if __name__ == '__main__':
         elif cols == 16 and rows == 2:
             testsuite_16x2.run(lcd)
         else:
-            print_usage(str(cols) + 'x' + str(rows) + ' displays not supported in this test.')
+            print_usage(str(cols) + 'x' + str(rows) + ' displays are not supported in this test.')
     else:
-        print_usage('Test \'' + test + '\' not supported.')
+        print_usage('Test \'' + test + '\' is not supported.')
