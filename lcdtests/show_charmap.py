@@ -37,7 +37,7 @@ except NameError:  # Python 3
     safe_input = input
 
 
-from RPLCD import i2c, gpio
+#from RPLCD import i2c, gpio
 
 
 def run(lcd, rows, cols):
