@@ -175,18 +175,10 @@ if __name__ == '__main__':
         data = options_pop('data')
         rs = int(options_pop('rs'))
         e = int(options_pop('e'))
-
         rw = options_pop('rw', 'None')
-        if rw == 'None':
-            rw = None
-        else:
-            rw = int(rw)
-
+        rw = None if rw == 'None' else rw = int(rw)
         bl = options_pop('bl', 'None')
-        if bl == 'None':
-            bl = None
-        else:
-            bl = int(bl)
+        bl = None if bl == 'None' else bl = int(bl)
 
         # Parse data pins into a list
         pins_data = {}
