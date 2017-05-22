@@ -176,14 +176,14 @@ if __name__ == '__main__':
         rs = int(options_pop('rs'))
         e = int(options_pop('e'))
 
-        rw = options_pop('rw', None)
-        if rw == 'None' or rw is None:
+        rw = options_pop('rw', 'None')
+        if rw == 'None':
             rw = None
         else:
             rw = int(rw)
 
-        bl = options_pop('bl', None)
-        if bl == 'None' or bl is None:
+        bl = options_pop('bl', 'None')
+        if bl == 'None':
             bl = None
         else:
             bl = int(bl)
