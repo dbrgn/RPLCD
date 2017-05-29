@@ -1,11 +1,11 @@
 # Release process
 
-Signing key: https://dbrgn.ch/F2F3A5FA.asc
+Signing key: 3578F667F2F3A5FA (https://keybase.io/dbrgn)
 
 Used variables:
 
     export VERSION={VERSION}
-    export GPG=F2F3A5FA
+    export GPG=3578F667F2F3A5FA
 
 Update version numbers:
 
