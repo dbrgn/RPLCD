@@ -122,7 +122,7 @@ def options_pop(value, default=no_default):
     except KeyError:
         print_usage('Option %s is not defined.' % value)
     except ValueError as e:
-        print_usage('The value for %s is not valid.\n%s' % value % e)
+        print_usage('The value for %s is not valid.\n%s' % (value, e))
     except Exception as e:
         raise e
     if return_value == '':
@@ -189,7 +189,7 @@ if __name__ == '__main__':
         lcd = gpio.CharLCD(pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
                            numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
     else:
-        print_usage('Connection type ' + lcdmode + ' is not supported. Must be either i2c or gpio')
+        print_usage('Connection type %s is not supported. Must be either i2c or gpio' % lcdmode)
 
     # Run selected test
     if test == 'show_charmap':
@@ -200,6 +200,6 @@ if __name__ == '__main__':
         elif cols == 16 and rows == 2:
             testsuite_16x2.run(lcd)
         else:
-            print_usage(str(cols) + 'x' + str(rows) + ' displays are not supported in this test.')
+            print_usage('%sx%s displays are not supported in this test.' % (cols, rows))
     else:
-        print_usage('Test \'' + test + '\' is not supported.')
+        print_usage('Test \'%s\' is not supported.' % test)
