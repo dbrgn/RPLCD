@@ -105,9 +105,9 @@ First, import the RPLCD library from your Python script.
 
 .. sourcecode:: python
 
-    from RPLCD.i2c import CharLCD
+    from RPLCD.gpio import CharLCD
 
-Then create a new instance of the :class:`~RPLCD.i2c.CharLCD` class. If you used
+Then create a new instance of the :class:`~RPLCD.gpio.CharLCD` class. If you used
 the default wiring above and have a 20x4 LCD, all that you need is the
 following:
 
