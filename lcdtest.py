@@ -36,6 +36,7 @@ import lcdtests.testsuite_16x2 as testsuite_16x2
 
 # Globals
 options = {}
+no_default = object()
 
 
 def print_usage(error=None):
@@ -105,7 +106,7 @@ def print_usage(error=None):
     sys.exit(1)
 
 
-def options_pop(value, default=-1):
+def options_pop(value, default=no_default):
     ''' Pops value from options with error checking
         value: which option to pop and check.
         default: optional, sets a default if not defined.
@@ -114,18 +115,18 @@ def options_pop(value, default=-1):
     global options
     try:
         # If no default value is defined
-        if default is -1:
+        if default is no_default:
             return_value = options.pop(value)
         else:
             return_value = options.pop(value, default)
     except KeyError:
-        print_usage('Option ' + value + ' is not defined.')
+        print_usage('Option %s is not defined.' % value)
     except ValueError as e:
-        print_usage('The value for ' + value + ' is not valid.\n' + e)
+        print_usage('The value for %s is not valid.\n%s' % value % e)
     except Exception as e:
         raise e
-    if return_value is '':
-        print_usage('Option ' + value + ' can\'t be blank.')
+    if return_value == '':
+        print_usage('Option %s can\'t be blank.' % value)
     return return_value
 
 
@@ -176,7 +177,7 @@ if __name__ == '__main__':
         rs = int(options_pop('rs'))
         e = int(options_pop('e'))
         rw = options_pop('rw', 'None')
-        rw = None if rw is 'None' else int(rw)
+        rw = None if rw == 'None' else int(rw)
         bl = options_pop('bl', 'None')
         bl = None if bl == 'None' else int(bl)
 
