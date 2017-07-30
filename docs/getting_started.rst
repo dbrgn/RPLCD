@@ -42,8 +42,8 @@ Via GPIO
 If you don't have an I²C version of the board, you can also connect the LCD
 Pins directly to the GPIO header of the Raspberry Pi.
 
-The standard wiring configuration uses the following pins in 4 bit mode (BOARD
-numbering scheme):
+If you don't know how to wire up the LCD to the Raspberry Pi, you could use this
+wiring configuration in 4 bit mode (BOARD numbering scheme):
 
 - RS: 15
 - RW: 18
@@ -108,17 +108,18 @@ First, import the RPLCD library from your Python script.
 
     from RPLCD.gpio import CharLCD
 
-Then create a new instance of the :class:`~RPLCD.gpio.CharLCD` class. If you used
-the default wiring above and have a 20x4 LCD, all that you need is the
-following:
+Then create a new instance of the :class:`~RPLCD.gpio.CharLCD` class. If you
+have a 20x4 LCD, you must at least specify the numbering mode and the pins you
+used:
 
 .. sourcecode:: python
 
-    lcd = CharLCD()
+    lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
+                  numbering_mode=GPIO.BOARD)
 
 If you want to customize the way the LCD is instantiated (e.g. by changing the
 pin configuration or the number of columns and rows on your display), you can
-change the corresponding parameters. Example:
+change the corresponding parameters. Here's a full example:
 
 .. sourcecode:: python
 

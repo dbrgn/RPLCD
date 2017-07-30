@@ -113,7 +113,7 @@ pixel row. Each character is written to a specific location in CGRAM (numbers
 
 .. sourcecode:: python
 
-    >>> lcd = CharLCD()
+    >>> lcd = CharLCD(...)
     >>> smiley = (
     ...     0b00000,
     ...     0b01010,
