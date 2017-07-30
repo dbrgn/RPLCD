@@ -91,8 +91,8 @@ Supported I²C Port Expanders
 Documentation
 =============
 
-You can find the documentation here: https://readthedocs.org/projects/rplcd/
-
+- Stable (released on PyPI): http://rplcd.readthedocs.io/en/stable/
+- Latest (current master): http://rplcd.readthedocs.io/en/latest/
 
 Testing
 =======
