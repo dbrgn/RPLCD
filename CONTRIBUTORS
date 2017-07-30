@@ -8,4 +8,4 @@ Contributors
 - @stripwax (backlight circuit support)
 - @rameshg87 (wiring docs)
 - @thijstriemstra (fixes to README and setup.py)
-- @GoranLundberg (support for MCP23008 I²C port expander)
+- @GoranLundberg (support for MCP23008 and MCP23017 I²C port expander)
