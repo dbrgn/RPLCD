@@ -13,7 +13,7 @@ Update version numbers:
 
 Do a signed commit and signed tag of the release:
 
-    git add setup.py CHANGELOG.md docs/conf.py
+    git add setup.py CHANGELOG.md RPLCD/__init__.py docs/conf.py
     git commit -S${GPG} -m "Release v${VERSION}"
     git tag -u ${GPG} -m "Release v${VERSION}" v${VERSION}
 

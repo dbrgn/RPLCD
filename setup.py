@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 readme = open('README.rst').read()
 
 setup(name='RPLCD',
-      version='0.9.0',
+      version='1.0.0',
       description='A Raspberry Pi LCD library for the widely used Hitachi HD44780 controller.',
       long_description=readme,
       author='Danilo Bargen',
@@ -16,13 +16,12 @@ setup(name='RPLCD',
       packages=find_packages(),
       platforms=['any'],
       classifiers=[
-          'Development Status :: 4 - Beta',
+          'Development Status :: 5 - Production/Stable',
           'Environment :: Other Environment',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: MIT License',
           'Operating System :: POSIX',
           'Programming Language :: Python :: 2',
-          'Programming Language :: Python :: 2.6',
           'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.3',

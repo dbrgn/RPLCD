@@ -11,6 +11,29 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.0.0 (2017-07-30)
+
+This is the first release that can be considered stable. It involves some API
+changes, so you might need to adapt your scripts (mainly because some default
+arguments to `CharLCD` were removed).
+
+If you notice any documentation that hasn't been updated yet to the newer API,
+please let us know!
+
+- [add] Support for `MCP23008` and `MCP23014^ I²C port expanders (#43, #59)
+- [add] Add `RPLCD.__version__` attribute
+- [fix] Fix bug in auto linebreak algorithm (#53)
+- [fix] Fix bugs in show_charmap script (#52)
+- [fix] Fix error in A02 character map
+- [chg] Remove default args for `gpio.CharLCD`, pins and numbering mode always
+        need to be specified explicitly from now on
+- [chg] Remove default for `i2c.CharLCD` i2c_expander parameter,
+        always needs to be specified explicitly from now on
+- [chg] Remove all enums (`Alignment`, `CursorMode`, `ShiftMode`,
+        `BacklightMode`), replace them with string based API (#67)
+- [chg] Rewrite test scripts, expose them all through a single entry point
+        script: `lcdtest.py` (#58, #59)
+
 ### v0.9.0 (2017-05-09)
 
 This version can be considered the release candidate for the 1.0 release.
