@@ -119,7 +119,7 @@ class BaseCharLCD(object):
 
         # Configure display mode
         self._display_mode = c.LCD_DISPLAYON
-        self._cursor_mode = int(c.CursorMode.hide)
+        self._cursor_mode = c.CursorMode.hide
         self.command(c.LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         c.usleep(50)
 
@@ -127,8 +127,8 @@ class BaseCharLCD(object):
         self.clear()
 
         # Configure entry mode
-        self._text_align_mode = int(c.Alignment.left)
-        self._display_shift_mode = int(c.ShiftMode.cursor)
+        self._text_align_mode = c.Alignment.left
+        self._display_shift_mode = c.ShiftMode.cursor
         self._cursor_pos = (0, 0)
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
@@ -158,36 +158,46 @@ class BaseCharLCD(object):
             doc='The cursor position as a 2-tuple (row, col).')
 
     def _get_text_align_mode(self):
-        try:
-            return c.Alignment[self._text_align_mode]
-        except ValueError:
+        if self._text_align_mode == c.Alignment.left:
+            return 'left'
+        elif self._text_align_mode == c.Alignment.right:
+            return 'right'
+        else:
             raise ValueError('Internal _text_align_mode has invalid value.')
 
     def _set_text_align_mode(self, value):
-        if value not in c.Alignment:
-            raise ValueError('Cursor move mode must be of ``common.Alignment`` type.')
-        self._text_align_mode = int(value)
+        if value == 'left':
+            self._text_align_mode = c.Alignment.left
+        elif value == 'right':
+            self._text_align_mode = c.Alignment.right
+        else:
+            raise ValueError('Cursor move mode must be either `left` or `right`')
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
 
     text_align_mode = property(_get_text_align_mode, _set_text_align_mode,
-            doc='The text alignment (``Alignment.left`` or ``Alignment.right``).')
+            doc='The text alignment (``left`` or ``right``).')
 
     def _get_write_shift_mode(self):
-        try:
-            return c.ShiftMode[self._display_shift_mode]
-        except ValueError:
+        if self._display_shift_mode == c.ShiftMode.cursor:
+            return 'cursor'
+        elif self._display_shift_mode == c.ShiftMode.display:
+            return 'display'
+        else:
             raise ValueError('Internal _display_shift_mode has invalid value.')
 
     def _set_write_shift_mode(self, value):
-        if value not in c.ShiftMode:
-            raise ValueError('Write shift mode must be of ``common.ShiftMode`` type.')
-        self._display_shift_mode = int(value)
+        if value == 'cursor':
+            self._display_shift_mode = c.ShiftMode.cursor
+        elif value == 'display':
+            self._display_shift_mode = c.ShiftMode.display
+        else:
+            raise ValueError('Write shift mode must be either `cursor` or `display`.')
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
 
     write_shift_mode = property(_get_write_shift_mode, _set_write_shift_mode,
-            doc='The shift mode when writing (``ShiftMode.cursor`` or ``ShiftMode.display``).')
+            doc='The shift mode when writing (``cursor`` or ``display``).')
 
     def _get_display_enabled(self):
         return self._display_mode == c.LCD_DISPLAYON
@@ -201,21 +211,29 @@ class BaseCharLCD(object):
             doc='Whether or not to display any characters.')
 
     def _get_cursor_mode(self):
-        try:
-            return c.CursorMode[self._cursor_mode]
-        except ValueError:
+        if self._cursor_mode == c.CursorMode.hide:
+            return 'hide'
+        elif self._cursor_mode == c.CursorMode.line:
+            return 'line'
+        elif self._cursor_mode == c.CursorMode.blink:
+            return 'blink'
+        else:
             raise ValueError('Internal _cursor_mode has invalid value.')
 
     def _set_cursor_mode(self, value):
-        if value not in c.CursorMode:
-            raise ValueError('Cursor mode must be of ``CursorMode`` type.')
-        self._cursor_mode = int(value)
+        if value == 'hide':
+            self._cursor_mode = c.CursorMode.hide
+        elif value == 'line':
+            self._cursor_mode = c.CursorMode.line
+        elif value == 'blink':
+            self._cursor_mode = c.CursorMode.blink
+        else:
+            raise ValueError('Cursor mode must be one of `hide`, `line` or `blink`.')
         self.command(c.LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         c.usleep(50)
 
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
-            doc='How the cursor should behave (``CursorMode.hide``, ' +
-                                   '``CursorMode.line`` or ``CursorMode.blink``).')
+            doc='How the cursor should behave (``hide``, ``line`` or ``blink``).')
 
     # High level commands
 
@@ -279,7 +297,7 @@ class BaseCharLCD(object):
                 else:
                     self.cursor_pos = (0, col)
             elif char == codecs.CR:
-                if self.text_align_mode is c.Alignment.left:
+                if self.text_align_mode == 'left':
                     self.cursor_pos = (row, 0)
                 else:
                     self.cursor_pos = (row, self.lcd.cols - 1)
@@ -380,7 +398,7 @@ class BaseCharLCD(object):
             unchanged = False
 
         # Update cursor position.
-        if self.text_align_mode is c.Alignment.left:
+        if self.text_align_mode == 'left':
             if self.auto_linebreaks is False or col < self.lcd.cols - 1:
                 # No newline, update internal pointer
                 newpos = (row, col + 1)
@@ -414,13 +432,13 @@ class BaseCharLCD(object):
                 self.recent_auto_linebreak = True
 
     def cr(self):  # type: () -> None
-        """Write a carriage return (``\r``) character to the LCD."""
+        """Write a carriage return (``\\r``) character to the LCD."""
         self.write_string('\r')
 
     def lf(self):  # type: () -> None
-        """Write a line feed (``\n``) character to the LCD."""
+        """Write a line feed (``\\n``) character to the LCD."""
         self.write_string('\n')
 
     def crlf(self):  # type: () -> None
-        """Write a line feed and a carriage return (``\r\n``) character to the LCD."""
+        """Write a line feed and a carriage return (``\\r\\n``) character to the LCD."""
         self.write_string('\r\n')
