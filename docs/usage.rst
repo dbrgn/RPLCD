@@ -57,17 +57,6 @@ Alternatively, if you want to hide all characters but keep the data in the LCD
 memory, set the :attr:`~RPLCD.i2c.CharLCD.display_enabled` property to ``False``.
 
 
-Custom Wiring
-=============
-
-When using a LCD connected via GPIO pins, the wiring can be customized in the
-:class:`~RPLCD.gpio.CharLCD` constructor. These are the standard values:
-
-.. sourcecode:: python
-
-    lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24])
-
-
 Character Maps
 ==============
 
@@ -81,7 +70,7 @@ character map:
 
 .. sourcecode:: python
 
-    lcd = CharLCD(charmap='A00')
+    lcd = CharLCD(..., charmap='A00')
 
 As a rule of thumb, if your display can show Japanese characters, it uses
 ``A00``, otherwise ``A02``. To show the entire character map on your LCD, you

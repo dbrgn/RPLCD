@@ -10,7 +10,7 @@ You can install RPLCD directly from `PyPI
 
     $ sudo pip install RPLCD
 
-If you want to use I2C, you also need smbus::
+If you want to use I²C, you also need smbus::
 
     $ sudo apt-get install python-smbus
 
