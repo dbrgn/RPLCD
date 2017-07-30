@@ -136,7 +136,8 @@ class CharLCD(BaseCharLCD):
         # Errorchecking for expander parameters
         if expander_params is None:
             if self._i2c_expander == 'MCP23017':
-                raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is not defined, must be either \'A\' or \'B\'')
+                raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is not defined, '
+                                 'must be either \'A\' or \'B\'')
             else:
                 self._expander_params = {}
         else:
@@ -145,7 +146,8 @@ class CharLCD(BaseCharLCD):
                     self._expander_params = {}
                     self._expander_params['gpio_bank'] = expander_params['gpio_bank']
                 else:
-                    raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is \'%s\' must be either \'A\' or \'B\'' % expander_params['gpio_bank'])
+                    raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is \'%s\', '
+                            'must be either \'A\' or \'B\'' % expander_params['gpio_bank'])
 
         # Currently the I2C mode only supports 4 bit communication
         self.data_bus_mode = c.LCD_4BITMODE
@@ -172,7 +174,7 @@ class CharLCD(BaseCharLCD):
             # Variable for storing data and applying bitmasks and shifting.
             self._mcp_data = 0
 
-            # Set iodir register value according to expander 
+            # Set iodir register value according to expander
             # If using MCP23017 set which gpio bank to use, A or B
             if self._i2c_expander == 'MCP23008':
                 IODIR = MCP23008_IODIR

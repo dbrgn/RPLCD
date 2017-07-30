@@ -16,9 +16,9 @@ SP = 32  # Space
 
 
 @pytest.fixture
-def get_lcd(mocker):
+def get_lcd(mocker, charlcd_kwargs):
     def _func(cols, rows, auto_linebreaks):
-        lcd = CharLCD(cols=cols, rows=rows, auto_linebreaks=auto_linebreaks)
+        lcd = CharLCD(cols=cols, rows=rows, auto_linebreaks=auto_linebreaks, **charlcd_kwargs)
         mocker.patch.object(lcd, '_send_data')
         mocker.patch.object(lcd, '_send_instruction')
         return lcd

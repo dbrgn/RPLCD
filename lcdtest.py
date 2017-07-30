@@ -69,8 +69,10 @@ def print_usage(error=None):
         print('')
         print('Examples:')
         print('')
-        print('%s i2c testsuite expander=PCF8574 addr=0x27 port=1 cols=20 rows=4 charmap=A00' % sys.argv[0])
-        print('%s i2c testsuite expander=MCP23017 addr=0x20 port=1 cols=20 rows=4 charmap=A00 gpio_bank=A' % sys.argv[0])
+        print(sys.argv[0] + ' i2c testsuite expander=PCF8574 addr=0x27 port=1 '
+              'cols=20 rows=4 charmap=A00')
+        print(sys.argv[0] + ' i2c testsuite expander=MCP23017 addr=0x20 port=1 '
+              'kols=20 rows=4 charmap=A00 gpio_bank=A')
 
     # Options for GPIO mode
     elif ((len(sys.argv) > 1) and (sys.argv[1] == 'gpio')):
@@ -94,7 +96,8 @@ def print_usage(error=None):
         print('')
         print('Example:')
         print('')
-        print('%s gpio testsuite cols=20 rows=4 mode=BCM rs=15 rw=None e=16 bl=None data=21,22,23,24 charmap=A00' % sys.argv[0])
+        print(sys.argv[0] + ' gpio testsuite cols=20 rows=4 mode=BCM rs=15 rw=None e=16 '
+              'bl=None data=21,22,23,24 charmap=A00')
     else:
         print('<options> For info about options run:')
         print('')
@@ -159,7 +162,8 @@ if __name__ == '__main__':
             lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols,
                               rows=rows, expander_params=options)
         except IOError:
-            print_usage('IOError: Usually caused by the wrong i2c address/port or device not connected properly')
+            print_usage('IOError: Usually caused by the wrong i2c address/port '
+                        'or device not connected properly')
     elif lcdmode == 'gpio':
         if len(sys.argv) < 8:
             print_usage()

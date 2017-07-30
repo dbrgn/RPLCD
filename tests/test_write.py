@@ -4,14 +4,14 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import pytest
 
 from RPLCD.gpio import CharLCD
-from RPLCD.common import RS_DATA, RS_INSTRUCTION, LCD_SETDDRAMADDR
+from RPLCD.common import LCD_SETDDRAMADDR
 
 
-def test_write_simple(mocker):
+def test_write_simple(mocker, charlcd_kwargs):
     """
     Write "HelloWorld" to the display.
     """
-    lcd = CharLCD()
+    lcd = CharLCD(**charlcd_kwargs)
     send_data = mocker.patch.object(lcd, '_send_data')
     text = 'HelloWorld'
     lcd.write_string(text)
@@ -29,11 +29,11 @@ def test_write_simple(mocker):
     assert calls[9] == (100,)
 
 
-def test_caching(mocker):
+def test_caching(mocker, charlcd_kwargs):
     """
     Characters should only be written if they have changed
     """
-    lcd = CharLCD()
+    lcd = CharLCD(**charlcd_kwargs)
     send_data = mocker.patch.object(lcd, '_send_data')
     send_instruction = mocker.patch.object(lcd, '_send_instruction')
 
@@ -66,11 +66,11 @@ def test_caching(mocker):
     ('A00', 0b11110101),
     ('A02', 0b11111100),
 ])
-def test_charmap(mocker, charmap, ue):
+def test_charmap(mocker, charmap, ue, charlcd_kwargs):
     """
     The charmap should be used. The "ü" Umlaut should be encoded correctly.
     """
-    lcd = CharLCD(charmap=charmap)
+    lcd = CharLCD(charmap=charmap, **charlcd_kwargs)
     send = mocker.patch.object(lcd, '_send_data')
 
     text = 'Züri'
@@ -88,11 +88,11 @@ def test_charmap(mocker, charmap, ue):
     (2, 16),
     (4, 20),
 ])
-def test_write_newline(mocker, rows, cols):
+def test_write_newline(mocker, rows, cols, charlcd_kwargs):
     """
     Write text containing CR/LF chars to the display.
     """
-    lcd = CharLCD(rows=rows, cols=cols)
+    lcd = CharLCD(rows=rows, cols=cols, **charlcd_kwargs)
     send_data = mocker.patch.object(lcd, '_send_data')
     send_instruction = mocker.patch.object(lcd, '_send_instruction')
     text = '\nab\n\rcd'
