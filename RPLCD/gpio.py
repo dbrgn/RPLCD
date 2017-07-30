@@ -35,10 +35,9 @@ PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight m
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
+    def __init__(self, numbering_mode=None, pin_rs=None, pin_rw=None, pin_e=None, pins_data=None,
                        pin_backlight=None, backlight_mode=c.BacklightMode.active_low,
                        backlight_enabled=True,
-                       numbering_mode=GPIO.BOARD,
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
                        auto_linebreaks=True):
@@ -89,7 +88,15 @@ class CharLCD(BaseCharLCD):
 
         """
         # Set attributes
-        self.numbering_mode = numbering_mode
+        if numbering_mode == GPIO.BCM or numbering_mode == GPIO.BOARD:
+            self.numbering_mode = numbering_mode
+        else:
+            raise ValueError('Invalid GPIO numbering mode: numbering_mode=%s , must be either GPIO.BOARD or GPIO.BCM' % numbering_mode)
+        if pin_rs is None:
+            raise ValueError('pin_rs is not defined.')
+        if pin_e is None:
+            raise ValueError('pin_e is not defined.')
+
         if len(pins_data) == 4:  # 4 bit mode
             self.data_bus_mode = c.LCD_4BITMODE
             block1 = [None] * 4

@@ -11,22 +11,14 @@ replacement_char = 0x20  # SPACE
 # Table with 1:1 mapping
 encoding_table = {
 
-    '\x00':   0x00,  # User defined (CGRAM)
-    '\x00':   0x01,  # User defined (CGRAM)
-    '\x00':   0x02,  # User defined (CGRAM)
-    '\x00':   0x03,  # User defined (CGRAM)
-    '\x00':   0x04,  # User defined (CGRAM)
-    '\x00':   0x05,  # User defined (CGRAM)
-    '\x00':   0x06,  # User defined (CGRAM)
-    '\x00':   0x07,  # User defined (CGRAM)
-    '\x00':   0x08,
-    '\x00':   0x09,
-    '\x00':   0x0a,
-    '\x00':   0x0b,
-    '\x00':   0x0c,
-    '\x00':   0x0d,
-    '\x00':   0x0e,
-    '\x00':   0x0f,
+    '\u0000': 0x00,  # User defined (CGRAM)
+    '\u0001': 0x01,  # User defined (CGRAM)
+    '\u0002': 0x02,  # User defined (CGRAM)
+    '\u0003': 0x03,  # User defined (CGRAM)
+    '\u0004': 0x04,  # User defined (CGRAM)
+    '\u0005': 0x05,  # User defined (CGRAM)
+    '\u0006': 0x06,  # User defined (CGRAM)
+    '\u0007': 0x07,  # User defined (CGRAM)
 
     '▶':      0x10,  # BLACK RIGHT-POINTING TRIANGLE
     '◀':      0x11,  # BLACK LEFT-POINTING TRIANGLE
