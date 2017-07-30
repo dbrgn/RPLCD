@@ -26,7 +26,7 @@ please let us know!
 - [fix] Fix bugs in show_charmap script (#52)
 - [fix] Fix error in A02 character map
 - [chg] Remove default args for `gpio.CharLCD`, pins and numbering mode always
-        need to be specified explicitly from now on
+        need to be specified explicitly from now on (#60)
 - [chg] Remove default for `i2c.CharLCD` i2c_expander parameter,
         always needs to be specified explicitly from now on
 - [chg] Remove all enums (`Alignment`, `CursorMode`, `ShiftMode`,
