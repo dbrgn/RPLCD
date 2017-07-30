@@ -78,7 +78,7 @@ def run(lcd):
 
     lcd.write_shift_mode = 'cursor'
     lcd.cursor_pos = (1, 5)
-    lcd.write_string(lcd.write_shift_mode.name)
+    lcd.write_string('cursor')
     input('The string "cursor" should now be on the second row, column 0. ')
 
     lcd.home()
