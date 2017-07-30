@@ -85,7 +85,7 @@ character map:
 
 As a rule of thumb, if your display can show Japanese characters, it uses
 ``A00``, otherwise ``A02``. To show the entire character map on your LCD, you
-can use the ``show_charmap.py`` script.
+can use the ``show_charmap`` target of the ``lcdtest.py`` script.
 
 Should you run into the situation that your character map does not seem to match
 either the ``A00`` or the ``A02`` tables, please `open an issue

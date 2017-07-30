@@ -97,11 +97,11 @@ You can find the documentation here: https://readthedocs.org/projects/rplcd/
 Testing
 =======
 
-Test Scripts
-------------
+Interactive Test Script
+-----------------------
 
-To test your LCD, please run the ``test_16x2.py`` or ``test_20x4.py`` script and
-confirm/verify each step with the enter key.
+To test your LCD, please run the ``lcdtest.py`` script with the ``testsuite``
+target.
 
 Unit Tests
 ----------
