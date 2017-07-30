@@ -171,7 +171,7 @@ class BaseCharLCD(object):
         elif value == 'right':
             self._text_align_mode = c.Alignment.right
         else:
-            raise ValueError('Cursor move mode must be either `left` or `right`')
+            raise ValueError('Text align mode must be either `left` or `right`')
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
 
