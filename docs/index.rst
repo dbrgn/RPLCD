@@ -39,6 +39,12 @@ motivation:
 
 - MicroPython port
 
+**Supported I²C Port Expanders**
+
+- PCF8574 (used by a lot of I²C LCD adapters on Ali Express)
+- MCP23008 (used in Adafruit I²C LCD backpack)
+- MCP23017
+
 
 Contents
 ========

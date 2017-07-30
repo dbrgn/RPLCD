@@ -80,7 +80,8 @@ you need to know the address of your LCD. You can find it on the command line
 using the ``sudo i2cdetect 1`` command. In my case the address of the display
 was ``0x27``. You also need to provide the name of the I²C port expander that
 your board uses. It should be written on the microchip that's soldered on to
-your board. Supported port expanders are the ``PCF8574`` and the ``MCP23008``.
+your board. Supported port expanders are the ``PCF8574``, the ``MCP23008`` and
+the ``MCP23017``.
 
 .. sourcecode:: python
 
