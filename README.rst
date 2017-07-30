@@ -139,10 +139,6 @@ This code is licensed under the MIT license, see the `LICENSE file
 <https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
 <http://www.tldrlegal.com/license/mit-license>`_ for more information. 
 
-The module ``RPLCD/enum.py`` is (c) 2004-2013 by Barry Warsaw. It was
-distributed as part of the ``flufl.enum`` package under the LGPL License version
-3 or later.
-
 
 .. _charlcd: https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD
 .. _liquidcrystal: http://arduino.cc/en/Reference/LiquidCrystal

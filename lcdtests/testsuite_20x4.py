@@ -23,8 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-from RPLCD import Alignment, CursorMode, ShiftMode
-
 try:
     input = raw_input
 except NameError:
@@ -46,10 +44,10 @@ def run(lcd):
     lcd.backlight = True
     input('Display should be blank. ')
 
-    lcd.cursor_mode = CursorMode.blink
+    lcd.cursor_mode = 'blink'
     input('The cursor should now blink. ')
 
-    lcd.cursor_mode = CursorMode.line
+    lcd.cursor_mode = 'line'
     input('The cursor should now be a line. ')
 
     lcd.write_string('Hello world!')
@@ -73,14 +71,14 @@ def run(lcd):
     lcd.write_string('12345')
     input('The string should have a left offset of 5 characters. ')
 
-    lcd.write_shift_mode = ShiftMode.display
+    lcd.write_shift_mode = 'display'
     lcd.cursor_pos = (1, 5)
     lcd.write_string('12345')
     input('Both strings should now be at column 0. ')
 
-    lcd.write_shift_mode = ShiftMode.cursor
+    lcd.write_shift_mode = 'cursor'
     lcd.cursor_pos = (2, 5)
-    lcd.write_string(lcd.write_shift_mode.name)
+    lcd.write_string('cursor')
     input('The string "cursor" should now be on the third row, column 0. ')
 
     lcd.home()
@@ -104,11 +102,11 @@ def run(lcd):
     lcd.shift_display(-4)
     input('Shift should now be undone. ')
 
-    lcd.text_align_mode = Alignment.right
+    lcd.text_align_mode = 'right'
     lcd.write_string(' Spam')
     input('The word "Spam" should now be inverted. ')
 
-    lcd.text_align_mode = Alignment.left
+    lcd.text_align_mode = 'left'
     lcd.write_string(' Wurscht')
     input('The word "mapS" should now be replaced with "Wurscht". ')
 
@@ -125,7 +123,7 @@ def run(lcd):
     input('Text should nicely wrap around lines. ')
 
     lcd.clear()
-    lcd.cursor_mode = CursorMode.hide
+    lcd.cursor_mode = 'hide'
     lcd.write_string('Paris: 21°C\n\rZürich: 18°C')
     print('Text should now show "Paris: 21°C, Zürich: 18°C" without any encoding issues.', end='')
     input()

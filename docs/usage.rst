@@ -138,13 +138,11 @@ Changing the Cursor Appearance
 
 The cursor appearance can be changed by setting the
 :attr:`~RPLCD.i2c.CharLCD.cursor_mode` property to one of the following three
-:class:`~RPLCD.common.CursorMode` values:
+values:
 
-- :attr:`~RPLCD.common.CursorMode.hide` – No cursor will be displayed
-- :attr:`~RPLCD.common.CursorMode.line` – The cursor will be indicated with an
-  underline
-- :attr:`~RPLCD.common.CursorMode.blink` – The cursor will be indicated with a
-  blinking square
+- ``hide`` – No cursor will be displayed
+- ``line`` – The cursor will be indicated with an underline
+- ``blink`` – The cursor will be indicated with a blinking square
 
 
 Backlight Control
@@ -168,10 +166,9 @@ using a transistor and a pull-up resistor. Then connect the transistor to a GPIO
 pin and configure that pin using the ``pin_backlight`` parameter in the
 constructor. If you use an active high circuit instead of active low, you can
 change that behavior by setting the  ``backlight_mode`` to either
-:attr:`BacklightMode.active_high <RPLCD.common.BacklightMode.active_high>` or
-:attr:`BacklightMode.active_low <RPLCD.common.BacklightMode.active_low>`. Now
-you can toggle the :attr:`~RPLCD.gpio.CharLCD.backlight_enabled` property to
-turn the backlight on and off.
+``active_high`` or ``active_low``. Now you can toggle the
+:attr:`~RPLCD.gpio.CharLCD.backlight_enabled` property to turn the backlight on
+and off.
 
 
 Automatic Line Breaks

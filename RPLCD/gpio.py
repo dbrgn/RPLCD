@@ -36,7 +36,7 @@ PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight m
 
 class CharLCD(BaseCharLCD):
     def __init__(self, numbering_mode=None, pin_rs=None, pin_rw=None, pin_e=None, pins_data=None,
-                       pin_backlight=None, backlight_mode=c.BacklightMode.active_low,
+                       pin_backlight=None, backlight_mode='active_low',
                        backlight_enabled=True,
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
@@ -62,10 +62,10 @@ class CharLCD(BaseCharLCD):
         :param pin_backlight: Pin for controlling backlight on/off. Set this to
             ``None`` for no backlight control. Default: ``None``.
         :type pin_backlight: int
-        :param backlight_mode: Set this to one of the BacklightMode enum values
+        :param backlight_mode: Set this to either ``active_high`` or ``active_low``
             to configure the operating control for the backlight. Has no effect if
             pin_backlight is ``None``
-        :type backlight_mode: BacklightMode
+        :type backlight_mode: str
         :param backlight_enabled: Whether the backlight is enabled initially.
             Default: ``True``. Has no effect if pin_backlight is ``None``
         :type backlight_enabled: bool
@@ -157,7 +157,7 @@ class CharLCD(BaseCharLCD):
             raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
         self._backlight_enabled = value
         GPIO.output(self.pins.backlight,
-                    value ^ (self.backlight_mode is c.BacklightMode.active_low))
+                    value ^ (self.backlight_mode == 'active_low'))
 
     backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
             doc='Whether or not to turn on the backlight.')
