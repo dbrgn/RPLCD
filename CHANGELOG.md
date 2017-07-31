@@ -20,7 +20,7 @@ arguments to `CharLCD` were removed).
 If you notice any documentation that hasn't been updated yet to the newer API,
 please let us know!
 
-- [add] Support for `MCP23008` and `MCP23014^ I²C port expanders (#43, #59)
+- [add] Support for `MCP23008` and `MCP23014` I²C port expanders (#43, #59)
 - [add] Add `RPLCD.__version__` attribute
 - [fix] Fix bug in auto linebreak algorithm (#53)
 - [fix] Fix bugs in show_charmap script (#52)
@@ -38,7 +38,7 @@ please let us know!
 
 This version can be considered the release candidate for the 1.0 release.
 
-- [add] Support for i2c port expanders (#20)
+- [add] Support for `PCF8574` i2c port expander (#20)
 - [add] Implement proper automatic encoding of unicode strings,
         add encoding tables for A00 and A02 character maps (#40)
 - [add] Implement convenience functions for CR/LF (#45) 
