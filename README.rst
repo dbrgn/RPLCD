@@ -36,8 +36,36 @@ preinstalled on Raspbian) are needed to use this library.
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo-i2c.jpg
     :alt: Photo of 20x4 LCD in action
 
+Python 3 Setup (recommended)
+=====
+Install PIP for Python 3 (If you haven't already)
 
-Setup
+   $ sudo apt-get install python3-pip
+   
+Install RPLCD directly from `PyPI
+<https://pypi.python.org/pypi/RPLCD/>`_ using pip::
+
+    $ sudo pip3 install RPLCD
+
+If you want to use I2C, you also need smbus::
+
+    $ sudo apt install python3-smbus
+
+You can also install the library manually without pip3. Either just copy the
+scripts to your working directory and import them, or download the repository
+and run ``python setup.py install`` to install it into your Python package
+directory.
+python3-smbus
+
+Download the lcdtest.py script
+
+   $ wget https://github.com/dbrgn/RPLCD/blob/master/lcdtest.py
+
+Run the lcdtest.py script to test your lcd, this is an example with the origional pi 1 using port 0, and using a 20x4 LCD display.
+
+   $ sudo python3 lcdtest.py i2c testsuite expander=PCF8574 port=0 cols=20 rows=4 addr=0x27
+
+Python 2 Setup
 =====
 
 You can install RPLCD directly from `PyPI
