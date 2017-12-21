@@ -33,6 +33,9 @@ Arduino's LiquidCrystal_ library.
 No external dependencies (except the ``RPi.GPIO`` library, which comes
 preinstalled on Raspbian) are needed to use this library.
 
+If you're trying to get started with RPLCD, you should probably `read the docs
+<#documentation>`__ :)
+
 .. image:: https://raw.github.com/dbrgn/RPLCD/master/photo-i2c.jpg
     :alt: Photo of 20x4 LCD in action
 
