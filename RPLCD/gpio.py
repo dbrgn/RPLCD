@@ -139,7 +139,11 @@ class CharLCD(BaseCharLCD):
             GPIO.output(self.pins.rw, 0)
 
     def _close_connection(self):
-        GPIO.cleanup()
+        pins = (self.pins.rs, self.pins.rw, self.pins.e, self.pins.d0, self.pins.d1,
+                self.pins.d2, self.pins.d3, self.pins.d4, self.pins.d5, self.pins.d6,
+                self.pins.d7)
+        active_pins = [pin for pin in pins if pin is not None]
+        GPIO.cleanup(active_pins)
 
     # Properties
 
