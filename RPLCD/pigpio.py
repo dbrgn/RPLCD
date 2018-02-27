@@ -295,14 +295,14 @@ class CharLCD(BaseCharLCD):
 
         # Assemble the parameters sent to the pigpio script
         params = [mode]
-        params.extend([(value >> i) & 0x01 for i in range(8)]
+        params.extend([(value >> i) & 0x01 for i in range(8)])
         # Switch off pigpio's exceptions, so that we get the return codes
         pigpio.exceptions = False
         while True:
             ret = self.pi.run_script(self._writescript, params)
             if ret >= 0:
                 break
-            elif ret != pigpio.PI_SCRIPT_NOT_READY
+            elif ret != pigpio.PI_SCRIPT_NOT_READY:
                 raise pigpio.error(pigpio.error_text(ret))
             # If pigpio script is not ready, sleep and try again
             c.usleep(1)
