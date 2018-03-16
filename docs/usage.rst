@@ -170,6 +170,46 @@ change that behavior by setting the  ``backlight_mode`` to either
 :attr:`~RPLCD.gpio.CharLCD.backlight_enabled` property to turn the backlight on
 and off.
 
+pigpio
+~~~~~~
+
+When using the ``pigpio`` library, it is also possible to control the backlight
+with PWM.
+
+The API is compatible to the backlight control of I²C and GPIO explained above,
+but the :attr:`~RPLCD.pigpio.CharLCD.backlight_enabled` property (and parameter)
+now also accepts a value between ``0`` and ``1`` as a backlight level (``0`` or
+``False`` turns the backlight off, ``1`` or ``True`` turns it on). The perceived
+brightness of the backlight should roughly correspond to the given value.
+
+The PWM dimming of the backlight has to be enabled explicitly by setting the
+``backlight_pwm`` parameter to ``True`` during initialization of
+:class:`~RPLCD.pigpio.CharLCD`. If this parameter is ``False`` (the default
+value), the interface only switches the backlight on and off. If this parameter
+is a number, dimming of the backlight is enabled and the value is interpreted
+as the PWM frequency in Hertz.
+
+
+Contrast Control
+================
+
+This is currently only possible with the pigpio backend.
+
+pigpio
+~~~~~~
+
+The API is similar to that controlling the backlight. The ``pin_contrast``
+specifies the pin connected to the LCDs contrast input. The ``contrast_mode``
+can be ``active_high`` or ``active_low`` and the ``contrast_pwm`` sets the PWM
+frequency.
+
+The :attr:`~RPLCD.pigpio.CharLCD.contrast` property sets the contrast level. It
+should be a value between ``0`` and ``1``. It is also recognized as a parameter
+to :class:`~RPLCD.pigpio.CharLCD` to set the initial contrast level.
+
+If you don't set the ``pin_contrast`` parameter, the contrast control stays
+disabled.
+
 
 Automatic Line Breaks
 =====================

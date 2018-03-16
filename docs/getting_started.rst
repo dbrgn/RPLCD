@@ -62,6 +62,20 @@ the `Adafruit tutorial
 <https://learn.adafruit.com/character-lcds/wiring-a-character-lcd>`_ to learn
 how to wire up these circuits.
 
+Via pigpio
+~~~~~~~~~~
+
+If you decide to use the ``pigpio`` library to control the LCD, follow the
+instructions set out above. Please keep in mind that the ``pigpio`` can only
+use the BOARD numbering scheme.
+
+The advantage of using the ``pigpio`` library is that you could control the
+backlight and contrast via PWM. You could also run the program on one computer
+(there is no need for this computer to be a Raspberry Pi) and control a LCD on
+any Raspberry Pi because ``pigpio`` follows a server-client approach. The
+disadvantage is, that it might be a bit slower when updating compared to using
+the GPIO library.
+
 
 Initializing the LCD
 ====================
@@ -127,6 +141,47 @@ change the corresponding parameters. Here's a full example:
 
     lcd = CharLCD(pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   numbering_mode=GPIO.BOARD,
+                  cols=20, rows=4, dotsize=8,
+                  charmap='A02',
+                  auto_linebreaks=True)
+
+Setup: pigpio
+~~~~~~~~~~~~~
+
+First, import the the pigpio and RPLCD libraries from your Python script.
+
+.. sourcecode:: python
+
+    import pigpio
+    from RPLCD.pigpio import CharLCD
+
+Then create a connection to the pigpio daemon
+
+.. sourcecode:: python
+
+    pi = pigpio.pi()
+
+and create a new instance of the :class:`~RPLCD.pigpio.CharLCD` class. If you
+have a 20x4 LCD, you must at least specify the previously initiated pigpio
+connection and the pins you used:
+
+.. sourcecode:: python
+
+    lcd = CharLCD(pi,
+                  pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24])
+
+If you want to customize the way the LCD is instantiated (e.g. by changing the
+pin configuration or the number of columns and rows on your display), you can
+change the corresponding parameters. Here's a full example:
+
+.. sourcecode:: python
+
+    import pigpio
+    from RPLCD.pigpio import CharLCD
+
+    pi = pigpio.pi()
+    lcd = CharLCD(pi,
+                  pin_rs=15, pin_rw=18, pin_e=16, pins_data=[21, 22, 23, 24],
                   cols=20, rows=4, dotsize=8,
                   charmap='A02',
                   auto_linebreaks=True)
