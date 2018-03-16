@@ -261,7 +261,7 @@ if __name__ == '__main__':
         pins_data = [int(pin) for pin in pins_data]
         lcd = pigpio.CharLCD(pi,
                              pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
-                             numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
+                             cols=cols, rows=rows, charmap=charmap)
     else:
         print_usage('Connection type %s is not supported. Must be either i2c, gpio or pigpio' %
                     lcdmode)
