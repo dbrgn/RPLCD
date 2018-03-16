@@ -192,7 +192,8 @@ class CharLCD(BaseCharLCD):
         # pigpio script to write data to the LCD
         piscript = ['write {pin.rs} p0']        # Choose instruction or data mode
         if self.pins.rw is not None:
-            piscript.append('write {pin.rw} 0') # If the RW pin is used, set it to low
+            # If the RW pin is used, set it to low
+            piscript.append('write {pin.rw} 0')
         if self.data_bus_mode == c.LCD_8BITMODE:
             # Script to write 8 bits of data into the data bus.
             piscript.extend(                # Write data in 1 chunk of 8 bits
@@ -247,15 +248,20 @@ class CharLCD(BaseCharLCD):
             raise ValueError('You did not configure a GPIO pin for backlight control!')
         if self.backlight_pwm:
             if not ((0 <= value <= 1) or isinstance(value, bool)):
-                raise ValueError('backlight_enabled must be set to a value between 0 and 1 or to ``True`` or ``False``, if PWM is enabled; got {}'.format(value))
+                raise ValueError(
+                        'backlight_enabled must be set to a value '
+                        'between 0 and 1 or to ``True`` or ``False``, '
+                        'if PWM is enabled; got {}'.format(value))
         else:
             if not isinstance(value, bool):
-                raise ValueError('backlight_enabled must be set to ``True`` or ``False``, if PWM is not enabled; got: {}'.format(value))
+                raise ValueError(
+                        'backlight_enabled must be set to ``True`` or ``False``, '
+                        'if PWM is not enabled; got: {}'.format(value))
         self._backlight_enabled = value
         if self.backlight_pwm:
             # Convert perceived brightness (as requested by `value`) to duty
             # cycle (see comment above definition of PWM):
-            dc = 2**(value/PWM)-1
+            dc = 2**(value / PWM) - 1
             if self.backlight_mode == 'active_low':
                 dc = 255 - dc
             self.pi.set_PWM_dutycycle(self.pins.backlight, round(dc))
