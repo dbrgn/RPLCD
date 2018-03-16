@@ -263,7 +263,8 @@ if __name__ == '__main__':
                              pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
                              numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
     else:
-        print_usage('Connection type %s is not supported. Must be either i2c, gpio or pigpio' % lcdmode)
+        print_usage('Connection type %s is not supported. Must be either i2c, gpio or pigpio' %
+                    lcdmode)
 
     # Run selected test
     if test == 'show_charmap':
