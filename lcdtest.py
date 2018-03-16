@@ -25,10 +25,6 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 import sys
 
-import RPi.GPIO as GPIO
-
-from RPLCD import i2c, gpio
-
 # Import supported tests
 import lcdtests.show_charmap as show_charmap
 import lcdtests.testsuite_20x4 as testsuite_20x4
@@ -42,6 +38,7 @@ no_default = object()
 def print_usage(error=None):
     print('Usage: %s i2c <test> <options>' % sys.argv[0])
     print('       %s gpio <test> <options>' % sys.argv[0])
+    print('       %s pigpio <text> <options>' % sys.argv[0])
     print('')
     print('<test> Which test to run:')
     print('')
@@ -98,11 +95,43 @@ def print_usage(error=None):
         print('')
         print(sys.argv[0] + ' gpio testsuite cols=20 rows=4 mode=BCM rs=15 rw=None e=16 '
               'bl=None data=21,22,23,24 charmap=A00')
+    # Options for PIGPIO mode
+    elif ((len(sys.argv) > 1) and (sys.argv[1] == 'pigpio')):
+
+        print('<options> pigpio options:')
+        print('')
+        print('   host    - Host name of the Pi on which the pigpio daemon is running.')
+        print('             Default: $PIGPIO_ADDR or localhost')
+        print('   port    - Port number on which the pigpio daemon is listening.')
+        print('             Default: $PIGPIO_PORT or 8888')
+        print('   cols    - The number of columns on your LCD, e.g. 16')
+        print('   rows    - The number of rows on your LCD, e.g. 2')
+        print('   rs      - RS pin number')
+        print('   rw      - RW pin number. Default: None')
+        print('   e       - E pin number')
+        print('   bl      - Backlight pin number. Default: None')
+        print('   data    - Data (d0-d7) gpio pin numbers, 4 or 8 numbers depending')
+        print('             on if you want 4 or 8 bit mode, separated by commas.')
+        print('             Example: data=1,2,3,4,5,6,7,8 (for 8-bit mode)')
+        print('                      data=5,6,7,8 (for 4-bit mode)')
+        print('   charmap - Which character map to use. Either A00 or A02. If your display')
+        print('             contains Japanese characters, it probably uses the A00 charmap,')
+        print('             otherwise A02. Default: A00')
+        print('')
+        print('Note:')
+        print('')
+        print('Please start the pigpio daemon before running the tests.')
+        print('')
+        print('Example:')
+        print('')
+        print(sys.argv[0] + ' pigpio testsuite cols=20 rows=4 rs=15 rw=None e=16 '
+              'bl=None data=21,22,23,24 charmap=A00')
     else:
         print('<options> For info about options run:')
         print('')
         print('   %s i2c' % sys.argv[0])
         print('   %s gpio' % sys.argv[0])
+        print('   %s pigpio' % sys.argv[0])
         print('')
     if error is not None:
         print('\nError: ' + error)
@@ -151,6 +180,9 @@ if __name__ == '__main__':
     rows = int(options_pop('rows'))
     charmap = options_pop('charmap', 'A00')
     if lcdmode == 'i2c':
+
+        from RPLCD import i2c
+
         if len(sys.argv) < 5:
             print_usage()
 
@@ -165,6 +197,10 @@ if __name__ == '__main__':
             print_usage('IOError: Usually caused by the wrong i2c address/port '
                         'or device not connected properly')
     elif lcdmode == 'gpio':
+
+        import RPi.GPIO as GPIO
+        from RPLCD import gpio
+
         if len(sys.argv) < 8:
             print_usage()
 
@@ -192,8 +228,42 @@ if __name__ == '__main__':
         pins_data = [int(pin) for pin in pins_data]
         lcd = gpio.CharLCD(pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
                            numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
+    elif lcdmode == 'pigpio':
+
+        from pigpio import pi
+        from RPLCD import pigpio
+
+        if len(sys.argv) < 7:
+            print_usage()
+
+        # pigpio options
+        host = options_pop('host')
+        port = options_pop('port')
+        if host == 'None':
+            pi = pi()
+        elif port == 'None':
+            pi = pi(host)
+        else:
+            pi = pi(host, port)
+
+        data = options_pop('data')
+        rs = int(options_pop('rs'))
+        e = int(options_pop('e'))
+        rw = options_pop('rw', 'None')
+        rw = None if rw == 'None' else int(rw)
+        bl = options_pop('bl', 'None')
+        bl = None if bl == 'None' else int(bl)
+
+        # Parse data pins into a list
+        pins_data = {}
+        pins_data = data.split(',')
+        # Convert data pins to int
+        pins_data = [int(pin) for pin in pins_data]
+        lcd = pigpio.CharLCD(pi,
+                             pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
+                             numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
     else:
-        print_usage('Connection type %s is not supported. Must be either i2c or gpio' % lcdmode)
+        print_usage('Connection type %s is not supported. Must be either i2c, gpio or pigpio' % lcdmode)
 
     # Run selected test
     if test == 'show_charmap':
