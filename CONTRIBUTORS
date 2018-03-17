@@ -9,3 +9,4 @@ Contributors
 - @rameshg87 (wiring docs)
 - @thijstriemstra (fixes to README and setup.py)
 - @GoranLundberg (support for MCP23008 and MCP23017 I²C port expander)
+- @sphh (support for pigpio backend)
