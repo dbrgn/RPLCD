@@ -67,7 +67,7 @@ Via pigpio
 
 If you decide to use the ``pigpio`` library to control the LCD, follow the
 instructions set out above. Please keep in mind that the ``pigpio`` can only
-use the BOARD numbering scheme.
+use the BCM numbering scheme.
 
 The advantage of using the ``pigpio`` library is that you could control the
 backlight and contrast via PWM. You could also run the program on one computer
