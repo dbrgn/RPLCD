@@ -92,7 +92,9 @@ class CharLCD(BaseCharLCD):
             self.numbering_mode = numbering_mode
         else:
             raise ValueError('Invalid GPIO numbering mode: numbering_mode=%s, '
-                             'must be either GPIO.BOARD or GPIO.BCM' % numbering_mode)
+                             'must be either GPIO.BOARD or GPIO.BCM.\n'
+                             'See https://gist.github.com/dbrgn/77d984a822bfc9fddc844f67016d0f7e '
+                             'for more details.' % numbering_mode)
         if pin_rs is None:
             raise ValueError('pin_rs is not defined.')
         if pin_e is None:
