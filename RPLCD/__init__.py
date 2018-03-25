@@ -1,14 +1,14 @@
 import warnings
 
-from .contextmanagers import cursor, cleared
-from .gpio import CharLCD as GpioCharLCD
+from .contextmanagers import cursor, cleared  # noqa
 
 
 __version__ = '1.0.0'
 
 
-class CharLCD(GpioCharLCD):
-    def __init__(self, *args, **kwargs):
+class CharLCD:
+    def __new__(cls, *args, **kwargs):
+        from .gpio import CharLCD as GpioCharLCD
         warnings.warn("Using RPLCD.CharLCD directly is deprecated. " +
                       "Use RPLCD.gpio.CharLCD instead!", DeprecationWarning)
-        super(CharLCD, self).__init__(*args, **kwargs)
+        return GpioCharLCD(*args, **kwargs)
