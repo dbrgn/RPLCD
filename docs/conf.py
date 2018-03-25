@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RPLCD'
-copyright = '2013-2017, Danilo Bargen'
+copyright = '2013-2018, Danilo Bargen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2017 Danilo Bargen
+Copyright (C) 2013-2018 Danilo Bargen
 Copyright (C) 2018 Stephan Helma
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
