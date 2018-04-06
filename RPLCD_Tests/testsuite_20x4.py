@@ -160,5 +160,4 @@ def run(lcd):
 
 
 if __name__ == '__main__':
-
-    print('This is a submodule of lcdtest.py, please run it instead.')
+    print('This is a submodule of `rplcd-tests`, please run it instead.')

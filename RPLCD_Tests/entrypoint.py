@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Copyright (C) 2013-2018 Danilo Bargen
@@ -26,9 +25,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import sys
 
 # Import supported tests
-import lcdtests.show_charmap as show_charmap
-import lcdtests.testsuite_20x4 as testsuite_20x4
-import lcdtests.testsuite_16x2 as testsuite_16x2
+from . import show_charmap, testsuite_20x4, testsuite_16x2
 
 # Globals
 options = {}
@@ -162,7 +159,7 @@ def options_pop(value, default=no_default):
     return return_value
 
 
-if __name__ == '__main__':
+def run():
     if len(sys.argv) < 3:
         print_usage()
 

@@ -105,7 +105,7 @@ Testing
 Interactive Test Script
 -----------------------
 
-To test your LCD, please run the ``lcdtest.py`` script with the ``testsuite``
+To test your LCD, please run the ``rplcd-tests`` script with the ``testsuite``
 target.
 
 Unit Tests
