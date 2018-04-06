@@ -11,6 +11,17 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.1.0 (2018-04-07)
+
+This release primarily includes the pigpio backend (thanks @sphh!) and a few
+small improvements. Among other things, you can now use the I²C backend without
+having the `RPi.GPIO` library installed!
+
+- [add] Add pigpio backend (#77)
+- [chg] Limit GPIO cleanup to active pins (#72)
+- [chg] Add better help regarding missing `numbering_mode` (#80)
+- [chg] Late-import of GPIO backend in compatibility wrapper (#78)
+
 ### v1.0.0 (2017-07-30)
 
 This is the first release that can be considered stable. It involves some API
