@@ -22,17 +22,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-from smbus import SMBus
+from machine import I2C
 
 from . import common as c
-from .i2c_common import (
-    PCF8574_BACKLIGHT, PCF8574_NOBACKLIGHT,
-    PCF8574_E,
-    MCP230XX_BACKLIGHT, MCP230XX_NOBACKLIGHT,
-    MCP230XX_RS, MCP230XX_E, MCP230XX_DATAMASK, MCP230XX_DATASHIFT,
-    MCP23008_IODIR, MCP23008_GPIO,
-    MCP23017_IODIRA, MCP23017_IODIRB, MCP23017_GPIOA, MCP23017_GPIOB,
-)
 from .lcd import BaseCharLCD
 
 
