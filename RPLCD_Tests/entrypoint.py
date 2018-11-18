@@ -167,6 +167,7 @@ def run():
     test = sys.argv[2]
 
     # Parse options into a dictionary
+    global options
     try:
         options = dict([arg.split('=', 1) for arg in sys.argv[3:]])
     except ValueError:
