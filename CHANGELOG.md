@@ -11,6 +11,17 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.2.0 (2018-11-27)
+
+This release adds support for the pure-python `smbus2` library as an automatic
+fallback for `smbus` (thanks @joscha) and fixes an issue with the testsuite
+(thanks @bazooka07). Last but not least, the `rplcd-tests` script should now be
+included as a console script when packaging RPLCD.
+
+- [add] Support smbus2 as drop-in replacement for I2C access (#90)
+- [fix] Fix missing global modifier in tests (#88)
+- [chg] Bundle test script when packaging (#82)
+
 ### v1.1.0 (2018-04-07)
 
 This release primarily includes the pigpio backend (thanks @sphh!) and a few
