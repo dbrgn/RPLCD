@@ -50,12 +50,10 @@ You can install RPLCD directly from `PyPI
 
     $ sudo pip install RPLCD
 
-If you want to use I²C, you also need smbus::
+If you want to use I²C, you also need either the smbus or `smbus2 <https://pypi.org/project/smbus2/>`_ library::
 
     $ sudo apt install python-smbus
-
-or alternatively `smbus2<https://pypi.org/project/smbus2/>`_::
-
+    or
     $ sudo pip install smbus2
 
 RPLCD will first try to use smbus if available and if not, fall back to smbus2.
@@ -80,7 +78,7 @@ Implemented
 - Built-in support for `A00` and `A02` character tables
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
-- No external dependencies (except `RPi.GPIO`, and `python-smbus` if you need
+- No external dependencies (except `RPi.GPIO`, and `python-smbus` or `smbus2` if you need
   I²C support)
 
 Wishlist
