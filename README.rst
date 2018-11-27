@@ -54,6 +54,12 @@ If you want to use I²C, you also need smbus::
 
     $ sudo apt install python-smbus
 
+or alternatively `smbus2<https://pypi.org/project/smbus2/>`_::
+
+    $ sudo pip install smbus2
+
+RPLCD will first try to use smbus if available and if not, fall back to smbus2.
+
 You can also install the library manually without pip. Either just copy the
 scripts to your working directory and import them, or download the repository
 and run ``python setup.py install`` to install it into your Python package
