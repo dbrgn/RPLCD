@@ -32,7 +32,7 @@ Arduino's LiquidCrystal_ library.
 
 For GPIO mode, no external dependencies (except the ``RPi.GPIO`` library, which
 comes preinstalled on Raspbian) are needed to use this library. If you want to
-control LCDs via I²C, then you also need the ``python-smbus`` library. If you
+control LCDs via I²C, then you also need the ``python-smbus`` or ``smbus2`` library. If you
 want to control the LCD with ``pigpio``, you have to install the pigpio_ library.
 
 If you're trying to get started with RPLCD, you should probably `read the docs
@@ -50,9 +50,13 @@ You can install RPLCD directly from `PyPI
 
     $ sudo pip install RPLCD
 
-If you want to use I²C, you also need smbus::
+If you want to use I²C, you also need either the smbus or `smbus2 <https://pypi.org/project/smbus2/>`_ library::
 
     $ sudo apt install python-smbus
+    or
+    $ sudo pip install smbus2
+
+RPLCD will first try to use smbus if available and if not, fall back to smbus2.
 
 You can also install the library manually without pip. Either just copy the
 scripts to your working directory and import them, or download the repository
@@ -74,7 +78,7 @@ Implemented
 - Built-in support for `A00` and `A02` character tables
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
-- No external dependencies (except `RPi.GPIO`, and `python-smbus` if you need
+- No external dependencies (except `RPi.GPIO`, and `python-smbus` or `smbus2` if you need
   I²C support)
 
 Wishlist

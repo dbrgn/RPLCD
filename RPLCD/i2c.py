@@ -22,7 +22,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from __future__ import print_function, division, absolute_import, unicode_literals
 
-from smbus import SMBus
+
+try:
+    from smbus import SMBus
+except ImportError:
+    from smbus2 import SMBus
 
 from . import common as c
 from .lcd import BaseCharLCD
