@@ -32,7 +32,7 @@ Arduino's LiquidCrystal_ library.
 
 For GPIO mode, no external dependencies (except the ``RPi.GPIO`` library, which
 comes preinstalled on Raspbian) are needed to use this library. If you want to
-control LCDs via I²C, then you also need the ``python-smbus`` library. If you
+control LCDs via I²C, then you also need the ``python-smbus`` or ``smbus2`` library. If you
 want to control the LCD with ``pigpio``, you have to install the pigpio_ library.
 
 If you're trying to get started with RPLCD, you should probably `read the docs
