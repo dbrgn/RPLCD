@@ -42,4 +42,6 @@ docs/*.pdf
 
 # Python
 VIRTUAL/
+VENV/
 .cache/
+.mypy_cache/
