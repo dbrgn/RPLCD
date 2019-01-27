@@ -186,6 +186,10 @@ change the corresponding parameters. Here's a full example:
                   charmap='A02',
                   auto_linebreaks=True)
 
+If you've been experiencing `issues <https://github.com/dbrgn/RPLCD/issues/70>`_
+with garbled text occasionally on initialization of the display, try setting
+the parameter ``legacy_mode=True``.
+
 Writing Data
 ~~~~~~~~~~~~
 
