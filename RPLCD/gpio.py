@@ -37,7 +37,7 @@ else:
     from time import perf_counter as now
 
 # Duration to rate-limit calls to _send
-LEGACY_MODE_WAIT_TIME = 0.001
+COMPAT_MODE_WAIT_TIME = 0.001
 
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 
@@ -49,7 +49,7 @@ class CharLCD(BaseCharLCD):
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
                        auto_linebreaks=True,
-                       legacy_mode=False):
+                       compat_mode=False):
         """
         Character LCD controller.
 
@@ -94,14 +94,14 @@ class CharLCD(BaseCharLCD):
         :param auto_linebreaks: Whether or not to automatically insert line
             breaks. Default: ``True``.
         :type auto_linebreaks: bool
-        :param legacy_mode: Whether to run additional checks to support older LCDs
+        :param compat_mode: Whether to run additional checks to support older LCDs
             that may not run at the reference clock (or keep up with it).
-        :type legacy_mode: bool
+        :type compat_mode: bool
 
         """
-        # Configure legacy mode
-        self.legacy_mode = legacy_mode
-        if legacy_mode:
+        # Configure compatibility mode
+        self.compat_mode = compat_mode
+        if compat_mode:
             self.last_send_event = now()
 
         # Set attributes
@@ -190,8 +190,8 @@ class CharLCD(BaseCharLCD):
     def _send(self, value, mode):
         """Send the specified value to the display with automatic 4bit / 8bit
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
-        # Wait, if legacy mode is enabled
-        if self.legacy_mode:
+        # Wait, if compatibility mode is enabled
+        if self.compat_mode:
             self._wait()
 
         # Choose instruction or data mode
@@ -209,7 +209,7 @@ class CharLCD(BaseCharLCD):
             self._write4bits(value)
 
         # Record the time for the tail-end of the last send event
-        if self.legacy_mode:
+        if self.compat_mode:
             self.last_send_event = now()
 
     def _send_data(self, value):
@@ -245,6 +245,6 @@ class CharLCD(BaseCharLCD):
 
     def _wait(self):
         """Rate limit the number of send events."""
-        end = self.last_send_event + LEGACY_MODE_WAIT_TIME
+        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
         while now() < end:
             pass
