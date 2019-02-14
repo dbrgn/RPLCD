@@ -3,7 +3,7 @@ import warnings
 from .contextmanagers import cursor, cleared  # noqa
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 class CharLCD:

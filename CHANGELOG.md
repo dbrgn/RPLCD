@@ -11,6 +11,21 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.2.1 (2019-02-14)
+
+Older LCDs (or LCDs that are based off the HD44780) aren't all made equal. It
+appears that some don't run at the reference clock, and as such, they're in a
+busy state far more often than newer or better ones; this leads to missed
+sends.
+
+This release contains a new compatibility mode that increases wait times during
+writes. This should fix issues with occasionally garbled display contents. To
+enable it, pass `compat_mode=True` to the `CharLCD` constructor.
+
+Thanks @lcheng1 for the fix and @albedozero for testing it!
+
+- [fix] Add compatibility mode (#91, #70)
+
 ### v1.2.0 (2018-11-27)
 
 This release adds support for the pure-python `smbus2` library as an automatic
