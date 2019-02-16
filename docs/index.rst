@@ -60,6 +60,7 @@ Contents
    installation.rst
    getting_started.rst
    usage.rst
+   troubleshooting.rst
    api.rst
 
 
