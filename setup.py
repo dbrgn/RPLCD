@@ -13,7 +13,7 @@ setup(name='RPLCD',
       url='https://github.com/dbrgn/RPLCD',
       license='MIT',
       keywords='raspberry, raspberry pi, lcd, liquid crystal, hitachi, hd44780',
-      packages=['RPLCD', 'RPLCD_Tests'],
+      packages=['RPLCD', 'RPLCD.codecs', 'RPLCD_Tests'],
       entry_points={
           'console_scripts': ['rplcd-tests=RPLCD_Tests.entrypoint:run'],
       },
