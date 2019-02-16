@@ -11,6 +11,11 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.2.2 (2019-02-16)
+
+- [fix] Fix pakaging bug that would result in the error message `ImportError:
+        cannot import name 'codecs'` (#92)
+
 ### v1.2.1 (2019-02-14)
 
 Older LCDs (or LCDs that are based off the HD44780) aren't all made equal. It
