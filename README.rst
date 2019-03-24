@@ -134,11 +134,22 @@ Coding Guidelines
     flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
 
 
+About HD44780
+=============
+
+The HD44780 LCD controller is a controller chip for driving alphanumeric LCD displays. Though it's
+not manufactured anymore there are a lot of compatible chips / clones of it e.g. the ST7066 or the
+KS0066. Displays sold with 'HD44780' in its name today typically are built with one of those 
+clones, though they all look the from the outside most of the time (like in the image at the 
+start of this README). 
+
+
 Resources
 =========
 
 - TC2004A-01 Data Sheet: http://www.adafruit.com/datasheets/TC2004A-01.pdf
 - HD44780U Data Sheet: http://www.adafruit.com/datasheets/HD44780.pdf
+- ST7066 Data Sheet: https://www.sparkfun.com/datasheets/LCD/st7066.pdf
 
 
 License
