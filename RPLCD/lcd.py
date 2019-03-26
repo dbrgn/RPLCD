@@ -52,7 +52,7 @@ class BaseCharLCD(object):
                 Allowed: 8 or 10. Default: 8.
             charmap:
                 The character map used. Depends on your LCD. This must be
-                either ``A00`` or ``A02``.  Default: ``A02``.
+                either ``A00`` or ``A02`` or ``ST0B``.  Default: ``A02``.
             auto_linebreaks:
                 Whether or not to automatically insert line breaks.
                 Default: True.
@@ -66,8 +66,12 @@ class BaseCharLCD(object):
         elif charmap == 'A02':
             self.codec = codecs.A02Codec()
             pass
+        elif charmap == 'ST0B':
+            self.codec = codecs.ST0BCodec()
+            pass
         else:
-            raise ValueError('The ``charmap`` argument must be either ``A00`` or ``A02``')
+            raise ValueError(
+                'The ``charmap`` argument must be either ``A00`` or ``A02`` or ``ST0B``')
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)

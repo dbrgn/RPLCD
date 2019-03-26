@@ -64,6 +64,8 @@ RPLCD supports the two most commonly used character maps for HD44780 style
 displays: A00 and A02. You can find them on pages 17 and 18 of `the datasheet
 <https://www.sparkfun.com/datasheets/LCD/HD44780.pdf>`_.
 
+Additionally it supports the character map 0B of the ST7066 controller chip.
+
 The default character map is ``A02``. If you find that some of the characters
 you are writing to the display turn out wrong, then try using the ``A00``
 character map:
@@ -73,7 +75,7 @@ character map:
     lcd = CharLCD(..., charmap='A00')
 
 As a rule of thumb, if your display can show Japanese characters, it uses
-``A00``, otherwise ``A02``. To show the entire character map on your LCD, you
+``A00``, otherwise ``A02`` or ``ST0B``. To show the entire character map on your LCD, you
 can use the ``show_charmap`` target of the ``rplcd-tests`` script.
 
 Should you run into the situation that your character map does not seem to match

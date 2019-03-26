@@ -2,7 +2,7 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 from ..common import sliding_window
-from . import hd44780_a00, hd44780_a02
+from . import hd44780_a00, hd44780_a02, st7066_0b
 
 
 # Constants used to encode special characters.
@@ -28,7 +28,8 @@ class Codec(object):
 
     def encode(self, input_):  # type: (str) -> List[int]
         result = []
-        window_iter = sliding_window(input_, self.codec.combined_chars_lookahead)
+        window_iter = sliding_window(
+            input_, self.codec.combined_chars_lookahead)
         while True:
             try:
                 window = next(window_iter)
@@ -62,7 +63,8 @@ class Codec(object):
                 continue
 
             # Otherwise, do a regular lookup in the encoding table
-            result.append(self.codec.encoding_table.get(char, self.codec.replacement_char))
+            result.append(self.codec.encoding_table.get(
+                char, self.codec.replacement_char))
 
         return result
 
@@ -75,3 +77,8 @@ class A00Codec(Codec):
 class A02Codec(Codec):
     def __init__(self):
         super(A02Codec, self).__init__(hd44780_a02)
+
+
+class ST0BCodec(Codec):
+    def __init__(self):
+        super(ST0BCodec, self).__init__(st7066_0b)

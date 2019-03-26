@@ -75,7 +75,8 @@ Implemented
 - Support for both parallel (GPIO) and I²C connection
 - Support for custom characters
 - Support for backlight control circuits
-- Built-in support for `A00` and `A02` character tables
+- Built-in support for `A00`, `A02` (standard HD44780)
+  or `ST0B` (see ST7066_, page 11) character tables
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies (except `RPi.GPIO`, and `python-smbus` or `smbus2` if you need
@@ -134,11 +135,22 @@ Coding Guidelines
     flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
 
 
+About HD44780
+=============
+
+The HD44780 LCD controller is a controller chip for driving alphanumeric LCD displays. Though it's
+not manufactured anymore there are a lot of compatible chips / clones of it e.g. the ST7066 or the
+KS0066. Displays sold with 'HD44780' in its name today typically are built with one of those 
+clones, though they all look the same from the outside most of the time (like in the image at the 
+start of this README). 
+
+
 Resources
 =========
 
 - TC2004A-01 Data Sheet: http://www.adafruit.com/datasheets/TC2004A-01.pdf
 - HD44780U Data Sheet: http://www.adafruit.com/datasheets/HD44780.pdf
+- ST7066 Data Sheet: https://www.sparkfun.com/datasheets/LCD/st7066.pdf
 
 
 License
@@ -152,3 +164,4 @@ This code is licensed under the MIT license, see the `LICENSE file
 .. _charlcd: https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_CharLCD
 .. _liquidcrystal: http://arduino.cc/en/Reference/LiquidCrystal
 .. _pigpio: http://abyz.me.uk/rpi/pigpio/
+.. _st7066: https://www.sparkfun.com/datasheets/LCD/st7066.pdf

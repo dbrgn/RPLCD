@@ -31,7 +31,7 @@ Features
 - Support for backlight control circuits (including PWM dimming when using the
   ``pigpio`` backend)
 - Support for contrast control (when using the ``pigpio`` backend)
-- Built-in support for ``A00`` and ``A02`` character tables
+- Built-in support for ``A00`` and ``A02`` and ``ST0B`` character tables
 - Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies (except ``RPi.GPIO``, and ``python-smbus`` if you need

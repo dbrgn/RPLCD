@@ -113,7 +113,7 @@ class CharLCD(BaseCharLCD):
             Allowed: ``8`` or ``10``. Default: ``8``.
         :type dotsize: int
         :param charmap: The character map used. Depends on your LCD. This must
-            be either ``A00`` or ``A02``. Default: ``A02``.
+            be either ``A00`` or ``A02`` or ``ST0B``. Default: ``A02``.
         :type charmap: str
         :param auto_linebreaks: Whether or not to automatically insert line
             breaks. Default: ``True``.
