@@ -31,6 +31,11 @@ from . import common as c
 from .lcd import BaseCharLCD
 from .compat import range
 
+import sys
+if sys.version_info.major < 3:
+    from time import clock as now
+else:
+    from time import perf_counter as now
 
 # https://diarmuid.ie/blog/pwm-exponential-led-fading-on-arduino-or-other-platforms/
 # p 101 .. maximum value of the PWM cycle
@@ -52,7 +57,8 @@ class CharLCD(BaseCharLCD):
                        contrast_pwm=None, contrast=0.5,
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
-                       auto_linebreaks=True):
+                       auto_linebreaks=True,
+                       compat_mode=False):
         """
         Character LCD controller.
 
@@ -151,7 +157,8 @@ class CharLCD(BaseCharLCD):
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize,
                                       charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+                                      auto_linebreaks=auto_linebreaks,
+                                      compat_mode=compat_mode)
 
         # Set backlight status
         if pin_backlight is not None:
@@ -300,6 +307,10 @@ class CharLCD(BaseCharLCD):
         """Send the specified value to the display with automatic 4bit / 8bit
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
 
+        # Wait, if compatibility mode is enabled
+        if self.compat_mode:
+            self._wait()
+
         # Assemble the parameters sent to the pigpio script
         params = [mode]
         params.extend([(value >> i) & 0x01 for i in range(8)])
@@ -315,6 +326,10 @@ class CharLCD(BaseCharLCD):
             c.usleep(1)
         # Switch on pigpio's exceptions
         pigpio.exceptions = True
+
+        # Record the time for the tail-end of the last send event
+        if self.compat_mode:
+            self.last_send_event = now()
 
     def _send_data(self, value):
         """Send data to the display. """

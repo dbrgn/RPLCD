@@ -27,7 +27,14 @@ from collections import namedtuple
 from . import codecs
 from . import common as c
 from .compat import range
+import sys
+if sys.version_info.major < 3:
+    from time import clock as now
+else:
+    from time import perf_counter as now
 
+# Duration to rate-limit calls to _send
+COMPAT_MODE_WAIT_TIME = 0.001
 
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
@@ -38,7 +45,7 @@ class BaseCharLCD(object):
 
     # Init, setup, teardown
 
-    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True):
+    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True, compat_mode=False):
         """
         Character LCD controller. Base class only, you should use a subclass.
 
@@ -117,6 +124,8 @@ class BaseCharLCD(object):
         else:
             raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
 
+
+
         # Write configuration to display
         self.command(c.LCD_FUNCTIONSET | displayfunction)
         c.usleep(50)
@@ -136,6 +145,11 @@ class BaseCharLCD(object):
         self._cursor_pos = (0, 0)
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
+
+        # Configure compatibility mode
+        self.compat_mode = compat_mode
+        if compat_mode:
+            self.last_send_event = now()
 
     def close(self, clear=False):
         if clear:
@@ -238,6 +252,12 @@ class BaseCharLCD(object):
 
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
             doc='How the cursor should behave (``hide``, ``line`` or ``blink``).')
+
+    def _wait(self):
+        """Rate limit the number of send events."""
+        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
+        while now() < end:
+            pass
 
     # High level commands
 
@@ -446,3 +466,4 @@ class BaseCharLCD(object):
     def crlf(self):  # type: () -> None
         """Write a line feed and a carriage return (``\\r\\n``) character to the LCD."""
         self.write_string('\r\n')
+

@@ -36,9 +36,6 @@ if sys.version_info.major < 3:
 else:
     from time import perf_counter as now
 
-# Duration to rate-limit calls to _send
-COMPAT_MODE_WAIT_TIME = 0.001
-
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 
 
@@ -99,10 +96,6 @@ class CharLCD(BaseCharLCD):
         :type compat_mode: bool
 
         """
-        # Configure compatibility mode
-        self.compat_mode = compat_mode
-        if compat_mode:
-            self.last_send_event = now()
 
         # Set attributes
         if numbering_mode == GPIO.BCM or numbering_mode == GPIO.BOARD:
@@ -136,7 +129,8 @@ class CharLCD(BaseCharLCD):
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize,
                                       charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+                                      auto_linebreaks=auto_linebreaks,
+                                      compat_mode=compat_mode)
 
         # Set backlight status
         if pin_backlight is not None:
@@ -243,8 +237,4 @@ class CharLCD(BaseCharLCD):
         GPIO.output(self.pins.e, 0)
         c.usleep(100)  # commands need > 37us to settle
 
-    def _wait(self):
-        """Rate limit the number of send events."""
-        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
-        while now() < end:
-            pass
+
