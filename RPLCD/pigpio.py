@@ -158,7 +158,8 @@ class CharLCD(BaseCharLCD):
             self.backlight_enabled = backlight_enabled
 
         # Set contrast
-        self.contrast = contrast
+        if pin_contrast is not None:
+            self.contrast = contrast
 
     def _init_connection(self):
         # Setup GPIO
