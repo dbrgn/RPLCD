@@ -1,9 +1,6 @@
 RPLCD
 #####
 
-.. image:: https://badges.gitter.im/RPLCD/Lobby.svg
-   :alt: Join the chat at https://gitter.im/RPLCD/Lobby
-   :target: https://gitter.im/RPLCD/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 .. image:: https://img.shields.io/travis/dbrgn/RPLCD/master.svg
     :target: https://travis-ci.org/dbrgn/RPLCD
     :alt: Build Status
