@@ -11,6 +11,10 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### Unreleased
+
+- [rem] Drop support for Python 3.3
+
 ### v1.3.0 (2020-05-03)
 
 This release adds a new charmap (thanks @kroesi) and fixes an initialization
@@ -18,6 +22,7 @@ bug when using the pigpio backend (thanks @makslevental).
 
 - [add] Add support for ST7066 0B charmap (#95)
 - [fix] pigpio: Fix initialization without `pin_contrast` (#97) 
+- [dep] This is the last release with official Python 3.3 support
 
 ### v1.2.2 (2019-02-16)
 
