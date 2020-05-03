@@ -11,9 +11,17 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.3.0 (2020-05-03)
+
+This release adds a new charmap (thanks @kroesi) and fixes an initialization
+bug when using the pigpio backend (thanks @makslevental).
+
+- [add] Add support for ST7066 0B charmap (#95)
+- [fix] pigpio: Fix initialization without `pin_contrast` (#97) 
+
 ### v1.2.2 (2019-02-16)
 
-- [fix] Fix pakaging bug that would result in the error message `ImportError:
+- [fix] Fix packaging bug that would result in the error message `ImportError:
         cannot import name 'codecs'` (#92)
 
 ### v1.2.1 (2019-02-14)
