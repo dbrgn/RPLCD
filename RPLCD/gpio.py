@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 from collections import namedtuple
+from time import sleep
 
 import RPi.GPIO as GPIO
 
@@ -36,8 +37,6 @@ if sys.version_info.major < 3:
 else:
     from time import perf_counter as now
 
-# Duration to rate-limit calls to _send
-COMPAT_MODE_WAIT_TIME = 0.001
 
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 
@@ -49,7 +48,8 @@ class CharLCD(BaseCharLCD):
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
                        auto_linebreaks=True,
-                       compat_mode=False):
+                       compat_mode=False,
+                       compat_mode_wait_time=0.001):
         """
         Character LCD controller.
 
@@ -97,10 +97,14 @@ class CharLCD(BaseCharLCD):
         :param compat_mode: Whether to run additional checks to support older LCDs
             that may not run at the reference clock (or keep up with it).
         :type compat_mode: bool
+        :param compat_mode_wait_time: Minimum time to pass between sends.
+            if zero, turns off compat_mode  Default: ``0.001`` seconds.
+        :type compat_mode_wait_time: float
 
         """
         # Configure compatibility mode
-        self.compat_mode = compat_mode
+        self.compat_mode = compat_mode and compat_mode_wait_time > 0
+        self.compat_mode_wait_time = compat_mode_wait_time
         if compat_mode:
             self.last_send_event = now()
 
@@ -245,6 +249,8 @@ class CharLCD(BaseCharLCD):
 
     def _wait(self):
         """Rate limit the number of send events."""
-        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
-        while now() < end:
-            pass
+        end = self.last_send_event + self.compat_mode_wait_time
+        sleep_duration = end - now()
+        if sleep_duration > 0:
+            sleep(sleep_duration)
+

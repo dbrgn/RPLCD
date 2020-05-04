@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from __future__ import division, absolute_import, unicode_literals
 
 from collections import namedtuple
+from time import sleep
 
 import pigpio
 
@@ -31,6 +32,14 @@ from . import common as c
 from .lcd import BaseCharLCD
 from .compat import range
 
+import sys
+if sys.version_info.major < 3:
+    from time import clock as now
+else:
+    from time import perf_counter as now
+
+# Duration to rate-limit calls to _send
+COMPAT_MODE_WAIT_TIME = 0.001
 
 # https://diarmuid.ie/blog/pwm-exponential-led-fading-on-arduino-or-other-platforms/
 # p 101 .. maximum value of the PWM cycle
@@ -52,7 +61,9 @@ class CharLCD(BaseCharLCD):
                        contrast_pwm=None, contrast=0.5,
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
-                       auto_linebreaks=True):
+                       auto_linebreaks=True,
+                       compat_mode=False,
+                       compat_mode_wait_time=0.001):
         """
         Character LCD controller.
 
@@ -118,11 +129,23 @@ class CharLCD(BaseCharLCD):
         :param auto_linebreaks: Whether or not to automatically insert line
             breaks. Default: ``True``.
         :type auto_linebreaks: bool
-
+        :param compat_mode: Whether to run additional checks to support older LCDs
+            that may not run at the reference clock (or keep up with it).
+        :type compat_mode: bool
+        :param compat_mode_wait_time: Minimum time to pass between sends.
+            if zero, turns off compat_mode  Default: ``0.001`` seconds.
+        :type compat_mode_wait_time: float
         """
 
         # Save the pigpio.pi object
         self.pi = pi
+
+        # Configure compatibility mode
+        self.compat_mode = compat_mode and compat_mode_wait_time > 0
+        self.compat_mode_wait_time = compat_mode_wait_time
+
+        if compat_mode:
+            self.last_send_event = now()
 
         # Set attributes
         if pin_rs is None:
@@ -299,6 +322,9 @@ class CharLCD(BaseCharLCD):
     def _send(self, value, mode):
         """Send the specified value to the display with automatic 4bit / 8bit
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
+        # Wait, if compatibility mode is enabled
+        if self.compat_mode and self.compat_mode_wait_time > 0:
+            self._wait()
 
         # Assemble the parameters sent to the pigpio script
         params = [mode]
@@ -316,6 +342,10 @@ class CharLCD(BaseCharLCD):
         # Switch on pigpio's exceptions
         pigpio.exceptions = True
 
+        # Record the time for the tail-end of the last send event
+        if self.compat_mode:
+            self.last_send_event = now()
+
     def _send_data(self, value):
         """Send data to the display. """
         self._send(value, c.RS_DATA)
@@ -323,3 +353,10 @@ class CharLCD(BaseCharLCD):
     def _send_instruction(self, value):
         """Send instruction to the display. """
         self._send(value, c.RS_INSTRUCTION)
+
+    def _wait(self):
+        """Rate limit the number of send events."""
+        end = self.last_send_event + self.compat_mode_wait_time
+        sleep_duration = end - now()
+        if sleep_duration > 0:
+            sleep(sleep_duration)
