@@ -32,9 +32,7 @@ if sys.version_info.major < 3:
     from time import clock as now
 else:
     from time import perf_counter as now
-
-# Duration to rate-limit calls to _send
-COMPAT_MODE_WAIT_TIME = 0.001
+from time import sleep
 
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
@@ -45,7 +43,8 @@ class BaseCharLCD(object):
 
     # Init, setup, teardown
 
-    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True, compat_mode=False):
+    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True, compat_mode=False,
+                 compat_mode_wait_time=0.001):
         """
         Character LCD controller. Base class only, you should use a subclass.
 
@@ -63,9 +62,20 @@ class BaseCharLCD(object):
             auto_linebreaks:
                 Whether or not to automatically insert line breaks.
                 Default: True.
-
+            compat_mode:
+                Whether to run additional checks to support older LCDs
+                that may not run at the reference clock (or keep up with it).
+                Default: False
+            compat_mode_wait_time: Minimum time to pass between sends.
+                if zero, turns off compat_mode
+                Default: ``0.001`` seconds.
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
+
+        # Configure compatibility mode
+        self.compat_mode = compat_mode and compat_mode_wait_time > 0
+        self.compat_mode_wait_time = compat_mode_wait_time
+        self._compat_mode_record_send_event()
 
         # Initialize codec
         if charmap == 'A00':
@@ -124,8 +134,6 @@ class BaseCharLCD(object):
         else:
             raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
 
-
-
         # Write configuration to display
         self.command(c.LCD_FUNCTIONSET | displayfunction)
         c.usleep(50)
@@ -145,11 +153,6 @@ class BaseCharLCD(object):
         self._cursor_pos = (0, 0)
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
-
-        # Configure compatibility mode
-        self.compat_mode = compat_mode
-        if compat_mode:
-            self.last_send_event = now()
 
     def close(self, clear=False):
         if clear:
@@ -252,12 +255,6 @@ class BaseCharLCD(object):
 
     cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
             doc='How the cursor should behave (``hide``, ``line`` or ``blink``).')
-
-    def _wait(self):
-        """Rate limit the number of send events."""
-        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
-        while now() < end:
-            pass
 
     # High level commands
 
@@ -466,4 +463,20 @@ class BaseCharLCD(object):
     def crlf(self):  # type: () -> None
         """Write a line feed and a carriage return (``\\r\\n``) character to the LCD."""
         self.write_string('\r\n')
+
+    def _is_compat_mode_on(self):
+        """Compat mode is on, when it's enabled and the wait time is > 0"""
+        return self.compat_mode and self.compat_mode_wait_time > 0
+
+    def _compat_mode_wait(self):
+        """Wait the specified amount, if the compat mode is on, to rate limit the data transmission"""
+        if self._is_compat_mode_on():
+            end = self.last_send_event + self.compat_mode_wait_time
+            sleep_duration = end - now()
+            if sleep_duration > 0:
+                sleep(sleep_duration)
+
+    def _compat_mode_record_send_event(self):
+        """Record when did the last send take place, so the rate limiting adapts to any slowdowns."""
+        self.last_send_event = now()
 
