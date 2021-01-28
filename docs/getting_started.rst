@@ -91,7 +91,7 @@ First, import the RPLCD library from your Python script.
 
 Then create a new instance of the :class:`~RPLCD.i2c.CharLCD` class. For that,
 you need to know the address of your LCD. You can find it on the command line
-using the ``sudo i2cdetect 1`` command (or ``sudo i2cdetect 0`` on the original
+using the ``sudo i2cdetect -y 1`` command (or ``sudo i2cdetect -y 0`` on the original
 Raspberry Pi). In my case the address of the display was ``0x27``. You also need
 to provide the name of the I²C port expander that your board uses. It should be
 written on the microchip that's soldered on to your board. Supported port
