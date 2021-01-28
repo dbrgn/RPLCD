@@ -10,9 +10,13 @@ You can install RPLCD directly from `PyPI
 
     $ sudo pip install RPLCD
 
-If you want to use I²C, you also need smbus::
+If you want to use I²C, you also either the smbus or `smbus2 <https://pypi.org/project/smbus2/>`_ library::
 
-    $ sudo apt-get install python-smbus
+    $ sudo apt install python-smbus
+    or
+    $ sudo pip install smbus2
+
+RPLCD will first try to use smbus if available and if not, fall back to smbus2.
 
 If you want to use pigpio, the easiest way is to install the library via your
 packet manager (select the Python version you need)::
