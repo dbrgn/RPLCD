@@ -83,6 +83,17 @@ Initializing the LCD
 Setup: I²C
 ~~~~~~~~~~
 
+To use an i2c device, the user running the Python script needs write
+permissions to the i2c device. Under Raspbian, the pi user already has
+permissions. If using another username created seperately, assign the group
+"i2c" to your user. For example assuming logged in as current user and that
+user has sudo permissions issue::
+
+    sudo usermod -aG i2c $USER
+
+For other platforms take a look at `permissions for non-root users
+<https://lexruee.ch/setting-i2c-permissions-for-non-root-users.html>`_
+
 First, import the RPLCD library from your Python script.
 
 .. sourcecode:: python
