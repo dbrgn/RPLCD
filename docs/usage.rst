@@ -8,7 +8,7 @@ Writing To Display
 
 Regular text can be written to the :class:`~RPLCD.i2c.CharLCD` instance using
 the :meth:`~RPLCD.i2c.CharLCD.write_string` method. It accepts unicode strings
-(``str`` in Python 3, ``unicode`` in Python 2).
+(``str`` in Python 3).
 
 The cursor position can be set by assigning a ``(row, col)`` tuple to
 :attr:`~RPLCD.i2c.CharLCD.cursor_pos`. It can be reset to the starting position

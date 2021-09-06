@@ -274,5 +274,4 @@ autoclass_content = 'init'
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'python2': ('https://docs.python.org/2.7', None),
 }
