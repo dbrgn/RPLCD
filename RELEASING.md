@@ -1,11 +1,11 @@
 # Release process
 
-Signing key: 3578F667F2F3A5FA (https://keybase.io/dbrgn)
+Signing key: B993FF98A90C9AB1 (https://bargen.dev/B993FF98A90C9AB1.txt)
 
 Used variables:
 
     export VERSION={VERSION}
-    export GPG=3578F667F2F3A5FA
+    export GPG=B993FF98A90C9AB1
 
 Update version numbers:
 

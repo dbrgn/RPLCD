@@ -11,9 +11,11 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
-### Unreleased
+### v1.3.1 (2023-03-25)
 
+- [fix] Check invalid cursor position only when auto_linebreaks enabled (#93, #109)
 - [rem] Drop support for Python 3.3
+- [dep] This is the last release with official Python 2 and 3.4/3.5/3.6 support
 
 ### v1.3.0 (2020-05-03)
 
