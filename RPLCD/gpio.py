@@ -30,15 +30,6 @@ from . import common as c
 from .lcd import BaseCharLCD
 from .compat import range
 
-import sys
-if sys.version_info.major < 3:
-    from time import clock as now
-else:
-    from time import perf_counter as now
-
-# Duration to rate-limit calls to _send
-COMPAT_MODE_WAIT_TIME = 0.001
-
 PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight mode')
 
 
@@ -49,7 +40,8 @@ class CharLCD(BaseCharLCD):
                        cols=20, rows=4, dotsize=8,
                        charmap='A02',
                        auto_linebreaks=True,
-                       compat_mode=False):
+                       compat_mode=False,
+                       compat_mode_wait_time=0.001):
         """
         Character LCD controller.
 
@@ -97,12 +89,11 @@ class CharLCD(BaseCharLCD):
         :param compat_mode: Whether to run additional checks to support older LCDs
             that may not run at the reference clock (or keep up with it).
         :type compat_mode: bool
+        :param compat_mode_wait_time: Minimum time to pass between sends.
+            if zero, turns off compat_mode  Default: ``0.001`` seconds.
+        :type compat_mode_wait_time: float
 
         """
-        # Configure compatibility mode
-        self.compat_mode = compat_mode
-        if compat_mode:
-            self.last_send_event = now()
 
         # Set attributes
         if numbering_mode == GPIO.BCM or numbering_mode == GPIO.BOARD:
@@ -136,7 +127,9 @@ class CharLCD(BaseCharLCD):
         # Call superclass
         super(CharLCD, self).__init__(cols, rows, dotsize,
                                       charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+                                      auto_linebreaks=auto_linebreaks,
+                                      compat_mode=compat_mode,
+                                      compat_mode_wait_time=compat_mode_wait_time)
 
         # Set backlight status
         if pin_backlight is not None:
@@ -190,9 +183,8 @@ class CharLCD(BaseCharLCD):
     def _send(self, value, mode):
         """Send the specified value to the display with automatic 4bit / 8bit
         selection. The rs_mode is either ``RS_DATA`` or ``RS_INSTRUCTION``."""
-        # Wait, if compatibility mode is enabled
-        if self.compat_mode:
-            self._wait()
+        # Wait if compatibility mode is enabled
+        self._compat_mode_wait()
 
         # Choose instruction or data mode
         GPIO.output(self.pins.rs, mode)
@@ -209,8 +201,7 @@ class CharLCD(BaseCharLCD):
             self._write4bits(value)
 
         # Record the time for the tail-end of the last send event
-        if self.compat_mode:
-            self.last_send_event = now()
+        self._compat_mode_record_send_event()
 
     def _send_data(self, value):
         """Send data to the display. """
@@ -243,8 +234,3 @@ class CharLCD(BaseCharLCD):
         GPIO.output(self.pins.e, 0)
         c.usleep(100)  # commands need > 37us to settle
 
-    def _wait(self):
-        """Rate limit the number of send events."""
-        end = self.last_send_event + COMPAT_MODE_WAIT_TIME
-        while now() < end:
-            pass

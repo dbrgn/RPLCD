@@ -27,7 +27,12 @@ from collections import namedtuple
 from . import codecs
 from . import common as c
 from .compat import range
-
+import sys
+if sys.version_info.major < 3:
+    from time import clock as now
+else:
+    from time import perf_counter as now
+from time import sleep
 
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
@@ -38,7 +43,8 @@ class BaseCharLCD(object):
 
     # Init, setup, teardown
 
-    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True):
+    def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True, compat_mode=False,
+                 compat_mode_wait_time=0.001):
         """
         Character LCD controller. Base class only, you should use a subclass.
 
@@ -56,9 +62,20 @@ class BaseCharLCD(object):
             auto_linebreaks:
                 Whether or not to automatically insert line breaks.
                 Default: True.
-
+            compat_mode:
+                Whether to run additional checks to support older LCDs
+                that may not run at the reference clock (or keep up with it).
+                Default: False
+            compat_mode_wait_time: Minimum time to pass between sends.
+                if zero, turns off compat_mode
+                Default: ``0.001`` seconds.
         """
         assert dotsize in [8, 10], 'The ``dotsize`` argument should be either 8 or 10.'
+
+        # Configure compatibility mode
+        self.compat_mode = compat_mode and compat_mode_wait_time > 0
+        self.compat_mode_wait_time = compat_mode_wait_time
+        self._compat_mode_record_send_event()
 
         # Initialize codec
         if charmap == 'A00':
@@ -447,3 +464,20 @@ class BaseCharLCD(object):
     def crlf(self):  # type: () -> None
         """Write a line feed and a carriage return (``\\r\\n``) character to the LCD."""
         self.write_string('\r\n')
+
+    def _is_compat_mode_on(self):
+        """Compat mode is on, when it's enabled and the wait time is > 0"""
+        return self.compat_mode and self.compat_mode_wait_time > 0
+
+    def _compat_mode_wait(self):
+        """Wait the specified amount, if the compat mode is on, to rate limit the data transmission"""
+        if self._is_compat_mode_on():
+            end = self.last_send_event + self.compat_mode_wait_time
+            sleep_duration = end - now()
+            if sleep_duration > 0:
+                sleep(sleep_duration)
+
+    def _compat_mode_record_send_event(self):
+        """Record when did the last send take place, so the rate limiting adapts to any slowdowns."""
+        self.last_send_event = now()
+
