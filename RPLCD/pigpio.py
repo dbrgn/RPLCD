@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2018 Danilo Bargen
+Copyright (C) 2013-2023 Danilo Bargen
 Copyright (C) 2018 Stephan Helma
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,15 +20,12 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-from __future__ import division, absolute_import, unicode_literals
-
 from collections import namedtuple
 
 import pigpio
 
 from . import common as c
 from .lcd import BaseCharLCD
-from .compat import range
 
 
 # https://diarmuid.ie/blog/pwm-exponential-led-fading-on-arduino-or-other-platforms/

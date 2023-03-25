@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2018 Danilo Bargen
+Copyright (C) 2013-2023 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -20,21 +19,14 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-from __future__ import print_function, division, absolute_import, unicode_literals
-
 from collections import namedtuple
 
 import RPi.GPIO as GPIO
 
 from . import common as c
 from .lcd import BaseCharLCD
-from .compat import range
 
-import sys
-if sys.version_info.major < 3:
-    from time import clock as now
-else:
-    from time import perf_counter as now
+from time import perf_counter as now
 
 # Duration to rate-limit calls to _send
 COMPAT_MODE_WAIT_TIME = 0.001

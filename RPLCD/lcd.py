@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2018 Danilo Bargen
+Copyright (C) 2013-2023 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -20,13 +19,10 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-from __future__ import print_function, division, absolute_import, unicode_literals
-
 from collections import namedtuple
 
 from . import codecs
 from . import common as c
-from .compat import range
 
 
 LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
