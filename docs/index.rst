@@ -5,7 +5,7 @@ Welcome to RPLCD's documentation!
 About
 =====
 
-RPLCD is a Python 2/3 Raspberry PI Character LCD library for the Hitachi HD44780
+RPLCD is a Python 3 Raspberry PI Character LCD library for the Hitachi HD44780
 controller. It supports both GPIO (parallel) mode as well as boards with an I²C
 port expander (e.g. the PCF8574 or the MCP23008). Furthermore it can use the
 pigpio_ library to control the (remote) LCD.
@@ -32,7 +32,6 @@ Features
   ``pigpio`` backend)
 - Support for contrast control (when using the ``pigpio`` backend)
 - Built-in support for ``A00`` and ``A02`` and ``ST0B`` character tables
-- Python 2/3 compatible
 - Caching: Only write characters if they changed
 - No external dependencies (except ``RPi.GPIO``, and ``python-smbus`` if you need
   I²C support)

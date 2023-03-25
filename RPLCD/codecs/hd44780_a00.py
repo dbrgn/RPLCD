@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 The HD4480-A00 character table is a slightly altered form
 of the JIS X 0201 codec.
 """
-# flake8: noqa
-from __future__ import print_function, division, absolute_import, unicode_literals
-
 # Character shown if no mapping was found
 replacement_char = 0x20  # SPACE
 

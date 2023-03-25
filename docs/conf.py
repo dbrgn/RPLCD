@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # RPLCD documentation build configuration file, created by
 # sphinx-quickstart on Sun Apr 20 23:09:39 2014.
@@ -52,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RPLCD'
-copyright = '2013-2018, Danilo Bargen'
+copyright = '2013-2023, Danilo Bargen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

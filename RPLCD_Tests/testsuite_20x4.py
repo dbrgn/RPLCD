@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
-Copyright (C) 2013-2018 Danilo Bargen
+Copyright (C) 2013-2023 Danilo Bargen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -21,22 +20,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-from __future__ import print_function, division, absolute_import, unicode_literals
-
-try:
-    input = raw_input
-except NameError:
-    pass
-
-try:
-    range = xrange
-except NameError:  # Python 3
-    pass
-
-try:
-    safe_input = raw_input
-except NameError:  # Python 3
-    safe_input = input
 
 
 def run(lcd):

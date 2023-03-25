@@ -1,15 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function, division, absolute_import, unicode_literals
-
 import pytest
 
 from RPLCD.gpio import CharLCD
-
-
-try:
-    unichr = unichr
-except NameError:  # Python 3
-    unichr = chr
 
 
 SP = 32  # Space
@@ -31,7 +22,7 @@ def test_auto_linebreaks(get_lcd):
     """
     lcd = get_lcd(16, 2, True)
     for i in range(48, 67):
-        lcd.write_string(unichr(i))
+        lcd.write_string(chr(i))
     assert lcd._content[0] == [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
     assert lcd._content[1] == [64, 65, 66, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP]
 
@@ -42,7 +33,7 @@ def test_no_auto_linebreaks(get_lcd):
     """
     lcd = get_lcd(16, 2, False)
     for i in range(48, 67):
-        lcd.write_string(unichr(i))
+        lcd.write_string(chr(i))
     assert lcd._content[0] == [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
     assert lcd._content[1] == [SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP, SP]
 
