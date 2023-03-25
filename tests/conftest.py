@@ -1,14 +1,14 @@
-import mock
+from unittest.mock import MagicMock, patch
 import pytest
 
 
 # Mock RPi.GPIO module (https://m.reddit.com/r/Python/comments/5eddp5/mock_testing_rpigpio/)
-MockRPi = mock.MagicMock()
+MockRPi = MagicMock()
 modules = {
     'RPi': MockRPi,
     'RPi.GPIO': MockRPi.GPIO,
 }
-patcher = mock.patch.dict('sys.modules', modules)
+patcher = patch.dict('sys.modules', modules)
 patcher.start()
 
 
