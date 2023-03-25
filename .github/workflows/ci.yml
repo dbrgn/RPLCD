@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+name: CI
+
+jobs:
+
+  test:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        deps:
+          - { python: '3.5', }
+          - { python: '3.6', }
+      fail-fast: false
+    name: Python ${{ matrix.deps.python }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup python ${{ matrix.deps.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.deps.python }}
+      - name: Upgrade pip
+        run: pip install -U pip
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Run tests
+        run: pytest

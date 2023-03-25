@@ -1,8 +1,8 @@
 RPLCD
 #####
 
-.. image:: https://img.shields.io/travis/dbrgn/RPLCD/master.svg
-    :target: https://travis-ci.org/dbrgn/RPLCD
+.. image:: https://img.shields.io/github/actions/workflow/status/dbgn/RPLCD/ci.yml?branch=master
+    :target: https://github.com/dbrgn/RPLCD/actions/workflows/ci.yml
     :alt: Build Status
 .. image:: https://img.shields.io/pypi/v/RPLCD.svg
     :target: https://pypi.python.org/pypi/RPLCD/
