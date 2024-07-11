@@ -92,6 +92,7 @@ Supported I²C Port Expanders
 - PCF8574 (used by a lot of I²C LCD adapters on Ali Express)
 - MCP23008 (used in Adafruit I²C LCD backpack)
 - MCP23017
+- JHD1804 (with AIP31068L controller, used in Grove - 16x2 LCD)
 
 
 Documentation
@@ -147,6 +148,8 @@ Resources
 - TC2004A-01 Data Sheet: http://www.adafruit.com/datasheets/TC2004A-01.pdf
 - HD44780U Data Sheet: http://www.adafruit.com/datasheets/HD44780.pdf
 - ST7066 Data Sheet: https://www.sparkfun.com/datasheets/LCD/st7066.pdf
+- JHD1804 Data Sheet: https://raw.githubusercontent.com/SeeedDocument/Grove-16x2_LCD_Series/master/res/JDH_1804_Datasheet.pdf
+- AIP31068L Data Sheet: https://www.orientdisplay.com/wp-content/uploads/2022/08/AIP31068L.pdf
 
 
 License
