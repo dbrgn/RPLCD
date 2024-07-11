@@ -128,7 +128,7 @@ class CharLCD(BaseCharLCD):
         self._port = port
 
         # Set i2c expander, 'PCF8574', 'MCP23008' and 'MCP23017' are supported.
-        if i2c_expander in ['PCF8574', 'MCP23008', 'MCP23017', "JHD1802"]:
+        if i2c_expander in ['PCF8574', 'MCP23008', 'MCP23017', "JHD1804"]:
             self._i2c_expander = i2c_expander
         else:
             raise NotImplementedError('I2C expander "%s" is not supported.' % i2c_expander)
@@ -230,7 +230,7 @@ class CharLCD(BaseCharLCD):
             self._mcp_data |= MCP230XX_RS
             self._pulse_data(value >> 4)
             self._pulse_data(value & 0x0F)
-        elif self._i2c_expander == 'JHD1802':
+        elif self._i2c_expander == 'JHD1804':
             self.bus.write_byte_data(self._address, 0xC0, value)
             c.usleep(100)
 
@@ -246,7 +246,7 @@ class CharLCD(BaseCharLCD):
             self._mcp_data &= ~MCP230XX_RS
             self._pulse_data(value >> 4)
             self._pulse_data(value & 0x0F)
-        elif self._i2c_expander == 'JHD1802':
+        elif self._i2c_expander == 'JHD1804':
             self.bus.write_byte_data(self._address, 0x80, value)
             c.usleep(100)
 

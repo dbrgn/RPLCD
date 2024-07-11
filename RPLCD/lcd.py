@@ -94,7 +94,7 @@ class BaseCharLCD(object):
         self._init_connection()
 
         # Choose 4 or 8 bit mode
-        if self._i2c_expander != 'JHD1802':
+        if self._i2c_expander != 'JHD1804':
             if self.data_bus_mode == c.LCD_4BITMODE:
                 # Hitachi manual page 46
                 self.command(0x03)
