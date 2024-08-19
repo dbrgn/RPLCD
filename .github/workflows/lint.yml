@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+name: flake8 Lint
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: flake8 Lint (`RPLCD`)
+        uses: py-actions/flake8@v2
+        with:
+          exclude: "RPLCD/codecs/*,tests/test_codecs.py"
+          ignore: "E126,E127,E128,C901"
+          max-line-length: "99"
+          path: "RPLCD RPLCD_Tests tests"

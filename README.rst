@@ -131,6 +131,10 @@ Coding Guidelines
     flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
 
 
+Observe the `linting action
+<https://github.com/dbrgn/RPLCD/blob/master/.github/workflows/lint.yml>`_ to get an idea which
+directories and files are being linted.
+
 About HD44780
 =============
 
