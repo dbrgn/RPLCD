@@ -265,7 +265,7 @@ class BaseCharLCD(object):
             u'Temperature: 30\xb0C'
 
         """
-        encoded = self.codec.encode(value)  # type: List[int]
+        encoded = self.codec.encode(value)
         ignored = False
 
         for [char, lookahead] in c.sliding_window(encoded, lookahead=1):

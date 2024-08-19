@@ -223,8 +223,8 @@ class CharLCD(BaseCharLCD):
         if self._i2c_expander == 'PCF8574':
             self.bus.write_byte(self._address, (c.RS_DATA | (value & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_DATA | (value & 0xF0))
-            self.bus.write_byte(self._address, (c.RS_DATA |
-                                               ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (
+                        c.RS_DATA | ((value << 4) & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_DATA | ((value << 4) & 0xF0))
         elif self._i2c_expander in ['MCP23008', 'MCP23017']:
             self._mcp_data |= MCP230XX_RS
@@ -233,11 +233,11 @@ class CharLCD(BaseCharLCD):
 
     def _send_instruction(self, value):
         if self._i2c_expander == 'PCF8574':
-            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
-                                               (value & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (
+                        c.RS_INSTRUCTION | (value & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_INSTRUCTION | (value & 0xF0))
-            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
-                                               ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(self._address, (c.RS_INSTRUCTION | (
+                        (value << 4) & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_INSTRUCTION | ((value << 4) & 0xF0))
         elif self._i2c_expander in ['MCP23008', 'MCP23017']:
             self._mcp_data &= ~MCP230XX_RS
