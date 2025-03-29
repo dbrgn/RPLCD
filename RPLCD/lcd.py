@@ -94,24 +94,25 @@ class BaseCharLCD(object):
         self._init_connection()
 
         # Choose 4 or 8 bit mode
-        if self.data_bus_mode == c.LCD_4BITMODE:
-            # Hitachi manual page 46
-            self.command(0x03)
-            c.msleep(4.5)
-            self.command(0x03)
-            c.msleep(4.5)
-            self.command(0x03)
-            c.usleep(100)
-            self.command(0x02)
-        elif self.data_bus_mode == c.LCD_8BITMODE:
-            # Hitachi manual page 45
-            self.command(0x30)
-            c.msleep(4.5)
-            self.command(0x30)
-            c.usleep(100)
-            self.command(0x30)
-        else:
-            raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
+        if self._i2c_expander != 'JHD1804':
+            if self.data_bus_mode == c.LCD_4BITMODE:
+                # Hitachi manual page 46
+                self.command(0x03)
+                c.msleep(4.5)
+                self.command(0x03)
+                c.msleep(4.5)
+                self.command(0x03)
+                c.usleep(100)
+                self.command(0x02)
+            elif self.data_bus_mode == c.LCD_8BITMODE:
+                # Hitachi manual page 45
+                self.command(0x30)
+                c.msleep(4.5)
+                self.command(0x30)
+                c.usleep(100)
+                self.command(0x30)
+            else:
+                raise ValueError('Invalid data bus mode: {}'.format(self.data_bus_mode))
 
         # Write configuration to display
         self.command(c.LCD_FUNCTIONSET | displayfunction)
