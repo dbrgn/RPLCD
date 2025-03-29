@@ -69,6 +69,7 @@ class CharLCD(BaseCharLCD):
             Pin mapping::
 
             7  | 6  | 5  | 4  | 3  | 2  | 1  | 0
+            -- | -- | -- | -- | -- | -- | -- | --
             D7 | D6 | D5 | D4 | BL | EN | RW | RS
 
 
@@ -92,6 +93,7 @@ class CharLCD(BaseCharLCD):
             Pin mapping::
 
             7  | 6  | 5  | 4  | 3  | 2 | 1  | 0
+            -- | -- | -- | -- | -- | - | -- | - 
             BL | D7 | D6 | D5 | D4 | E | RS | -
 
 
