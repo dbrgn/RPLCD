@@ -13,6 +13,7 @@ def get_lcd(mocker, charlcd_kwargs):
         mocker.patch.object(lcd, '_send_data')
         mocker.patch.object(lcd, '_send_instruction')
         return lcd
+
     return _func
 
 

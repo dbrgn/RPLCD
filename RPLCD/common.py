@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 import itertools
 import time
 
@@ -72,7 +73,8 @@ RS_INSTRUCTION = 0x00
 RS_DATA = 0x01
 
 
-# # # Helper classes # # #
+# # # HELPER CLASSES # # #
+
 
 class Alignment(object):
     left = LCD_ENTRYLEFT
@@ -91,6 +93,7 @@ class CursorMode(object):
 
 
 # # # HELPER FUNCTIONS # # #
+
 
 def msleep(milliseconds):
     """Sleep the specified amount of milliseconds."""

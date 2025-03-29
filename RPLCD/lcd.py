@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 from collections import namedtuple
 
 from . import codecs
@@ -29,6 +30,7 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 
 # # # MAIN # # #
+
 
 class BaseCharLCD(object):
 
@@ -67,7 +69,8 @@ class BaseCharLCD(object):
             pass
         else:
             raise ValueError(
-                'The ``charmap`` argument must be either ``A00`` or ``A02`` or ``ST0B``')
+                'The ``charmap`` argument must be either ``A00`` or ``A02`` or ``ST0B``'
+            )
 
         # LCD configuration
         self.lcd = LCDConfig(rows=rows, cols=cols, dotsize=dotsize)
@@ -146,8 +149,9 @@ class BaseCharLCD(object):
     def _set_cursor_pos(self, value):
         if not hasattr(value, '__getitem__') or len(value) != 2:
             raise ValueError('Cursor position should be determined by a 2-tuple.')
-        if self.auto_linebreaks and \
-                (value[0] not in range(self.lcd.rows) or value[1] not in range(self.lcd.cols)):
+        if self.auto_linebreaks and (
+            value[0] not in range(self.lcd.rows) or value[1] not in range(self.lcd.cols)
+        ):
             msg = 'Cursor position {pos!r} invalid on a {lcd.rows}x{lcd.cols} LCD.'
             raise ValueError(msg.format(pos=value, lcd=self.lcd))
         row_offsets = [0x00, 0x40, self.lcd.cols, 0x40 + self.lcd.cols]
@@ -155,8 +159,9 @@ class BaseCharLCD(object):
         self.command(c.LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
         c.usleep(50)
 
-    cursor_pos = property(_get_cursor_pos, _set_cursor_pos,
-            doc='The cursor position as a 2-tuple (row, col).')
+    cursor_pos = property(
+        _get_cursor_pos, _set_cursor_pos, doc='The cursor position as a 2-tuple (row, col).'
+    )
 
     def _get_text_align_mode(self):
         if self._text_align_mode == c.Alignment.left:
@@ -176,8 +181,11 @@ class BaseCharLCD(object):
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
 
-    text_align_mode = property(_get_text_align_mode, _set_text_align_mode,
-            doc='The text alignment (``left`` or ``right``).')
+    text_align_mode = property(
+        _get_text_align_mode,
+        _set_text_align_mode,
+        doc='The text alignment (``left`` or ``right``).',
+    )
 
     def _get_write_shift_mode(self):
         if self._display_shift_mode == c.ShiftMode.cursor:
@@ -197,8 +205,11 @@ class BaseCharLCD(object):
         self.command(c.LCD_ENTRYMODESET | self._text_align_mode | self._display_shift_mode)
         c.usleep(50)
 
-    write_shift_mode = property(_get_write_shift_mode, _set_write_shift_mode,
-            doc='The shift mode when writing (``cursor`` or ``display``).')
+    write_shift_mode = property(
+        _get_write_shift_mode,
+        _set_write_shift_mode,
+        doc='The shift mode when writing (``cursor`` or ``display``).',
+    )
 
     def _get_display_enabled(self):
         return self._display_mode == c.LCD_DISPLAYON
@@ -208,8 +219,9 @@ class BaseCharLCD(object):
         self.command(c.LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         c.usleep(50)
 
-    display_enabled = property(_get_display_enabled, _set_display_enabled,
-            doc='Whether or not to display any characters.')
+    display_enabled = property(
+        _get_display_enabled, _set_display_enabled, doc='Whether or not to display any characters.'
+    )
 
     def _get_cursor_mode(self):
         if self._cursor_mode == c.CursorMode.hide:
@@ -233,8 +245,11 @@ class BaseCharLCD(object):
         self.command(c.LCD_DISPLAYCONTROL | self._display_mode | self._cursor_mode)
         c.usleep(50)
 
-    cursor_mode = property(_get_cursor_mode, _set_cursor_mode,
-            doc='How the cursor should behave (``hide``, ``line`` or ``blink``).')
+    cursor_mode = property(
+        _get_cursor_mode,
+        _set_cursor_mode,
+        doc='How the cursor should behave (``hide``, ``line`` or ``blink``).',
+    )
 
     # High level commands
 
@@ -284,8 +299,8 @@ class BaseCharLCD(object):
             # linebreak happened recently, and the lookahead matches too,
             # ignore this write.
             if self.recent_auto_linebreak is True:
-                crlf = (char == codecs.CR and lookahead == codecs.LF)
-                lfcr = (char == codecs.LF and lookahead == codecs.CR)
+                crlf = char == codecs.CR and lookahead == codecs.LF
+                lfcr = char == codecs.LF and lookahead == codecs.CR
                 if crlf or lfcr:
                     ignored = True
                     continue

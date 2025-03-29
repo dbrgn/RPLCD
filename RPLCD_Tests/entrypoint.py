@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 import sys
 
 # Import supported tests
@@ -40,7 +41,7 @@ def print_usage(error=None):
     print('   testsuite    - Tests display formatting, 20x4 and 16x2 displays supported.')
     print('')
     # Options for i2c mode
-    if ((len(sys.argv) > 1) and (sys.argv[1] == 'i2c')):
+    if (len(sys.argv) > 1) and (sys.argv[1] == 'i2c'):
         print('<options> i2c options:')
         print('')
         print('   expander - Supported I²C port expanders are PCF8574, MCP23008 and MCP23017')
@@ -60,13 +61,17 @@ def print_usage(error=None):
         print('')
         print('Examples:')
         print('')
-        print(sys.argv[0] + ' i2c testsuite expander=PCF8574 addr=0x27 port=1 '
-              'cols=20 rows=4 charmap=A00')
-        print(sys.argv[0] + ' i2c testsuite expander=MCP23017 addr=0x20 port=1 '
-              'kols=20 rows=4 charmap=A00 gpio_bank=A')
+        print(
+            sys.argv[0] + ' i2c testsuite expander=PCF8574 addr=0x27 port=1 '
+            'cols=20 rows=4 charmap=A00'
+        )
+        print(
+            sys.argv[0] + ' i2c testsuite expander=MCP23017 addr=0x20 port=1 '
+            'kols=20 rows=4 charmap=A00 gpio_bank=A'
+        )
 
     # Options for GPIO mode
-    elif ((len(sys.argv) > 1) and (sys.argv[1] == 'gpio')):
+    elif (len(sys.argv) > 1) and (sys.argv[1] == 'gpio'):
 
         print('<options> gpio options:')
         print('')
@@ -87,10 +92,12 @@ def print_usage(error=None):
         print('')
         print('Example:')
         print('')
-        print(sys.argv[0] + ' gpio testsuite cols=20 rows=4 mode=BCM rs=15 rw=None e=16 '
-              'bl=None data=21,22,23,24 charmap=A00')
+        print(
+            sys.argv[0] + ' gpio testsuite cols=20 rows=4 mode=BCM rs=15 rw=None e=16 '
+            'bl=None data=21,22,23,24 charmap=A00'
+        )
     # Options for PIGPIO mode
-    elif ((len(sys.argv) > 1) and (sys.argv[1] == 'pigpio')):
+    elif (len(sys.argv) > 1) and (sys.argv[1] == 'pigpio'):
 
         print('<options> pigpio options:')
         print('')
@@ -118,8 +125,10 @@ def print_usage(error=None):
         print('')
         print('Example:')
         print('')
-        print(sys.argv[0] + ' pigpio testsuite cols=20 rows=4 rs=15 rw=None e=16 '
-              'bl=None data=21,22,23,24 charmap=A00')
+        print(
+            sys.argv[0] + ' pigpio testsuite cols=20 rows=4 rs=15 rw=None e=16 '
+            'bl=None data=21,22,23,24 charmap=A00'
+        )
     else:
         print('<options> For info about options run:')
         print('')
@@ -133,10 +142,10 @@ def print_usage(error=None):
 
 
 def options_pop(value, default=no_default):
-    ''' Pops value from options with error checking
-        value: which option to pop and check.
-        default: optional, sets a default if not defined.
-        returns: a string corresponding to the option on the command line
+    '''Pops value from options with error checking
+    value: which option to pop and check.
+    default: optional, sets a default if not defined.
+    returns: a string corresponding to the option on the command line
     '''
     global options
     try:
@@ -186,11 +195,20 @@ def run():
         address = int(options_pop('addr'), 16)
         port = int(options_pop('port', '1'))
         try:
-            lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols,
-                              rows=rows, expander_params=options)
+            lcd = i2c.CharLCD(
+                i2c_expander,
+                address,
+                port=port,
+                charmap=charmap,
+                cols=cols,
+                rows=rows,
+                expander_params=options,
+            )
         except IOError:
-            print_usage('IOError: Usually caused by the wrong i2c address/port '
-                        'or device not connected properly')
+            print_usage(
+                'IOError: Usually caused by the wrong i2c address/port '
+                'or device not connected properly'
+            )
     elif lcdmode == 'gpio':
 
         import RPi.GPIO as GPIO
@@ -221,8 +239,17 @@ def run():
         pins_data = data.split(',')
         # Convert data pins to int
         pins_data = [int(pin) for pin in pins_data]
-        lcd = gpio.CharLCD(pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
-                           numbering_mode=numbering_mode, cols=cols, rows=rows, charmap=charmap)
+        lcd = gpio.CharLCD(
+            pin_rs=rs,
+            pin_rw=rw,
+            pin_e=e,
+            pins_data=pins_data,
+            pin_backlight=bl,
+            numbering_mode=numbering_mode,
+            cols=cols,
+            rows=rows,
+            charmap=charmap,
+        )
     elif lcdmode == 'pigpio':
 
         from pigpio import pi
@@ -254,12 +281,21 @@ def run():
         pins_data = data.split(',')
         # Convert data pins to int
         pins_data = [int(pin) for pin in pins_data]
-        lcd = pigpio.CharLCD(pi,
-                             pin_rs=rs, pin_rw=rw, pin_e=e, pins_data=pins_data, pin_backlight=bl,
-                             cols=cols, rows=rows, charmap=charmap)
+        lcd = pigpio.CharLCD(
+            pi,
+            pin_rs=rs,
+            pin_rw=rw,
+            pin_e=e,
+            pins_data=pins_data,
+            pin_backlight=bl,
+            cols=cols,
+            rows=rows,
+            charmap=charmap,
+        )
     else:
-        print_usage('Connection type %s is not supported. Must be either i2c, gpio or pigpio' %
-                    lcdmode)
+        print_usage(
+            'Connection type %s is not supported. Must be either i2c, gpio or pigpio' % lcdmode
+        )
 
     # Run selected test
     if test == 'show_charmap':

@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 try:
     from smbus import SMBus
 except ImportError:
@@ -38,7 +39,7 @@ PIN_REGISTER_SELECT = 0x1  # Not used?
 
 # MCP230XX backlight control
 MCP230XX_BACKLIGHT = 0x80
-MCP230XX_NOBACKLIGHT = 0x7f
+MCP230XX_NOBACKLIGHT = 0x7F
 
 # MCP230XX pin bitmasks and datamask
 MCP230XX_RS = 0x02
@@ -58,11 +59,19 @@ MCP23017_GPIOB = 0x13
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, i2c_expander, address, expander_params=None, port=1,
-                       cols=20, rows=4, dotsize=8,
-                       charmap='A02',
-                       auto_linebreaks=True,
-                       backlight_enabled=True):
+    def __init__(
+        self,
+        i2c_expander,
+        address,
+        expander_params=None,
+        port=1,
+        cols=20,
+        rows=4,
+        dotsize=8,
+        charmap='A02',
+        auto_linebreaks=True,
+        backlight_enabled=True,
+    ):
         """
         CharLCD via PCF8574 I2C port expander:
 
@@ -93,7 +102,7 @@ class CharLCD(BaseCharLCD):
             Pin mapping::
 
             7  | 6  | 5  | 4  | 3  | 2 | 1  | 0
-            -- | -- | -- | -- | -- | - | -- | - 
+            -- | -- | -- | -- | -- | - | -- | -
             BL | D7 | D6 | D5 | D4 | E | RS | -
 
 
@@ -138,8 +147,10 @@ class CharLCD(BaseCharLCD):
         # Errorchecking for expander parameters
         if expander_params is None:
             if self._i2c_expander == 'MCP23017':
-                raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is not defined, '
-                                 'must be either \'A\' or \'B\'')
+                raise ValueError(
+                    'MCP23017: expander_params[\'gpio_bank\'] is not defined, '
+                    'must be either \'A\' or \'B\''
+                )
             else:
                 self._expander_params = {}
         else:
@@ -148,8 +159,10 @@ class CharLCD(BaseCharLCD):
                     self._expander_params = {}
                     self._expander_params['gpio_bank'] = expander_params['gpio_bank']
                 else:
-                    raise ValueError('MCP23017: expander_params[\'gpio_bank\'] is \'%s\', '
-                            'must be either \'A\' or \'B\'' % expander_params['gpio_bank'])
+                    raise ValueError(
+                        'MCP23017: expander_params[\'gpio_bank\'] is \'%s\', '
+                        'must be either \'A\' or \'B\'' % expander_params['gpio_bank']
+                    )
 
         # Currently the I2C mode only supports 4 bit communication
         self.data_bus_mode = c.LCD_4BITMODE
@@ -161,9 +174,9 @@ class CharLCD(BaseCharLCD):
             self._backlight = MCP230XX_BACKLIGHT if backlight_enabled else MCP230XX_NOBACKLIGHT
 
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize,
-                                      charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+        super(CharLCD, self).__init__(
+            cols, rows, dotsize, charmap=charmap, auto_linebreaks=auto_linebreaks
+        )
         # Refresh backlight status
         self.backlight_enabled = backlight_enabled
 
@@ -216,8 +229,11 @@ class CharLCD(BaseCharLCD):
                 self._mcp_data &= MCP230XX_NOBACKLIGHT
             self.bus.write_byte_data(self._address, self._mcp_gpio, self._mcp_data)
 
-    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
-            doc='Whether or not to enable the backlight. Either ``True`` or ``False``.')
+    backlight_enabled = property(
+        _get_backlight_enabled,
+        _set_backlight_enabled,
+        doc='Whether or not to enable the backlight. Either ``True`` or ``False``.',
+    )
 
     # Low level commands
 
@@ -225,8 +241,9 @@ class CharLCD(BaseCharLCD):
         if self._i2c_expander == 'PCF8574':
             self.bus.write_byte(self._address, (c.RS_DATA | (value & 0xF0)) | self._backlight)
             self._pulse_data(c.RS_DATA | (value & 0xF0))
-            self.bus.write_byte(self._address, (c.RS_DATA |
-                                               ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(
+                self._address, (c.RS_DATA | ((value << 4) & 0xF0)) | self._backlight
+            )
             self._pulse_data(c.RS_DATA | ((value << 4) & 0xF0))
         elif self._i2c_expander in ['MCP23008', 'MCP23017']:
             self._mcp_data |= MCP230XX_RS
@@ -235,11 +252,13 @@ class CharLCD(BaseCharLCD):
 
     def _send_instruction(self, value):
         if self._i2c_expander == 'PCF8574':
-            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
-                                               (value & 0xF0)) | self._backlight)
+            self.bus.write_byte(
+                self._address, (c.RS_INSTRUCTION | (value & 0xF0)) | self._backlight
+            )
             self._pulse_data(c.RS_INSTRUCTION | (value & 0xF0))
-            self.bus.write_byte(self._address, (c.RS_INSTRUCTION |
-                                               ((value << 4) & 0xF0)) | self._backlight)
+            self.bus.write_byte(
+                self._address, (c.RS_INSTRUCTION | ((value << 4) & 0xF0)) | self._backlight
+            )
             self._pulse_data(c.RS_INSTRUCTION | ((value << 4) & 0xF0))
         elif self._i2c_expander in ['MCP23008', 'MCP23017']:
             self._mcp_data &= ~MCP230XX_RS

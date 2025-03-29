@@ -20,6 +20,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 from collections import namedtuple
 
 import pigpio
@@ -39,16 +40,28 @@ PinConfig = namedtuple('PinConfig', 'rs rw e e2 d0 d1 d2 d3 d4 d5 d6 d7 backligh
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, pi,
-                       pin_rs=None, pin_rw=None, pin_e=None, pin_e2=None,
-                       pins_data=None,
-                       pin_backlight=None, backlight_mode='active_low',
-                       backlight_pwm=False, backlight_enabled=True,
-                       pin_contrast=None, contrast_mode='active_high',
-                       contrast_pwm=None, contrast=0.5,
-                       cols=20, rows=4, dotsize=8,
-                       charmap='A02',
-                       auto_linebreaks=True):
+    def __init__(
+        self,
+        pi,
+        pin_rs=None,
+        pin_rw=None,
+        pin_e=None,
+        pin_e2=None,
+        pins_data=None,
+        pin_backlight=None,
+        backlight_mode='active_low',
+        backlight_pwm=False,
+        backlight_enabled=True,
+        pin_contrast=None,
+        contrast_mode='active_high',
+        contrast_pwm=None,
+        contrast=0.5,
+        cols=20,
+        rows=4,
+        dotsize=8,
+        charmap='A02',
+        auto_linebreaks=True,
+    ):
         """
         Character LCD controller.
 
@@ -135,19 +148,31 @@ class CharLCD(BaseCharLCD):
         else:
             raise ValueError('There should be exactly 4 or 8 data pins.')
         block2 = pins_data[-4:]
-        self.pins = PinConfig(rs=pin_rs, rw=pin_rw, e=pin_e, e2=pin_e2,
-                              d0=block1[0], d1=block1[1], d2=block1[2], d3=block1[3],
-                              d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
-                              backlight=pin_backlight, contrast=pin_contrast)
+        self.pins = PinConfig(
+            rs=pin_rs,
+            rw=pin_rw,
+            e=pin_e,
+            e2=pin_e2,
+            d0=block1[0],
+            d1=block1[1],
+            d2=block1[2],
+            d3=block1[3],
+            d4=block2[0],
+            d5=block2[1],
+            d6=block2[2],
+            d7=block2[3],
+            backlight=pin_backlight,
+            contrast=pin_contrast,
+        )
         self.backlight_mode = backlight_mode
         self.backlight_pwm = backlight_pwm
         self.contrast_mode = contrast_mode
         self.contrast_pwm = contrast_pwm
 
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize,
-                                      charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+        super(CharLCD, self).__init__(
+            cols, rows, dotsize, charmap=charmap, auto_linebreaks=auto_linebreaks
+        )
 
         # Set backlight status
         if pin_backlight is not None:
@@ -181,41 +206,51 @@ class CharLCD(BaseCharLCD):
 
         # pigpio script to pulse the enable flag to process data
         enablepulse = [
-                'write {pin.e} 0',
-                'mics 1',
-                'trig {pin.e} 1 1',
-                'mics 100']                 # Commands need > 37us to settle
+            'write {pin.e} 0',
+            'mics 1',
+            'trig {pin.e} 1 1',
+            'mics 100',  # Commands need > 37us to settle
+        ]
 
         # pigpio script to write data to the LCD
-        piscript = ['write {pin.rs} p0']        # Choose instruction or data mode
+        piscript = ['write {pin.rs} p0']  # Choose instruction or data mode
         if self.pins.rw is not None:
             # If the RW pin is used, set it to low
             piscript.append('write {pin.rw} 0')
         if self.data_bus_mode == c.LCD_8BITMODE:
             # Script to write 8 bits of data into the data bus.
-            piscript.extend(                # Write data in 1 chunk of 8 bits
-                    ['write {pin.d0} p1',       # Write 8 bits of data into the data bus
-                     'write {pin.d1} p2',
-                     'write {pin.d2} p3',
-                     'write {pin.d3} p4',
-                     'write {pin.d4} p5',
-                     'write {pin.d5} p6',
-                     'write {pin.d6} p7',
-                     'write {pin.d7} p8'])
-            piscript.extend(enablepulse)    # Process data
+            piscript.extend(  # Write data in 1 chunk of 8 bits
+                [
+                    'write {pin.d0} p1',  # Write 8 bits of data into the data bus
+                    'write {pin.d1} p2',
+                    'write {pin.d2} p3',
+                    'write {pin.d3} p4',
+                    'write {pin.d4} p5',
+                    'write {pin.d5} p6',
+                    'write {pin.d6} p7',
+                    'write {pin.d7} p8',
+                ]
+            )
+            piscript.extend(enablepulse)  # Process data
         else:
-            piscript.extend(                # Write data in 2 chunks of 4 bits
-                    ['write {pin.d4} p5',       # Write 4 bits of data into the data bus
-                     'write {pin.d5} p6',
-                     'write {pin.d6} p7',
-                     'write {pin.d7} p8'])
-            piscript.extend(enablepulse)    # Process data
+            piscript.extend(  # Write data in 2 chunks of 4 bits
+                [
+                    'write {pin.d4} p5',  # Write 4 bits of data into the data bus
+                    'write {pin.d5} p6',
+                    'write {pin.d6} p7',
+                    'write {pin.d7} p8',
+                ]
+            )
+            piscript.extend(enablepulse)  # Process data
             piscript.extend(
-                    ['write {pin.d4} p1',       # Write 4 bits of data into the data bus
-                     'write {pin.d5} p2',
-                     'write {pin.d6} p3',
-                     'write {pin.d7} p4'])
-            piscript.extend(enablepulse)    # Process data
+                [
+                    'write {pin.d4} p1',  # Write 4 bits of data into the data bus
+                    'write {pin.d5} p2',
+                    'write {pin.d6} p3',
+                    'write {pin.d7} p4',
+                ]
+            )
+            piscript.extend(enablepulse)  # Process data
 
         # Make one string and insert the pin values
         piscript = ' '.join(piscript).format(pin=self.pins)
@@ -246,28 +281,32 @@ class CharLCD(BaseCharLCD):
         if self.backlight_pwm:
             if not ((0 <= value <= 1) or isinstance(value, bool)):
                 raise ValueError(
-                        'backlight_enabled must be set to a value '
-                        'between 0 and 1 or to ``True`` or ``False``, '
-                        'if PWM is enabled; got {}'.format(value))
+                    'backlight_enabled must be set to a value '
+                    'between 0 and 1 or to ``True`` or ``False``, '
+                    'if PWM is enabled; got {}'.format(value)
+                )
         else:
             if not isinstance(value, bool):
                 raise ValueError(
-                        'backlight_enabled must be set to ``True`` or ``False``, '
-                        'if PWM is not enabled; got: {}'.format(value))
+                    'backlight_enabled must be set to ``True`` or ``False``, '
+                    'if PWM is not enabled; got: {}'.format(value)
+                )
         self._backlight_enabled = value
         if self.backlight_pwm:
             # Convert perceived brightness (as requested by `value`) to duty
             # cycle (see comment above definition of PWM):
-            dc = 2**(value / PWM) - 1
+            dc = 2 ** (value / PWM) - 1
             if self.backlight_mode == 'active_low':
                 dc = 255 - dc
             self.pi.set_PWM_dutycycle(self.pins.backlight, round(dc))
         else:
-            self.pi.write(self.pins.backlight,
-                          value ^ (self.backlight_mode == 'active_low'))
+            self.pi.write(self.pins.backlight, value ^ (self.backlight_mode == 'active_low'))
 
-    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
-            doc='Turn on/off or set the brightness of the backlight.')
+    backlight_enabled = property(
+        _get_backlight_enabled,
+        _set_backlight_enabled,
+        doc='Turn on/off or set the brightness of the backlight.',
+    )
 
     def _get_contrast(self):
         # We could probably read the current GPIO output state via sysfs, but
@@ -287,8 +326,7 @@ class CharLCD(BaseCharLCD):
             dc = 255 - dc
         self.pi.set_PWM_dutycycle(self.pins.contrast, round(dc))
 
-    contrast = property(_get_contrast, _set_contrast,
-            doc='Set the LCD contrast.')
+    contrast = property(_get_contrast, _set_contrast, doc='Set the LCD contrast.')
 
     # Low level commands
 
@@ -313,9 +351,9 @@ class CharLCD(BaseCharLCD):
         pigpio.exceptions = True
 
     def _send_data(self, value):
-        """Send data to the display. """
+        """Send data to the display."""
         self._send(value, c.RS_DATA)
 
     def _send_instruction(self, value):
-        """Send instruction to the display. """
+        """Send instruction to the display."""
         self._send(value, c.RS_INSTRUCTION)
