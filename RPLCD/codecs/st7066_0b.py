@@ -109,7 +109,7 @@ encoding_table = {
     '^':      0x5e,  # CIRCUMFLEX ACCENT
     '_':      0x5f,  # LOW LINE
 
-    '`':      0x60,  # GRAVE ACCENT
+    '‘':      0x60,  # LEFT SINGLE QUOTATION MARK
     'a':      0x61,  # LATIN SMALL LETTER A
     'b':      0x62,  # LATIN SMALL LETTER B
     'c':      0x63,  # LATIN SMALL LETTER C
@@ -251,7 +251,7 @@ encoding_table = {
     'γ':      0xe1,  # GREEK SMALL LETTER GAMMA
     'δ':      0xe2,  # GREEK SMALL LETTER DELTA
     'ε':      0xe3,  # GREEK SMALL LETTER EPSILON
-    'ξ':      0xe4,  # GREEK SMALL LETTER XI
+    'ζ':      0xe4,  # GREEK SMALL LETTER ZETA
     'η':      0xe5,  # GREEK SMALL LETTER ETA
     'θ':      0xe6,  # GREEK SMALL LETTER THETA
     'ι':      0xe7,  # GREEK SMALL LETTER IOTA
