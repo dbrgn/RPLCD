@@ -12,6 +12,7 @@ class FoundMultiCharMapping(Exception):
     """
     Exception to escape nested loops.
     """
+
     pass
 
 
@@ -25,8 +26,7 @@ class Codec(object):
 
     def encode(self, input_):  # type: (str) -> List[int]
         result = []
-        window_iter = sliding_window(
-            input_, self.codec.combined_chars_lookahead)
+        window_iter = sliding_window(input_, self.codec.combined_chars_lookahead)
         while True:
             try:
                 window = next(window_iter)
@@ -60,8 +60,7 @@ class Codec(object):
                 continue
 
             # Otherwise, do a regular lookup in the encoding table
-            result.append(self.codec.encoding_table.get(
-                char, self.codec.replacement_char))
+            result.append(self.codec.encoding_table.get(char, self.codec.replacement_char))
 
         return result
 

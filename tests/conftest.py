@@ -16,6 +16,7 @@ patcher.start()
 @pytest.fixture
 def charlcd_kwargs():
     import RPi.GPIO as GPIO
+
     return {
         'numbering_mode': GPIO.BOARD,
         'pin_rs': 15,

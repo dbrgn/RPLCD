@@ -59,10 +59,13 @@ def test_caching(mocker, charlcd_kwargs):
     assert instruction_calls[2] == (LCD_SETDDRAMADDR | 5,)
 
 
-@pytest.mark.parametrize(['charmap', 'ue'], [
-    ('A00', 0b11110101),
-    ('A02', 0b11111100),
-])
+@pytest.mark.parametrize(
+    ['charmap', 'ue'],
+    [
+        ('A00', 0b11110101),
+        ('A02', 0b11111100),
+    ],
+)
 def test_charmap(mocker, charmap, ue, charlcd_kwargs):
     """
     The charmap should be used. The "ü" Umlaut should be encoded correctly.
@@ -81,10 +84,13 @@ def test_charmap(mocker, charmap, ue, charlcd_kwargs):
     assert calls[3] == (105,)
 
 
-@pytest.mark.parametrize(['rows', 'cols'], [
-    (2, 16),
-    (4, 20),
-])
+@pytest.mark.parametrize(
+    ['rows', 'cols'],
+    [
+        (2, 16),
+        (4, 20),
+    ],
+)
 def test_write_newline(mocker, rows, cols, charlcd_kwargs):
     """
     Write text containing CR/LF chars to the display.

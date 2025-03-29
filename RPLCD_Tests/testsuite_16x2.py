@@ -63,8 +63,10 @@ def run(lcd):
     input('The string "cursor" should now be on the second row, column 0. ')
 
     lcd.home()
-    input('Cursor should now be at initial position. Everything should be shifted '
-          'to the right by 5 characters. ')
+    input(
+        'Cursor should now be at initial position. Everything should be shifted '
+        'to the right by 5 characters. '
+    )
 
     lcd.cursor_pos = (1, 15)
     lcd.write_string('X')
@@ -103,8 +105,10 @@ def run(lcd):
     lcd.cursor_pos = (0, 4)
     lcd.write_string('5\n')
     lcd.write_string('6')
-    input('The numbers 1-6 should now be displayed in a zig zag line starting '
-          'in the top left corner. ')
+    input(
+        'The numbers 1-6 should now be displayed in a zig zag line starting '
+        'in the top left corner. '
+    )
 
     lcd.clear()
     lcd.write_string('This will wrap around both lines')

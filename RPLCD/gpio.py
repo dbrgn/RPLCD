@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
 from collections import namedtuple
 
 import RPi.GPIO as GPIO
@@ -35,13 +36,23 @@ PinConfig = namedtuple('PinConfig', 'rs rw e d0 d1 d2 d3 d4 d5 d6 d7 backlight m
 
 
 class CharLCD(BaseCharLCD):
-    def __init__(self, numbering_mode=None, pin_rs=None, pin_rw=None, pin_e=None, pins_data=None,
-                       pin_backlight=None, backlight_mode='active_low',
-                       backlight_enabled=True,
-                       cols=20, rows=4, dotsize=8,
-                       charmap='A02',
-                       auto_linebreaks=True,
-                       compat_mode=False):
+    def __init__(
+        self,
+        numbering_mode=None,
+        pin_rs=None,
+        pin_rw=None,
+        pin_e=None,
+        pins_data=None,
+        pin_backlight=None,
+        backlight_mode='active_low',
+        backlight_enabled=True,
+        cols=20,
+        rows=4,
+        dotsize=8,
+        charmap='A02',
+        auto_linebreaks=True,
+        compat_mode=False,
+    ):
         """
         Character LCD controller.
 
@@ -100,10 +111,12 @@ class CharLCD(BaseCharLCD):
         if numbering_mode == GPIO.BCM or numbering_mode == GPIO.BOARD:
             self.numbering_mode = numbering_mode
         else:
-            raise ValueError('Invalid GPIO numbering mode: numbering_mode=%s, '
-                             'must be either GPIO.BOARD or GPIO.BCM.\n'
-                             'See https://gist.github.com/dbrgn/77d984a822bfc9fddc844f67016d0f7e '
-                             'for more details.' % numbering_mode)
+            raise ValueError(
+                'Invalid GPIO numbering mode: numbering_mode=%s, '
+                'must be either GPIO.BOARD or GPIO.BCM.\n'
+                'See https://gist.github.com/dbrgn/77d984a822bfc9fddc844f67016d0f7e '
+                'for more details.' % numbering_mode
+            )
         if pin_rs is None:
             raise ValueError('pin_rs is not defined.')
         if pin_e is None:
@@ -118,17 +131,27 @@ class CharLCD(BaseCharLCD):
         else:
             raise ValueError('There should be exactly 4 or 8 data pins.')
         block2 = pins_data[-4:]
-        self.pins = PinConfig(rs=pin_rs, rw=pin_rw, e=pin_e,
-                              d0=block1[0], d1=block1[1], d2=block1[2], d3=block1[3],
-                              d4=block2[0], d5=block2[1], d6=block2[2], d7=block2[3],
-                              backlight=pin_backlight,
-                              mode=numbering_mode)
+        self.pins = PinConfig(
+            rs=pin_rs,
+            rw=pin_rw,
+            e=pin_e,
+            d0=block1[0],
+            d1=block1[1],
+            d2=block1[2],
+            d3=block1[3],
+            d4=block2[0],
+            d5=block2[1],
+            d6=block2[2],
+            d7=block2[3],
+            backlight=pin_backlight,
+            mode=numbering_mode,
+        )
         self.backlight_mode = backlight_mode
 
         # Call superclass
-        super(CharLCD, self).__init__(cols, rows, dotsize,
-                                      charmap=charmap,
-                                      auto_linebreaks=auto_linebreaks)
+        super(CharLCD, self).__init__(
+            cols, rows, dotsize, charmap=charmap, auto_linebreaks=auto_linebreaks
+        )
 
         # Set backlight status
         if pin_backlight is not None:
@@ -150,9 +173,19 @@ class CharLCD(BaseCharLCD):
             GPIO.output(self.pins.rw, 0)
 
     def _close_connection(self):
-        pins = (self.pins.rs, self.pins.rw, self.pins.e, self.pins.d0, self.pins.d1,
-                self.pins.d2, self.pins.d3, self.pins.d4, self.pins.d5, self.pins.d6,
-                self.pins.d7)
+        pins = (
+            self.pins.rs,
+            self.pins.rw,
+            self.pins.e,
+            self.pins.d0,
+            self.pins.d1,
+            self.pins.d2,
+            self.pins.d3,
+            self.pins.d4,
+            self.pins.d5,
+            self.pins.d6,
+            self.pins.d7,
+        )
         active_pins = [pin for pin in pins if pin is not None]
         GPIO.cleanup(active_pins)
 
@@ -171,11 +204,13 @@ class CharLCD(BaseCharLCD):
         if not isinstance(value, bool):
             raise ValueError('backlight_enabled must be set to ``True`` or ``False``.')
         self._backlight_enabled = value
-        GPIO.output(self.pins.backlight,
-                    value ^ (self.backlight_mode == 'active_low'))
+        GPIO.output(self.pins.backlight, value ^ (self.backlight_mode == 'active_low'))
 
-    backlight_enabled = property(_get_backlight_enabled, _set_backlight_enabled,
-            doc='Whether or not to turn on the backlight.')
+    backlight_enabled = property(
+        _get_backlight_enabled,
+        _set_backlight_enabled,
+        doc='Whether or not to turn on the backlight.',
+    )
 
     # Low level commands
 
@@ -205,11 +240,11 @@ class CharLCD(BaseCharLCD):
             self.last_send_event = now()
 
     def _send_data(self, value):
-        """Send data to the display. """
+        """Send data to the display."""
         self._send(value, c.RS_DATA)
 
     def _send_instruction(self, value):
-        """Send instruction to the display. """
+        """Send instruction to the display."""
         self._send(value, c.RS_INSTRUCTION)
 
     def _write4bits(self, value):
