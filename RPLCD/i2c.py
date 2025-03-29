@@ -148,8 +148,8 @@ class CharLCD(BaseCharLCD):
         if expander_params is None:
             if self._i2c_expander == 'MCP23017':
                 raise ValueError(
-                    'MCP23017: expander_params[\'gpio_bank\'] is not defined, '
-                    'must be either \'A\' or \'B\''
+                    "MCP23017: expander_params['gpio_bank'] is not defined, "
+                    "must be either 'A' or 'B'"
                 )
             else:
                 self._expander_params = {}
@@ -160,8 +160,8 @@ class CharLCD(BaseCharLCD):
                     self._expander_params['gpio_bank'] = expander_params['gpio_bank']
                 else:
                     raise ValueError(
-                        'MCP23017: expander_params[\'gpio_bank\'] is \'%s\', '
-                        'must be either \'A\' or \'B\'' % expander_params['gpio_bank']
+                        "MCP23017: expander_params['gpio_bank'] is '%s', "
+                        "must be either 'A' or 'B'" % expander_params['gpio_bank']
                     )
 
         # Currently the I2C mode only supports 4 bit communication

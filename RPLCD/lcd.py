@@ -33,7 +33,6 @@ LCDConfig = namedtuple('LCDConfig', 'rows cols dotsize')
 
 
 class BaseCharLCD(object):
-
     # Init, setup, teardown
 
     def __init__(self, cols=20, rows=4, dotsize=8, charmap='A02', auto_linebreaks=True):
@@ -284,7 +283,6 @@ class BaseCharLCD(object):
         ignored = False
 
         for [char, lookahead] in c.sliding_window(encoded, lookahead=1):
-
             # If the previous character has been ignored, skip this one too.
             if ignored is True:
                 ignored = False

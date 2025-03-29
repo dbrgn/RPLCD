@@ -124,9 +124,9 @@ Then run the tests:
 Coding Guidelines
 =================
 
-Please reformat your code using `black <https://black.readthedocs.io/>`_::
+Please reformat your code using `ruff format <https://docs.astral.sh/ruff/formatter/>`_::
 
-    black .
+    ruff format
 
 
 About HD44780

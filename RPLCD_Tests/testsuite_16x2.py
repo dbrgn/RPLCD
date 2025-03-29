@@ -23,7 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 def run(lcd):
-
     lcd.backlight = True
     input('Display should be blank. ')
 

@@ -72,7 +72,6 @@ def print_usage(error=None):
 
     # Options for GPIO mode
     elif (len(sys.argv) > 1) and (sys.argv[1] == 'gpio'):
-
         print('<options> gpio options:')
         print('')
         print('   mode    - GPIO numbering mode, either BOARD or BCM')
@@ -98,7 +97,6 @@ def print_usage(error=None):
         )
     # Options for PIGPIO mode
     elif (len(sys.argv) > 1) and (sys.argv[1] == 'pigpio'):
-
         print('<options> pigpio options:')
         print('')
         print('   host    - Host name of the Pi on which the pigpio daemon is running.')
@@ -142,11 +140,11 @@ def print_usage(error=None):
 
 
 def options_pop(value, default=no_default):
-    '''Pops value from options with error checking
+    """Pops value from options with error checking
     value: which option to pop and check.
     default: optional, sets a default if not defined.
     returns: a string corresponding to the option on the command line
-    '''
+    """
     global options
     try:
         # If no default value is defined
@@ -161,7 +159,7 @@ def options_pop(value, default=no_default):
     except Exception as e:
         raise e
     if return_value == '':
-        print_usage('Option %s can\'t be blank.' % value)
+        print_usage("Option %s can't be blank." % value)
     return return_value
 
 
@@ -184,7 +182,6 @@ def run():
     rows = int(options_pop('rows'))
     charmap = options_pop('charmap', 'A00')
     if lcdmode == 'i2c':
-
         from RPLCD import i2c
 
         if len(sys.argv) < 5:
@@ -210,7 +207,6 @@ def run():
                 'or device not connected properly'
             )
     elif lcdmode == 'gpio':
-
         import RPi.GPIO as GPIO
         from RPLCD import gpio
 
@@ -251,7 +247,6 @@ def run():
             charmap=charmap,
         )
     elif lcdmode == 'pigpio':
-
         from pigpio import pi
         from RPLCD import pigpio
 
@@ -308,4 +303,4 @@ def run():
         else:
             print_usage('%sx%s displays are not supported in this test.' % (cols, rows))
     else:
-        print_usage('Test \'%s\' is not supported.' % test)
+        print_usage("Test '%s' is not supported." % test)

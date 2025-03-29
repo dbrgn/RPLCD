@@ -11,7 +11,7 @@ class CharLCD:
         from .gpio import CharLCD as GpioCharLCD
 
         warnings.warn(
-            "Using RPLCD.CharLCD directly is deprecated. Use RPLCD.gpio.CharLCD instead!",
+            'Using RPLCD.CharLCD directly is deprecated. Use RPLCD.gpio.CharLCD instead!',
             DeprecationWarning,
         )
         return GpioCharLCD(*args, **kwargs)
