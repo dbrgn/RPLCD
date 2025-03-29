@@ -24,11 +24,11 @@ Build source and binary distributions:
 
 Sign files:
 
-    gpg --detach-sign -u ${GPG} -a dist/RPLCD-${VERSION}.tar.gz
-    gpg --detach-sign -u ${GPG} -a dist/RPLCD-${VERSION}-py3-none-any.whl
+    gpg --detach-sign -u ${GPG} -a dist/rplcd-${VERSION}.tar.gz
+    gpg --detach-sign -u ${GPG} -a dist/rplcd-${VERSION}-py3-none-any.whl
 
 Upload package to PyPI:
 
-    twine3 upload dist/RPLCD-${VERSION}*
+    twine3 upload dist/rplcd-${VERSION}*
     git push
     git push --tags
