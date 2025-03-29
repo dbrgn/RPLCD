@@ -46,3 +46,17 @@ jobs:
         run: pip install black~=25.1
       - name: Check code formatting
         run: black --check .
+
+  lint:
+    runs-on: ubuntu-24.04
+    name: Run linting with ruff
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+      - name: Install ruff
+        run: pip install ruff~=0.11.2
+      - name: Run linter
+        run: ruff check
