@@ -124,13 +124,7 @@ Then run the tests:
 Coding Guidelines
 =================
 
-`PEP8 <http://www.python.org/dev/peps/pep-0008/>`__ via `flake8
-<https://pypi.python.org/pypi/flake8>`_ with ``max-line-width`` set to 99 and
-``E126-E128,C901`` ignored::
-
-    flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
-
-Additionally, please reformat your code using `black <https://black.readthedocs.io/>`_::
+Please reformat your code using `black <https://black.readthedocs.io/>`_::
 
     black .
 
