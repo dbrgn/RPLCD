@@ -11,6 +11,12 @@ Possible log types:
 - `[fix]` for any bug fixes.
 - `[sec]` to invite users to upgrade in case of vulnerabilities.
 
+### v1.4.0 (2025-03-29)
+
+- [fix] Fix two wrong characters in ST7066-0B charmap (#142)
+- [rem] Remove support for Python 2.7
+- [rem] Drop support for Python 3.4–3.7
+
 ### v1.3.1 (2023-03-25)
 
 - [fix] Check invalid cursor position only when auto_linebreaks enabled (#93, #109)

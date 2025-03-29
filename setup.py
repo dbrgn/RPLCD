@@ -6,7 +6,7 @@ readme = open('README.rst').read()
 
 setup(
     name='RPLCD',
-    version='1.3.1',
+    version='1.4.0',
     description='A Raspberry Pi LCD library for the widely used Hitachi HD44780 controller.',
     long_description=readme,
     author='Danilo Bargen',
