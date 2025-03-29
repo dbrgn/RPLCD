@@ -1,9 +1,7 @@
-[tool.black]
+[tool.ruff]
 line-length = 99
-target-version = ["py38", "py39", "py310", "py311", "py312"]
-extend-exclude = '''
-(^/RPLCD/codecs/.*\.py$
-|^/docs/conf.py$
-)
-'''
-skip-string-normalization = true
+target-version = "py38"
+
+[tool.ruff.format]
+exclude = ["RPLCD/codecs/*.py", "docs/conf.py"]
+quote-style = "single"

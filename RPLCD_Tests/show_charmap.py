@@ -25,7 +25,6 @@ import sys
 
 
 def run(lcd, rows, cols):
-
     print('This tool shows the character map of your LCD on the display.')
     print('Press ctrl+c at any time to abort.\n')
 

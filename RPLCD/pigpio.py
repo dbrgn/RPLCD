@@ -258,7 +258,6 @@ class CharLCD(BaseCharLCD):
         self._writescript = self.pi.store_script(bytes(piscript, 'utf-8'))
 
     def _close_connection(self):
-
         while self.pi.script_status(self._writescript) == pigpio.PI_SCRIPT_RUNNING:
             c.msleep(10)
         self.pi.delete_script(self._writescript)

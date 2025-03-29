@@ -35,17 +35,17 @@ jobs:
 
   format:
     runs-on: ubuntu-24.04
-    name: Check code formatting with black
+    name: Check code formatting with ruff
     steps:
       - uses: actions/checkout@v3
       - name: Setup python
         uses: actions/setup-python@v4
         with:
           python-version: 3.12
-      - name: Install black
-        run: pip install black~=25.1
+      - name: Install ruff
+        run: pip install ruff~=0.11.2
       - name: Check code formatting
-        run: black --check .
+        run: ruff format --check --diff
 
   lint:
     runs-on: ubuntu-24.04
