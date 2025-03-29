@@ -9,7 +9,7 @@ name: CI
 jobs:
 
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         deps:
@@ -32,3 +32,17 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Run tests
         run: pytest
+
+  format:
+    runs-on: ubuntu-24.04
+    name: Check code formatting with black
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+      - name: Install black
+        run: pip install black~=25.1
+      - name: Check code formatting
+        run: black --check .

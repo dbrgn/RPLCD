@@ -130,6 +130,10 @@ Coding Guidelines
 
     flake8 --max-line-length=99 --ignore=E126,E127,E128,C901 RPLCD/lcd.py
 
+Additionally, please reformat your code using `black <https://black.readthedocs.io/>`_::
+
+    black .
+
 
 About HD44780
 =============
